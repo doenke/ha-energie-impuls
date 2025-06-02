@@ -34,7 +34,7 @@ class EnergyImpulsSession:
     def get_token(self):
         response = requests.post(LOGIN_URL, json={"username": self.username, "password": self.password})
         if response.status_code == 200:
-            self.token = response.json().get("token")
+            self.token = response.json().get("accessToken")
         else:
             raise Exception("Login fehlgeschlagen")
 

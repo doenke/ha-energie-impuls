@@ -1,0 +1,15 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Energie Impuls Zugangsdaten",
+        "description": "Bitte gib Benutzername und Passwort ein.",
+        "data": {
+          "username": "Benutzername",
+          "password": "Passwort"
+        }
+      }
+    }
+  },
+  "title": "Energie Impuls"
+}

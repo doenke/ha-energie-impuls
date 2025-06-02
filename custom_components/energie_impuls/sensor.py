@@ -54,15 +54,27 @@ class EnergyImpulsSession:
     def get_wallbox_data(self):
         if not self.token:
             self.get_token()
+
         headers = {"Authorization": f"Bearer {self.token}"}
         response = requests.get(WALLBOX_URL, headers=headers)
+
         if response.status_code == 401:
             self.get_token()
             headers = {"Authorization": f"Bearer {self.token}"}
             response = requests.get(WALLBOX_URL, headers=headers)
+
         if response.status_code == 200:
-            return response.json()[0]
-        raise Exception("Fehler beim Abrufen der Wallbox-Daten")
+            try:
+                json_data = response.json()
+                if isinstance(json_data, list) and json_data:
+                    return json_data[0]
+                else:
+                    raise Exception("Wallbox-Antwort war leer oder kein Array.")
+            except Exception as e:
+                raise Exception(f"Fehler beim Parsen der Wallbox-Antwort: {e}")
+        else:
+            raise Exception(f"Wallbox-API Fehler: {response.status_code} → {response.text}")
+
 
 class EnergieImpulsSensor(Entity):
     def __init__(self, session, key):

@@ -1,1 +1,5 @@
-{ "title": "Energie Impuls", "description": "Integration zur Energieüberwachung" }
+
+{
+  "title": "Energie Impuls",
+  "description": "Integration zur Visualisierung und Steuerung von Energieflüssen"
+}

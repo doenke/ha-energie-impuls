@@ -1,2 +1,3 @@
-# ha-energie-impuls
-Integration for Energie-impuls
+# Energie Impuls Integration
+
+Custom integration for Home Assistant.

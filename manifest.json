@@ -1,0 +1,9 @@
+{
+  "domain": "energie_impuls",
+  "name": "Energie Impuls",
+  "version": "1.0.0",
+  "documentation": "https://github.com/doenke/ha-energie-impuls",
+  "requirements": [],
+  "dependencies": [],
+  "codeowners": ["@doenke"]
+}

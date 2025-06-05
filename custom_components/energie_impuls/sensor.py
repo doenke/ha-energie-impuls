@@ -39,7 +39,7 @@ class EnergyImpulsSession:
 
         if response.status_code == 200:
             json_data = response.json()
-            self.token = json_data.get("accessToken")
+            self.token = json_data.get("access")
             if self.token:
                 _LOGGER.info(f"Neuer Token erhalten: {self.token}")
             else:

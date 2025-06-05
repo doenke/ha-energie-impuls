@@ -32,12 +32,22 @@ class EnergyImpulsSession:
         self.token = None
 
     def get_token(self):
-        response = requests.post(LOGIN_URL, json={"username": self.username, "password": self.password})
-        if response.status_code == 200:
-            self.token = response.json().get("accessToken")
-        else:
-            raise Exception("Login fehlgeschlagen")
+        response = requests.post(LOGIN_URL, json={
+        "username": self.username,
+        "password": self.password
+        })
 
+        if response.status_code == 200:
+            json_data = response.json()
+            self.token = json_data.get("accessToken")
+            if self.token:
+                _LOGGER.info(f"Neuer Token erhalten: {self.token}")
+            else:
+                _LOGGER.error(f"Antwort ohne Token: {json_data}")
+        else:
+            _LOGGER.error(f"Login fehlgeschlagen ({response.status_code}): {response.text}")
+            raise Exception("Login fehlgeschlagen")
+        
     def get_data(self):
         if not self.token:
             self.get_token()

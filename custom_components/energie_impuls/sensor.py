@@ -21,9 +21,17 @@ async def async_setup_entry(hass, entry, async_add_entities):
     password = entry.data[CONF_PASSWORD]
     session = EnergyImpulsSession(username, password)
     sensors = [EnergieImpulsSensor(session, key) for key in SENSOR_TYPES]
-    sensors.append(EnergieImpulsWallboxStatusSensor(session))
-    sensors.append(EnergieImpulsWallboxConsumptionSensor(session))
     async_add_entities(sensors, update_before_add=True)
+    sensors.extend([
+        WallboxSensorBase(session, "Wallbox Modus", "wallbox_mode_str", lambda d: d["_state"]["mode_str"]),
+        WallboxSensorBase(session, "Wallbox Moduscode", "wallbox_mode", lambda d: d["_state"]["mode"]),
+        WallboxSensorBase(session, "Wallbox Verbrauch", "wallbox_consumption", lambda d: d["_state"]["consumption"], "kW"),
+        WallboxSensorBase(session, "Wallbox Zeitstempel", "wallbox_timestamp", lambda d: d["_state"]["timestamp"]),
+        WallboxSensorBase(session, "Wallbox Seit Modus aktiv", "wallbox_mode_since", lambda d: d["_state"]["mode_since"]),
+        WallboxSensorBase(session, "Wallbox Hybridstrom", "wallbox_hybrid_charging", lambda d: d["_set_point"]["hybrid_charging_current"], "A"),
+        WallboxSensorBase(session, "Wallbox Name", "wallbox_name", lambda d: d["name"]),
+        WallboxSensorBase(session, "Wallbox Standort-ID", "wallbox_location", lambda d: d["location"]),
+    ])
 
 class EnergyImpulsSession:
     def __init__(self, username, password):
@@ -142,41 +150,4 @@ class WallboxSensorBase(Entity):
 
 
 
-class EnergieImpulsWallboxStatusSensor(Entity):
-    def __init__(self, session):
-        self._session = session
-        self._state = None
-        self._attr_name = "Wallbox Status"
-        self._attr_unique_id = "energie_impuls_wallbox_status"
 
-    def update(self):
-        try:
-            data = self._session.get_wallbox_data()
-            self._state = data["_state"]["mode_str"]
-        except Exception as e:
-            _LOGGER.error(f"Statusfehler Wallbox: {e}")
-            self._state = None
-
-    @property
-    def state(self):
-        return self._state
-
-class EnergieImpulsWallboxConsumptionSensor(Entity):
-    def __init__(self, session):
-        self._session = session
-        self._state = None
-        self._attr_name = "Wallbox Verbrauch"
-        self._attr_unit_of_measurement = "kW"
-        self._attr_unique_id = "energie_impuls_wallbox_consumption"
-
-    def update(self):
-        try:
-            data = self._session.get_wallbox_data()
-            self._state = round(data["_state"]["consumption"], 2)
-        except Exception as e:
-            _LOGGER.error(f"Verbrauchsfehler Wallbox: {e}")
-            self._state = None
-
-    @property
-    def state(self):
-        return self._state

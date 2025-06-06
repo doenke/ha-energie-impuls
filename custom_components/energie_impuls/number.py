@@ -26,7 +26,9 @@ class HybridChargingCurrentNumber(NumberEntity):
     def update(self):
         try:
             data = self._session.get_wallbox_data()
+            _LOGGER.debug(f"Wallboxdaten für hybrid_charging_current: {data}")
             self._state = data["_set_point"].get("hybrid_charging_current", 0)
+            _LOGGER.info(f"Aktueller Hybridwert: {self._state}")
             if self._state is None:
                 self._state = 0
         except Exception as e:

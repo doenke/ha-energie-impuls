@@ -65,7 +65,7 @@ class EnergyImpulsSession:
             self.get_token()
             headers = {"Authorization": f"Bearer {self.token}"}
             response = requests.get(DATA_URL, headers=headers)
-        if response.status_code == in (200, 201, 204):
+        if response.status_code in (200, 201, 204):
             return response.json()
         raise Exception("Fehler bei API-Antwort")
 

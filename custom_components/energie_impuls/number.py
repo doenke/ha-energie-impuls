@@ -44,7 +44,7 @@ class HybridChargingCurrentNumber(NumberEntity):
                 "hybrid_charging_current": None if int(value) == 0 else int(value)
             }
     
-            response = requests.patch(WALLBOX_SETPOINT_URL, headers=headers, json=payload)
+            response = requests.put(WALLBOX_SETPOINT_URL, headers=headers, json=payload)
             if response.status_code in (200, 204):
                 self._state = None if int(value) == 0 else int(value)
             else:

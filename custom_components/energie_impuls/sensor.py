@@ -45,7 +45,7 @@ class EnergyImpulsSession:
         "password": self.password
         })
 
-        if response.status_code == 200:
+        if response.status_code in (200, 201, 204):
             json_data = response.json()
             self.token = json_data.get("access")
             if self.token:
@@ -65,7 +65,7 @@ class EnergyImpulsSession:
             self.get_token()
             headers = {"Authorization": f"Bearer {self.token}"}
             response = requests.get(DATA_URL, headers=headers)
-        if response.status_code == 200:
+        if response.status_code == in (200, 201, 204):
             return response.json()
         raise Exception("Fehler bei API-Antwort")
 
@@ -81,7 +81,7 @@ class EnergyImpulsSession:
             headers = {"Authorization": f"Bearer {self.token}"}
             response = requests.get(WALLBOX_URL, headers=headers)
 
-        if response.status_code == 200:
+        if response.status_code in (200, 201, 204):
             try:
                 json_data = response.json()
                 if isinstance(json_data, list) and json_data:

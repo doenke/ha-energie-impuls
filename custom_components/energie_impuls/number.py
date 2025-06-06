@@ -30,7 +30,7 @@ class HybridChargingCurrentNumber(NumberEntity):
         except Exception as e:
             _LOGGER.error(f"Fehler beim Abrufen der Hybrid-Ladestromstärke: {e}")
             self._state = None
-
+    
     def set_native_value(self, value: float) -> None:
         try:
             self._session.get_token()
@@ -38,11 +38,18 @@ class HybridChargingCurrentNumber(NumberEntity):
                 "Authorization": f"Bearer {self._session.token}",
                 "Content-Type": "application/json"
             }
-            payload = { "hybrid_charging_current": int(value) }
+    
+            # 💡 0 in HA soll null in der API werden
+            payload = {
+                "hybrid_charging_current": None if int(value) == 0 else int(value)
+            }
+    
             response = requests.patch(WALLBOX_SETPOINT_URL, headers=headers, json=payload)
             if response.status_code in (200, 204):
-                self._state = int(value)
+                self._state = None if int(value) == 0 else int(value)
             else:
                 raise Exception(f"Fehler beim Setzen: {response.status_code} → {response.text}")
         except Exception as e:
             _LOGGER.error(f"Fehler beim Setzen von hybrid_charging_current: {e}")
+    
+    

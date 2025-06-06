@@ -107,6 +107,41 @@ class EnergieImpulsSensor(Entity):
     def state(self):
         return self._state
 
+class WallboxSensorBase(Entity):
+    def __init__(self, session, name, unique_id, extract_func, unit=None):
+        self._session = session
+        self._name = name
+        self._unique_id = unique_id
+        self._extract_func = extract_func
+        self._unit = unit
+        self._state = None
+
+    def update(self):
+        try:
+            data = self._session.get_wallbox_data()
+            self._state = self._extract_func(data)
+        except Exception as e:
+            _LOGGER.error(f"Fehler beim Abrufen von {self._unique_id}: {e}")
+            self._state = None
+
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def unique_id(self):
+        return self._unique_id
+
+    @property
+    def unit_of_measurement(self):
+        return self._unit
+
+    @property
+    def state(self):
+        return self._state
+
+
+
 class EnergieImpulsWallboxStatusSensor(Entity):
     def __init__(self, session):
         self._session = session

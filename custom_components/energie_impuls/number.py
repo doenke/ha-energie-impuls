@@ -45,7 +45,7 @@ class HybridChargingCurrentNumber(NumberEntity):
             }
     
             response = requests.put(WALLBOX_SETPOINT_URL, headers=headers, json=payload)
-            if response.status_code in (200, 204):
+            if response.status_code in (200, 201, 204):
                 self._state = None if int(value) == 0 else int(value)
             else:
                 raise Exception(f"Fehler beim Setzen: {response.status_code} → {response.text}")

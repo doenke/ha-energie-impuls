@@ -19,7 +19,7 @@ class HybridChargingCurrentNumber(NumberEntity):
         self._attr_unique_id = "energie_impuls_hybrid_current"
         self._attr_unit_of_measurement = "A"
         self._attr_native_min_value = 0
-        self._attr_native_max_value = 32
+        self._attr_native_max_value = 11
         self._attr_native_step = 1
         self._state = None
 

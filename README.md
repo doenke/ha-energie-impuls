@@ -86,16 +86,6 @@ Nach erfolgreichem Login wird ein Zugriffstoken gespeichert und automatisch erne
 
 ---
 
-## 🛠️ Entwicklung
-
-Diese Integration befindet sich im Aufbau und wird weiterentwickelt. Geplante Features:
-
-- Unterstützung mehrerer Wallboxen
-- Automatische Ladeplanung
-- Energie-Diagramme & Optimierung
-
----
-
 ## 🧑‍💻 Mitwirken
 
 Pull Requests, Bug Reports und Verbesserungsvorschläge sind willkommen. Bitte beschreibe deine Änderungen klar und verständlich.
@@ -106,8 +96,3 @@ Pull Requests, Bug Reports und Verbesserungsvorschläge sind willkommen. Bitte b
 
 MIT License – siehe [LICENSE](LICENSE)
 
----
-
-## 🙏 Danke
-
-An die Energie-Impuls-Community für die API und an das Home Assistant-Team für die Plattform ❤️

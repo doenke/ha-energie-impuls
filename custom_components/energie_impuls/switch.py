@@ -52,7 +52,7 @@ class EnergieImpulsSwitch(SwitchEntity):
             "Content-Type": "application/json"
         }
         response = requests.put(WALLBOX_SETPOINT_URL, headers=headers, json={self._key: value})
-        if response.status_code in (200, 204):
+        if response.status_code in (200, 201, 204):
             self._state = value
         else:
             raise Exception(f"Fehler bei API: {response.status_code}")

@@ -51,7 +51,7 @@ class EnergieImpulsSwitch(SwitchEntity):
             "Authorization": f"Bearer {self._session.token}",
             "Content-Type": "application/json"
         }
-        response = requests.patch(WALLBOX_SETPOINT_URL, headers=headers, json={self._key: value})
+        response = requests.put(WALLBOX_SETPOINT_URL, headers=headers, json={self._key: value})
         if response.status_code in (200, 204):
             self._state = value
         else:

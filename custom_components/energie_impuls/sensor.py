@@ -28,7 +28,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
         WallboxSensorBase(session, "Wallbox Verbrauch", "wallbox_consumption", lambda d: d["_state"]["consumption"], "kW"),
         WallboxSensorBase(session, "Wallbox Zeitstempel", "wallbox_timestamp", lambda d: d["_state"]["timestamp"]),
         WallboxSensorBase(session, "Wallbox Seit Modus aktiv", "wallbox_mode_since", lambda d: d["_state"]["mode_since"]),
-        WallboxSensorBase(session, "Wallbox Hybridstrom", "wallbox_hybrid_charging", lambda d: d["_set_point"]["hybrid_charging_current"], "A"),
+        # WallboxSensorBase(session, "Wallbox Hybridstrom", "wallbox_hybrid_charging", lambda d: d["_set_point"]["hybrid_charging_current"], "A"),
         WallboxSensorBase(session, "Wallbox Name", "wallbox_name", lambda d: d["name"]),
         WallboxSensorBase(session, "Wallbox Standort-ID", "wallbox_location", lambda d: d["location"]),
     ])

@@ -27,6 +27,8 @@ class HybridChargingCurrentNumber(NumberEntity):
         try:
             data = self._session.get_wallbox_data()
             self._state = data["_set_point"].get("hybrid_charging_current", 0)
+            if self._state is None:
+                self._state = 0
         except Exception as e:
             _LOGGER.error(f"Fehler beim Abrufen der Hybrid-Ladestromstärke: {e}")
             self._state = None

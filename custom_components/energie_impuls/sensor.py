@@ -14,6 +14,7 @@ SENSOR_TYPES = {
     "wallbox": {"name": "Wallbox", "unit": "kW"},
     "household": {"name": "Haushalt", "unit": "kW"},
     "battery_soc": {"name": "Batterie Ladezustand", "unit": "%"},
+    "wallbox_mode_str": {"name":"Wallbox Modus"},
 }
 
 async def async_setup_entry(hass, entry, async_add_entities):

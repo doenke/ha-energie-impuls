@@ -23,6 +23,10 @@ class HybridChargingCurrentNumber(NumberEntity):
         self._attr_native_step = 1
         self._state = None
 
+
+    @property
+    def native_value(self):
+        return self._state
     def update(self):
         try:
             data = self._session.get_wallbox_data()

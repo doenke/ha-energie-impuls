@@ -10,7 +10,6 @@ SENSOR_TYPES = {
     "pv": {"name": "PV-Erzeugung", "unit": "kW"},
     "to_grid": {"name": "Netzeinspeisung", "unit": "kW"},
     "to_battery": {"name": "Batterie-Ladung", "unit": "kW"},
-    "wallbox": {"name": "Wallbox", "unit": "kW"},
     "household": {"name": "Haushalt", "unit": "kW"},
     "battery_soc": {"name": "Batterie Ladezustand", "unit": "%"}
 }

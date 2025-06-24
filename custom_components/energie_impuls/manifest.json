@@ -6,6 +6,5 @@
   "documentation": "https://github.com/doenke/ha-energie-impuls",
   "requirements": [],
   "codeowners": ["@doenke"],
-  "iot_class": "cloud_polling",
-  "icon": "custom_components/energie_impuls/icon.png"
+  "iot_class": "cloud_polling"
 }

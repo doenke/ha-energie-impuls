@@ -41,6 +41,11 @@ class HybridChargingCurrentNumber(NumberEntity):
             self._state = None
     
     def set_native_value(self, value: float) -> None:
+         if int(value) in (1, 2, 3, 4, 5):
+            _LOGGER.warning(f"Wert {value} ist nicht erlaubt – wird ignoriert.")
+            return  # Ignorieren, nichts tun
+
+        
         try:
             self._session.get_token()
             headers = {

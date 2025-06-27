@@ -27,11 +27,12 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}
-          git fetch origin main
-          git checkout main
-          git pull origin main
+          git fetch origin
+          git checkout origin/main
+          git switch -c temp-update-branch
           git commit -am "Set version to $VERSION in manifest.json"
-          git push origin main
+          git push origin temp-update-branch:main
+
 
 
       - name: Create GitHub Release

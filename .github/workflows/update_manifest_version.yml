@@ -29,8 +29,10 @@ jobs:
           git fetch origin main
           git checkout main
           git pull origin main
+          git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}
           git commit -am "Set version to $VERSION in manifest.json"
           git push origin main
+
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2

@@ -21,6 +21,8 @@ jobs:
           jq --arg version "$VERSION" '.version = $version' custom_components/energie_impuls/manifest.json > tmp.json && mv tmp.json custom_components/energie_impuls/manifest.json
 
       - name: Commit updated manifest.json to main
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"

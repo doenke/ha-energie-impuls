@@ -40,4 +40,4 @@ jobs:
             - Version: ${{ github.ref_name }}
             - Änderungen siehe Commits: https://github.com/${{ github.repository }}/compare/${{ github.ref_name }}^...${{ github.ref_name }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}

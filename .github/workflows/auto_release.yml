@@ -1,0 +1,40 @@
+name: Auto Release on Tag
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+
+      - name: Update manifest.json
+        run: |
+          jq --arg version "$VERSION" '.version = $version' custom_components/energie_impuls/manifest.json > tmp.json && mv tmp.json custom_components/energie_impuls/manifest.json
+
+      - name: Commit updated manifest.json
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git commit -am "Set version to $VERSION in manifest.json"
+          git push
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          body: |
+            🚀 Automatisches Release erstellt durch GitHub Actions.
+            - Version: ${{ github.ref_name }}
+            - Änderungen siehe Commits: https://github.com/${{ github.repository }}/compare/${{ github.ref_name }}^...${{ github.ref_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

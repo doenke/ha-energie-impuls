@@ -22,6 +22,7 @@ class HybridChargingCurrentNumber(NumberEntity):
         self._attr_native_min_value = 0
         self._attr_native_max_value = 16
         self._attr_native_step = 1
+        self._icon = "mdi:battery-plus"
         self._state = None
 
 

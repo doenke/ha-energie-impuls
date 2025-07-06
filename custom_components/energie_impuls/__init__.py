@@ -1,7 +1,7 @@
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from .automation_vollladen import VollladenAutomatik
+from .automation_nightfull import VollladenAutomatik
 from .const import DOMAIN
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:

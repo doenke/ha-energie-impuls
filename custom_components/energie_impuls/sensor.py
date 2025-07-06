@@ -118,7 +118,7 @@ class EnergieImpulsSensor(Entity):
         return self._state
 
 class WallboxSensor(Entity):
-    def __init__(self, session, name, unique_id, extract_func, unit=None, icon=none):
+    def __init__(self, session, name, unique_id, extract_func, unit=None, icon=None):
         self._session = session
         self._extract_func = extract_func
         self._attr_name = f"Energie Impuls {name}"

@@ -12,19 +12,20 @@ _LOGGER = logging.getLogger(__name__)
 async def async_setup_entry(hass, entry, async_add_entities):
     session = EnergyImpulsSession(entry.data[CONF_USERNAME], entry.data[CONF_PASSWORD])
     switches = [
-        EnergieImpulsSwitch(session, "Wallbox Sperre", "locked"),
-        EnergieImpulsSwitch(session, "Überschussladen", "surplus_charging"),
+        EnergieImpulsSwitch(session, "Wallbox Sperre", "locked","mdi:lock"),
+        EnergieImpulsSwitch(session, "Überschussladen", "surplus_charging","mdi:octagram-plus"),
         NightFullChargeSwitch(hass),
     ]
     async_add_entities(switches, update_before_add=True)
 
 class EnergieImpulsSwitch(SwitchEntity):
-    def __init__(self, session, name, key):
+    def __init__(self, session, name, key,icon=None):
         self._session = session
         self._name = name
         self._key = key
         self._state = False
         self._attr_unique_id = f"energie_impuls_switch_{key}"
+        self._icon = icon
 
     @property
     def is_on(self):
@@ -71,6 +72,7 @@ class NightFullChargeSwitch(RestoreEntity, SwitchEntity):
         self._state = False
         self._attr_name = "Vollladen über Nacht"
         self._attr_unique_id = "energie_impuls_night_fullcharge"
+        self._icon = "mdi:weather-night"
         self.hass = hass
         
     async def async_added_to_hass(self):

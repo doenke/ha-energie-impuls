@@ -23,7 +23,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
     # Zusätzliche Wallbox-Sensoren
     sensors.extend([
-        WallboxSensor(session, "Wallbox Modus", "wallbox_mode_str", lambda d: d["_state"]["mode_str"],None,"mdi:ev-pug-type2"),
+        WallboxSensor(session, "Wallbox Modus", "wallbox_mode_str", lambda d: d["_state"]["mode_str"],None,"mdi:ev-plug-type2"),
         WallboxSensor(session, "Wallbox Moduscode", "wallbox_mode", lambda d: d["_state"]["mode"]),
         WallboxSensor(session, "Wallbox Verbrauch", "wallbox_consumption", lambda d: d["_state"]["consumption"], "kW","mdi:ev-station"),
         WallboxSensor(session, "Wallbox Zeitstempel", "wallbox_timestamp", lambda d: d["_state"]["timestamp"]),

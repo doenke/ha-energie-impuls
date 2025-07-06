@@ -9,20 +9,32 @@ class VollladenAutomatik:
     def __init__(self, hass):
         self.hass = hass
         self.enabled_entity = "switch.vollladen_uber_nacht"
-        self.trigger_entity = "sensor.energie_impuls_pv_erzeugung"
+        self.sensor_pv = "sensor.energie_impuls_pv_erzeugung"
+        self.sensor_haus = "sensor.energie_impuls_haushalt"
         self._active = False
         self._timer = None
+        self._saved_states = {}
 
     async def async_initialize(self):
         async_track_state_change_event(
             self.hass,
-            self.trigger_entity,
+            self.sensor_pv,
             self._state_change_handler
+        )
+        async_track_state_change_event(
+            self.hass,
+            self.sensor_haus,
+            self._state_change_handler
+        )
+        async_track_state_change_event(
+            self.hass,
+            self.enabled_entity,
+            self._on_enabled_toggle
         )
 
     async def _state_change_handler(self, event):
-        pv_state = self.hass.states.get("sensor.energie_impuls_pv_erzeugung")
-        haus_state = self.hass.states.get("sensor.energie_impuls_haushalt")
+        pv_state = self.hass.states.get(self.sensor_pv)
+        haus_state = self.hass.states.get(self.sensor_haus)
 
         try:
             pv = float(pv_state.state)
@@ -31,7 +43,7 @@ class VollladenAutomatik:
             return
 
         differenz = pv - haushalt
-        _LOGGER.debug(f"PV - Haushalt = {pv} - {haushalt} = {differenz:.2f} kW")
+        _LOGGER.debug(f"PV - Haushalt = {pv:.2f} - {haushalt:.2f} = {differenz:.2f} kW")
 
         if differenz > 2:
             if not self._active:
@@ -44,15 +56,49 @@ class VollladenAutomatik:
                 self._timer()
                 self._timer = None
 
-
     async def _timer_check(self, now):
         enabled = self.hass.states.get(self.enabled_entity)
         if enabled and enabled.state == "on":
-            _LOGGER.info("Vollladen über Nacht aktiv: Sperre & Überschuss aus")
+            _LOGGER.info("Vollladen über Nacht aktiv: Speichere alte Werte & deaktiviere Ladung")
+
+            # Speichere aktuelle Zustände
+            self._saved_states = {
+                "switch.uberschussladen": self.hass.states.get("switch.uberschussladen").state,
+                "switch.wallbox_sperre": self.hass.states.get("switch.wallbox_sperre").state,
+                "number.hybrid_charging_current": self.hass.states.get("number.hybrid_charging_current").state,
+            }
+
+            # Jetzt deaktivieren
             await self.hass.services.async_call("switch", "turn_off", {
                 "entity_id": ["switch.uberschussladen", "switch.wallbox_sperre"]
             })
+            await self.hass.services.async_call("number", "set_value", {
+                "entity_id": "number.hybrid_charging_current",
+                "value": 6
+            })
+
         self._active = False
         if self._timer:
             self._timer()
             self._timer = None
+
+    async def _on_enabled_toggle(self, event):
+        old_state = event.data.get("old_state")
+        new_state = event.data.get("new_state")
+
+        if old_state and old_state.state == "on" and new_state and new_state.state == "off":
+            _LOGGER.info("Vollladen über Nacht deaktiviert – stelle alte Werte wieder her")
+
+            for entity_id, old_value in self._saved_states.items():
+                domain = entity_id.split(".")[0]
+                if domain == "switch":
+                    await self.hass.services.async_call(domain, f"turn_{old_value}", {
+                        "entity_id": entity_id
+                    })
+                elif domain == "number":
+                    await self.hass.services.async_call(domain, "set_value", {
+                        "entity_id": entity_id,
+                        "value": float(old_value)
+                    })
+
+            self._saved_states = {}

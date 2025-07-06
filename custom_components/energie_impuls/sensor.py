@@ -131,6 +131,16 @@ class WallboxSensor(Entity):
         
         self._state = None
 
+        # Dynamischer Gerätename einmalig abrufen
+        try:
+            data = self._session.get_wallbox_data()
+            self._device_name = data.get("wallbox_name", "Wallbox")
+            self._device_id = str(data.get("wallbox_location", "unknown"))
+        except Exception as e:
+            _LOGGER.warning(f"Konnte Wallbox-Name nicht abrufen: {e}")
+            self._device_name = "Wallbox"
+            self._device_id = "unknown"
+
     def update(self):
         try:
             data = self._session.get_wallbox_data()
@@ -143,6 +153,16 @@ class WallboxSensor(Entity):
     def state(self):
         return self._state
 
+    @property
+    def device_info(self):
+         {
+            "identifiers": {("energie_impuls_wallbox_location", f"wallbox_{self._device_id}")},
+            "name": "Energie Impuls Wallbox",
+            "manufacturer": "Energie Impuls",
+            "model": self._device_name,
+            "configuration_url": "https://energie-impuls.site",
+        }
+        
 class VollladenStatusSensor(RestoreEntity, Entity):
     def __init__(self):
         self._attr_name = "Vollladen über Nacht jetzt aktiv"

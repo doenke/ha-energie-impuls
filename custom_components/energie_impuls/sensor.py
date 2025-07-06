@@ -102,7 +102,7 @@ class EnergieImpulsSensor(Entity):
     def __init__(self, session, key):
         self._session = session
         self._key = key
-        self._attr_name = f"Energie Impuls {SENSOR_TYPES[key]['name']}"
+        self._attr_name = SENSOR_TYPES[key]['name']
         self._attr_unique_id = f"energie_impuls_{key}"
         self._attr_unit_of_measurement = SENSOR_TYPES[key].get("unit")
         self._attr_icon = SENSOR_TYPES[key].get("icon")
@@ -124,7 +124,7 @@ class WallboxSensor(Entity):
     def __init__(self, session, name, unique_id, extract_func, unit=None, icon=None):
         self._session = session
         self._extract_func = extract_func
-        self._attr_name = f"Energie Impuls {name}"
+        self._attr_name = name
         self._attr_unique_id = f"energie_impuls_{unique_id}"
         self._attr_unit_of_measurement = unit
         self._attr_icon = icon

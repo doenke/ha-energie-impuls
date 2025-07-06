@@ -43,7 +43,7 @@ class EnergieImpulsSwitch(SwitchEntity):
 
     @property
     def device_info(self):
-         {
+         return {
             "identifiers": {("energie_impuls_wallbox_location", f"wallbox_{self._device_id}")},
             "name": "Energie Impuls Wallbox",
             "manufacturer": "Energie Impuls",

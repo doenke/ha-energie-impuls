@@ -11,26 +11,18 @@ class VollladenAutomatik:
         self.enabled_entity = "switch.vollladen_uber_nacht"
         self.sensor_pv = "sensor.energie_impuls_pv_erzeugung"
         self.sensor_haus = "sensor.energie_impuls_haushalt"
+        self.sensor_verbrauch = "sensor.energie_impuls_wallbox_verbrauch"
         self._active = False
         self._timer = None
         self._saved_states = {}
+        self._monitor_zero = False
+        self._zero_timer = None
 
     async def async_initialize(self):
-        async_track_state_change_event(
-            self.hass,
-            self.sensor_pv,
-            self._state_change_handler
-        )
-        async_track_state_change_event(
-            self.hass,
-            self.sensor_haus,
-            self._state_change_handler
-        )
-        async_track_state_change_event(
-            self.hass,
-            self.enabled_entity,
-            self._on_enabled_toggle
-        )
+        async_track_state_change_event(self.hass, self.sensor_pv, self._state_change_handler)
+        async_track_state_change_event(self.hass, self.sensor_haus, self._state_change_handler)
+        async_track_state_change_event(self.hass, self.sensor_verbrauch, self._verbrauch_handler)
+        async_track_state_change_event(self.hass, self.enabled_entity, self._on_enabled_toggle)
 
     async def _state_change_handler(self, event):
         pv_state = self.hass.states.get(self.sensor_pv)
@@ -61,14 +53,12 @@ class VollladenAutomatik:
         if enabled and enabled.state == "on":
             _LOGGER.info("Vollladen über Nacht aktiv: Speichere alte Werte & deaktiviere Ladung")
 
-            # Speichere aktuelle Zustände
             self._saved_states = {
                 "switch.uberschussladen": self.hass.states.get("switch.uberschussladen").state,
                 "switch.wallbox_sperre": self.hass.states.get("switch.wallbox_sperre").state,
                 "number.hybrid_charging_current": self.hass.states.get("number.hybrid_charging_current").state,
             }
 
-            # Jetzt deaktivieren
             await self.hass.services.async_call("switch", "turn_off", {
                 "entity_id": ["switch.uberschussladen", "switch.wallbox_sperre"]
             })
@@ -77,28 +67,58 @@ class VollladenAutomatik:
                 "value": 6
             })
 
+            self._monitor_zero = True
+
         self._active = False
         if self._timer:
             self._timer()
             self._timer = None
 
+    async def _verbrauch_handler(self, event):
+        if not self._monitor_zero:
+            return
+
+        try:
+            val = float(event.data.get("new_state").state)
+        except (ValueError, AttributeError, TypeError):
+            return
+
+        if val == 0:
+            if not self._zero_timer:
+                _LOGGER.info("Wallbox-Verbrauch = 0 → starte 10-Minuten-Zurücksetz-Timer")
+                self._zero_timer = async_track_time_interval(self.hass, self._reset_due_to_zero, timedelta(minutes=10))
+        else:
+            if self._zero_timer:
+                _LOGGER.info("Wallbox-Verbrauch ≠ 0 → Timer abgebrochen")
+                self._zero_timer()
+                self._zero_timer = None
+
+    async def _reset_due_to_zero(self, now):
+        _LOGGER.info("Wallbox-Verbrauch war 10 Minuten 0 → Setze alte Werte zurück")
+        await self._restore_saved_states()
+
     async def _on_enabled_toggle(self, event):
         old_state = event.data.get("old_state")
         new_state = event.data.get("new_state")
-
         if old_state and old_state.state == "on" and new_state and new_state.state == "off":
             _LOGGER.info("Vollladen über Nacht deaktiviert – stelle alte Werte wieder her")
+            await self._restore_saved_states()
 
-            for entity_id, old_value in self._saved_states.items():
-                domain = entity_id.split(".")[0]
-                if domain == "switch":
-                    await self.hass.services.async_call(domain, f"turn_{old_value}", {
-                        "entity_id": entity_id
-                    })
-                elif domain == "number":
-                    await self.hass.services.async_call(domain, "set_value", {
-                        "entity_id": entity_id,
-                        "value": float(old_value)
-                    })
+    async def _restore_saved_states(self):
+        for entity_id, old_value in self._saved_states.items():
+            domain = entity_id.split(".")[0]
+            if domain == "switch":
+                await self.hass.services.async_call(domain, f"turn_{old_value}", {
+                    "entity_id": entity_id
+                })
+            elif domain == "number":
+                await self.hass.services.async_call(domain, "set_value", {
+                    "entity_id": entity_id,
+                    "value": float(old_value)
+                })
 
-            self._saved_states = {}
+        self._saved_states = {}
+        self._monitor_zero = False
+        if self._zero_timer:
+            self._zero_timer()
+            self._zero_timer = None

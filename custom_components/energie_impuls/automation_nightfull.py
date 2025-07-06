@@ -10,7 +10,6 @@ class VollladenAutomatik:
         self.hass = hass
         self.enabled_entity = "switch.vollladen_uber_nacht"
         self.sensor_pv = "sensor.energie_impuls_pv_erzeugung"
-        self.sensor_haus = "sensor.energie_impuls_haushalt"
         self.sensor_verbrauch = "sensor.energie_impuls_wallbox_verbrauch"
         self._active = False
         self._timer = None
@@ -33,14 +32,12 @@ class VollladenAutomatik:
     async def _state_change_handler(self, event):
         try:
             pv = float(self.hass.states.get(self.sensor_pv).state)
-            haushalt = float(self.hass.states.get(self.sensor_haus).state)
         except (ValueError, AttributeError, TypeError):
             return
 
-        differenz = pv - haushalt
-        if differenz > 2:
+        if pv = 0 2:
             if not self._active:
-                _LOGGER.info("Vollladen: Differenz > 2 → Starte Timer")
+                _LOGGER.info("Vollladen: PV = 0")
                 self._active = True
                 self._timer = async_track_time_interval(self.hass, self._timer_check, timedelta(minutes=10))
         else:

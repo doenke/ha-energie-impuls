@@ -25,7 +25,7 @@ class EnergieImpulsSwitch(SwitchEntity):
         self._key = key
         self._state = False
         self._attr_unique_id = f"energie_impuls_switch_{key}"
-        self._icon = icon
+        self._attr_icon = icon
 
     @property
     def is_on(self):
@@ -72,7 +72,7 @@ class NightFullChargeSwitch(RestoreEntity, SwitchEntity):
         self._state = False
         self._attr_name = "Vollladen über Nacht"
         self._attr_unique_id = "energie_impuls_night_fullcharge"
-        self._icon = "mdi:weather-night"
+        self._attr_icon = "mdi:weather-night"
         self.hass = hass
         
     async def async_added_to_hass(self):

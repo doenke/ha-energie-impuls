@@ -16,16 +16,11 @@ class VollladenAutomatik:
         self._saved_states = {}
         self._monitor_zero = False
         self._zero_timer = None
-        self._status_sensor: VollladenStatusSensor = None
+        self._status_sensor= "binary_sensor.vollladen_uber_nacht_status"
 
     async def async_initialize(self):
-        self._status_sensor = VollladenStatusSensor()
-        self.hass.states.async_set("binary_sensor.vollladen_uber_nacht_status", "off")
-        self.hass.async_create_task(
-            self.hass.helpers.entity_component.async_add_entities([self._status_sensor], update_before_add=True)
-        )
+        self.hass.states.async_set(self._status_sensor, "off")
         async_track_state_change_event(self.hass, self.sensor_pv, self._state_change_handler)
-        async_track_state_change_event(self.hass, self.sensor_haus, self._state_change_handler)
         async_track_state_change_event(self.hass, self.sensor_verbrauch, self._verbrauch_handler)
         async_track_state_change_event(self.hass, self.enabled_entity, self._on_enabled_toggle)
 
@@ -35,7 +30,7 @@ class VollladenAutomatik:
         except (ValueError, AttributeError, TypeError):
             return
 
-        if pv = 0 2:
+        if pv == 0:
             if not self._active:
                 _LOGGER.info("Vollladen: PV = 0")
                 self._active = True
@@ -57,7 +52,7 @@ class VollladenAutomatik:
                 "number.hybrid_charging_current": self.hass.states.get("number.hybrid_charging_current").state,
             }
 
-            await self._status_sensor.async_turn_on()
+            await self.hass.states.async_set(self._status_sensor, "on")
             await self.hass.services.async_call("switch", "turn_off", {
                 "entity_id": ["switch.uberschussladen", "switch.wallbox_sperre"]
             })
@@ -80,7 +75,7 @@ class VollladenAutomatik:
             val = float(event.data.get("new_state").state)
         except (ValueError, AttributeError, TypeError):
             return
-        if val == 0 and self._status_sensor.is_on:
+        if val == 0 and self.hass.states.get(self._status_sensor).state=="on":
             if not self._zero_timer:
                 _LOGGER.info("Wallbox-Verbrauch = 0 → Starte Rücksetz-Timer")
                 self._zero_timer = async_track_time_interval(self.hass, self._reset_due_to_zero, timedelta(minutes=10))
@@ -91,13 +86,13 @@ class VollladenAutomatik:
 
     async def _reset_due_to_zero(self, now):
         _LOGGER.info("10 Minuten 0 W Verbrauch → Rücksetzen")
-        if self._status_sensor.is_on:
+        if self.hass.states.get(self._status_sensor).state=="on":
             await self._restore_saved_states()
 
     async def _on_enabled_toggle(self, event):
         if event.data.get("old_state").state == "on" and event.data.get("new_state").state == "off":
             _LOGGER.info("Vollladen-Schalter aus → Rücksetzen")
-            if self._status_sensor.is_on:
+            if self.hass.states.get(self._status_sensor).state=="on":
                 await self._restore_saved_states()
 
     async def _restore_saved_states(self):
@@ -113,7 +108,7 @@ class VollladenAutomatik:
                     "value": float(old_value)
                 })
         self._saved_states = {}
-        await self._status_sensor.async_turn_off()
+        await self.hass.states.async_set(self._status_sensor, "off")
         self._monitor_zero = False
         if self._zero_timer:
             self._zero_timer()

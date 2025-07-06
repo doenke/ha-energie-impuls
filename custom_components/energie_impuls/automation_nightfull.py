@@ -21,7 +21,7 @@ class VollladenAutomatik:
 
     async def async_initialize(self):
         self._status_sensor = VollladenStatusSensor()
-        self.hass.states.async_set(ACTIVE_STATUS_ENTITY, "off")
+        self.hass.states.async_set("binary_sensor.vollladen_uber_nacht_status", "off")
         self.hass.async_create_task(
             self.hass.helpers.entity_component.async_add_entities([self._status_sensor], update_before_add=True)
         )

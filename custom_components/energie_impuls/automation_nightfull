@@ -1,0 +1,58 @@
+from homeassistant.helpers.event import async_track_state_change_event
+from homeassistant.helpers.event import async_track_time_interval
+from datetime import timedelta
+import logging
+
+_LOGGER = logging.getLogger(__name__)
+
+class VollladenAutomatik:
+    def __init__(self, hass):
+        self.hass = hass
+        self.enabled_entity = "switch.vollladen_uber_nacht"
+        self.trigger_entity = "sensor.energie_impuls_pv_erzeugung"
+        self._active = False
+        self._timer = None
+
+    async def async_initialize(self):
+        async_track_state_change_event(
+            self.hass,
+            self.trigger_entity,
+            self._state_change_handler
+        )
+
+    async def _state_change_handler(self, event):
+        pv_state = self.hass.states.get("sensor.energie_impuls_pv_erzeugung")
+        haus_state = self.hass.states.get("sensor.energie_impuls_haushalt")
+
+        try:
+            pv = float(pv_state.state)
+            haushalt = float(haus_state.state)
+        except (ValueError, AttributeError, TypeError):
+            return
+
+        differenz = pv - haushalt
+        _LOGGER.debug(f"PV - Haushalt = {pv} - {haushalt} = {differenz:.2f} kW")
+
+        if differenz > 2:
+            if not self._active:
+                _LOGGER.info("Differenz über 2 kW → Starte 10-Minuten-Timer")
+                self._active = True
+                self._timer = async_track_time_interval(self.hass, self._timer_check, timedelta(minutes=10))
+        else:
+            self._active = False
+            if self._timer:
+                self._timer()
+                self._timer = None
+
+
+    async def _timer_check(self, now):
+        enabled = self.hass.states.get(self.enabled_entity)
+        if enabled and enabled.state == "on":
+            _LOGGER.info("Vollladen über Nacht aktiv: Sperre & Überschuss aus")
+            await self.hass.services.async_call("switch", "turn_off", {
+                "entity_id": ["switch.uberschussladen", "switch.wallbox_sperre"]
+            })
+        self._active = False
+        if self._timer:
+            self._timer()
+            self._timer = None

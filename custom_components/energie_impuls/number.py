@@ -35,7 +35,7 @@ class HybridChargingCurrentNumber(NumberEntity):
             self._device_name = "Wallbox"
             self._device_id = "unknown"
 
-    @property
+    
 
     @property
     def device_info(self):
@@ -46,6 +46,8 @@ class HybridChargingCurrentNumber(NumberEntity):
             "model": self._device_name,
             "configuration_url": "https://energie-impuls.site",
         }
+    
+    @property
     def native_value(self):
         return self._state
     def update(self):

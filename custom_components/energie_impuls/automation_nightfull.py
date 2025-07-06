@@ -26,9 +26,13 @@ class VollladenAutomatik:
 
     async def _state_change_handler(self, event):
         try:
-            pv = float(self.hass.states.get(self.sensor_pv).state)
+           state_obj = self.hass.states.get(self.sensor_pv)
+           if state_obj is None or state_obj.state in ("unknown", "unavailable"):
+              pv = 0
+           else:
+              pv = float(state_obj.state)
         except (ValueError, AttributeError, TypeError):
-            return
+           pv = 0  # Fallback bei Parsing-Fehlern
 
         if pv == 0:
             if not self._active:

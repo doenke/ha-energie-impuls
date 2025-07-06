@@ -14,9 +14,14 @@ Diese benutzerdefinierte Home Assistant-Integration verbindet dein Smart Home mi
   - Ladestrom (`hybrid_charging_current`) in Ampere
 - **Logik-Elemente**:
   - Automatik: „Vollladen über Nacht“
-    - speichert und stellt Zustände automatisch wieder her
-    - aktiviert bei PV-Überschuss = 0
-    - deaktiviert bei 10 Minuten Nicht-Verbrauch
+    - aktiviert bei PV-Erzeugung = 0 über 10 Minuten
+    - Gibt Wallbox frei und läd mit voller Geschwindigkeit
+    - speichert und stellt Zustände automatisch wieder her, wenn der Ladestrom auf 0 abgesunken ist
+       - Wallbox-Sperre (`locked`)
+       - Überschussladen (`surplus_charging`)
+       - Ladestrom (`hybrid_charging_current`)
+
+    
 
 
 ---

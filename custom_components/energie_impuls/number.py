@@ -22,11 +22,30 @@ class HybridChargingCurrentNumber(NumberEntity):
         self._attr_native_min_value = 0
         self._attr_native_max_value = 16
         self._attr_native_step = 1
-        self._icon = "mdi:battery-plus"
+        self._attr_icon = "mdi:battery-plus"
         self._state = None
-
+        
+        # Dynamischer Gerätename einmalig abrufen
+        try:
+            data = self._session.get_wallbox_data()
+            self._device_name = data.get("wallbox_name", "Wallbox")
+            self._device_id = str(data.get("wallbox_location", "unknown"))
+        except Exception as e:
+            _LOGGER.warning(f"Konnte Wallbox-Name nicht abrufen: {e}")
+            self._device_name = "Wallbox"
+            self._device_id = "unknown"
 
     @property
+
+    @property
+    def device_info(self):
+         {
+            "identifiers": {("energie_impuls_wallbox_location", f"wallbox_{self._device_id}")},
+            "name": "Energie Impuls Wallbox",
+            "manufacturer": "Energie Impuls",
+            "model": self._device_name,
+            "configuration_url": "https://energie-impuls.site",
+        }
     def native_value(self):
         return self._state
     def update(self):

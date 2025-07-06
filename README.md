@@ -4,18 +4,20 @@ Diese benutzerdefinierte Home Assistant-Integration verbindet dein Smart Home mi
 
 ## ⚙️ Funktionen
 
-- Authentifizierung über API-Login (Token-Handling integriert)
-- Automatische Abfrage der Energieflüsse:
-  - PV-Produktion
-  - Netzeinspeisung
-  - Batterieladung
-  - Wallbox-Verbrauch
-  - Haushaltsverbrauch
-  - Batterie-Ladezustand (SoC)
-- Auslesen des Wallbox-Status und Verbrauchs
-- Steuerung der Wallbox:
-  - **Wallbox sperren/freigeben**
-  - **Überschussladen aktivieren/deaktivieren**
+- **Live-Sensoren**:
+  - PV-Erzeugung, Netzeinspeisung, Haushaltsverbrauch,...
+  - Batterie-SOC (State of Charge)
+  - Wallbox-Verbrauch & -Modus
+- **Steuerbare Entitäten**:
+  - Wallbox-Sperre (`locked`)
+  - Überschussladen (`surplus_charging`)
+  - Ladestrom (`hybrid_charging_current`) in Ampere
+- **Logik-Elemente**:
+  - Automatik: „Vollladen über Nacht“
+    - speichert und stellt Zustände automatisch wieder her
+    - aktiviert bei PV-Überschuss = 0
+    - deaktiviert bei 10 Minuten Nicht-Verbrauch
+
 
 ---
 
@@ -85,6 +87,20 @@ Nach erfolgreichem Login wird ein Zugriffstoken gespeichert und automatisch erne
 | `switch.wallbox_ueberschussladen`      | Überschussladen aktivieren      |
 
 ---
+
+## 🔁 Automatisierungen
+
+### 💤 Vollladen über Nacht
+
+- Wird aktiviert, wenn:
+  - PV – Haushalt > 2 kW für 10 Minuten
+- Aktionen:
+  - Schaltet `surplus_charging` und `wallbox_sperre` aus
+  - Setzt `hybrid_charging_current` auf 6 A
+- Beendet, wenn:
+  - Verbrauch = 0 für 10 Minuten
+  - oder `switch.vollladen_uber_nacht` deaktiviert wird
+- Stellt dann ursprüngliche Werte wieder her
 
 ## 🧑‍💻 Mitwirken
 

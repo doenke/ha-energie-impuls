@@ -1,5 +1,6 @@
 
 from homeassistant.components.switch import SwitchEntity
+from homeassistant.helpers.restore_state import RestoreEntity
 from homeassistant.const import CONF_USERNAME, CONF_PASSWORD
 from .const import WALLBOX_SETPOINT_URL
 from .sensor import EnergyImpulsSession
@@ -65,13 +66,20 @@ class EnergieImpulsSwitch(SwitchEntity):
         except Exception as e:
             _LOGGER.error(f"Updatefehler Switch {self._key}: {e}")
 
-class NightFullChargeSwitch(SwitchEntity):
+class NightFullChargeSwitch(RestoreEntity, SwitchEntity):
     def __init__(self, hass):
         self._state = False
         self._attr_name = "Vollladen über Nacht"
         self._attr_unique_id = "energie_impuls_night_fullcharge"
         self.hass = hass
-
+        
+    async def async_added_to_hass(self):
+        await super().async_added_to_hass()
+        old_state = await self.async_get_last_state()
+        if old_state is not None:
+            self._state = old_state.state == "on"
+            _LOGGER.info(f"Zustand wiederhergestellt: {self._state}")
+    
     @property
     def is_on(self):
         return self._state

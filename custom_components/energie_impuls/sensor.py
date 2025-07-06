@@ -139,3 +139,35 @@ class WallboxSensor(Entity):
     @property
     def state(self):
         return self._state
+
+class VollladenStatusSensor(RestoreEntity, Entity):
+    def __init__(self):
+        self._attr_name = "Vollladen über Nacht aktiv"
+        self._attr_unique_id = "vollladen_status_sensor"
+        self._state = False
+        self.entity_id = "binary_sensor.vollladen_uber_nacht_status"
+
+    async def async_added_to_hass(self):
+        await super().async_added_to_hass()
+        old_state = await self.async_get_last_state()
+        self._state = old_state and old_state.state == "on"
+
+    @property
+    def is_on(self):
+        return self._state
+
+    @property
+    def state(self):
+        return "on" if self._state else "off"
+
+    @property
+    def device_class(self):
+        return "running"
+
+    async def async_turn_on(self):
+        self._state = True
+        self.async_write_ha_state()
+
+    async def async_turn_off(self):
+        self._state = False
+        self.async_write_ha_state()

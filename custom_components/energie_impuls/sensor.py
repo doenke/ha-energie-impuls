@@ -102,7 +102,7 @@ class EnergieImpulsSensor(Entity):
         self._attr_name = f"Energie Impuls {SENSOR_TYPES[key]['name']}"
         self._attr_unique_id = f"energie_impuls_{key}"
         self._attr_unit_of_measurement = SENSOR_TYPES[key].get("unit")
-        self._attr_icon = "SENSOR_TYPES[key].get("icon")
+        self._attr_icon = SENSOR_TYPES[key].get("icon")
         self._state = None
 
     def update(self):

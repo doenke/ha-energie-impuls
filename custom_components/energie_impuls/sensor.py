@@ -145,10 +145,11 @@ class WallboxSensor(Entity):
 
 class VollladenStatusSensor(RestoreEntity, Entity):
     def __init__(self):
-        self._attr_name = "Vollladen über Nacht aktiv"
+        self._attr_name = "Vollladen über Nacht jetzt aktiv"
         self._attr_unique_id = "vollladen_status_sensor"
         self._state = False
         self.entity_id = "binary_sensor.vollladen_uber_nacht_status"
+        self._icon = "mdi:weather-night"
 
     async def async_added_to_hass(self):
         await super().async_added_to_hass()

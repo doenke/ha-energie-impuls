@@ -13,6 +13,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
     switches = [
         EnergieImpulsSwitch(session, "Wallbox Sperre", "locked"),
         EnergieImpulsSwitch(session, "Überschussladen", "surplus_charging"),
+        NightFullChargeSwitch(hass),
     ]
     async_add_entities(switches, update_before_add=True)
 
@@ -63,3 +64,25 @@ class EnergieImpulsSwitch(SwitchEntity):
             self._state = data["_set_point"].get(self._key, False)
         except Exception as e:
             _LOGGER.error(f"Updatefehler Switch {self._key}: {e}")
+
+class NightFullChargeSwitch(SwitchEntity):
+    def __init__(self, hass):
+        self._state = False
+        self._attr_name = "Vollladen über Nacht"
+        self._attr_unique_id = "energie_impuls_night_fullcharge"
+        self.hass = hass
+
+    @property
+    def is_on(self):
+        return self._state
+
+    def turn_on(self, **kwargs):
+        _LOGGER.info("Vollladen über Nacht aktiviert")
+        self._state = True
+
+    def turn_off(self, **kwargs):
+        _LOGGER.info("Vollladen über Nacht deaktiviert")
+        self._state = False
+
+    def update(self):
+        pass  # Keine Abhängigkeit von externen Daten

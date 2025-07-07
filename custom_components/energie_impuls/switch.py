@@ -1,7 +1,7 @@
 
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.helpers.restore_state import RestoreEntity
-from homeassistant.const import CONF_USERNAME, CONF_PASSWORD
+from homeassistant.const import CONF_USERNAME, CONF_PASSWORD, DOMAIN
 from .const import WALLBOX_SETPOINT_URL
 from .sensor import EnergyImpulsSession
 import requests
@@ -27,16 +27,6 @@ class EnergieImpulsSwitch(SwitchEntity):
         self._attr_unique_id = f"energie_impuls_switch_{key}"
         self._attr_icon = icon
 
-
-        # Dynamischer Gerätename einmalig abrufen
-        try:
-            data = self._session.get_wallbox_data()
-            self._device_name = data.get("wallbox_name", "Wallbox")
-            self._device_id = str(data.get("wallbox_location", "unknown"))
-        except Exception as e:
-            _LOGGER.warning(f"Konnte Wallbox-Name nicht abrufen: {e}")
-            self._device_name = "Wallbox"
-            self._device_id = "unknown"
     @property
     def is_on(self):
         return self._state
@@ -44,10 +34,10 @@ class EnergieImpulsSwitch(SwitchEntity):
     @property
     def device_info(self):
          return {
-            "identifiers": {("energie_impuls_wallbox_location", f"wallbox_{self._device_id}")},
+            "identifiers": {(DOMAIN, f"wallbox_{hass.data[DOMAIN]["wb_device_id"]}")},
             "name": "Energie Impuls Wallbox",
-            "manufacturer": "Energie Impuls",
-            "model": self._device_name,
+            "manufacturer": "ABB",
+            "model": hass.data[DOMAIN]["wb_device_name"],
             "configuration_url": "https://energie-impuls.site",
         }
 
@@ -106,6 +96,16 @@ class NightFullChargeSwitch(RestoreEntity, SwitchEntity):
     def is_on(self):
         return self._state
 
+    @property
+    def device_info(self):
+         return {
+            "identifiers": {(DOMAIN, f"wallbox_{hass.data[DOMAIN]["wb_device_id"]}")},
+            "name": "Energie Impuls Wallbox",
+            "manufacturer": "ABB",
+            "model": hass.data[DOMAIN]["wb_device_name"],
+            "configuration_url": "https://energie-impuls.site",
+        }
+        
     def turn_on(self, **kwargs):
         _LOGGER.info("Vollladen über Nacht aktiviert")
         self._state = True

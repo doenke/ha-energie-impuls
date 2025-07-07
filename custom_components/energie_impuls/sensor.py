@@ -1,6 +1,5 @@
 from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.restore_state import RestoreEntity
-from homeassistant.const import CONF_USERNAME, CONF_PASSWORD
 from .const import DOMAIN
 from .api import EnergyImpulsSession
 import requests

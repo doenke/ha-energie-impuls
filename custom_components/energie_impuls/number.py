@@ -1,7 +1,7 @@
 from homeassistant.components.number import NumberEntity
 from homeassistant.const import CONF_USERNAME, CONF_PASSWORD
 from .const import WALLBOX_SETPOINT_URL
-from .sensor import EnergyImpulsSession
+from .api import EnergyImpulsSession
 import requests
 import logging
 

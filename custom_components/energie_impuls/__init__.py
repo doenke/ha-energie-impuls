@@ -2,6 +2,7 @@
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from .automation_nightfull import VollladenAutomatik
+from .sensor import EnergyImpulsSession
 from .const import DOMAIN, WALLBOX_NAME, WALLBOX_ID
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:

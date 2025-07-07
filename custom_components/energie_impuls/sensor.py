@@ -1,7 +1,7 @@
 from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.restore_state import RestoreEntity
 from homeassistant.const import CONF_USERNAME, CONF_PASSWORD
-from .const import LOGIN_URL, DATA_URL, WALLBOX_URL
+from .const import LOGIN_URL, DATA_URL, WALLBOX_URL, DOMAIN
 import requests
 import logging
 
@@ -120,6 +120,16 @@ class EnergieImpulsSensor(Entity):
     def state(self):
         return self._state
 
+
+    @property
+    def device_info(self):
+         return {
+            "identifiers": {(DOMAIN,"Myid")},
+            "name": "Energie Impuls",
+            "manufacturer": "Planville",
+            "model": "Energie Impuls",
+            "configuration_url": "https://energie-impuls.site",
+        }
 class WallboxSensor(Entity):
     def __init__(self, session, name, unique_id, extract_func, unit=None, icon=None):
         self._session = session

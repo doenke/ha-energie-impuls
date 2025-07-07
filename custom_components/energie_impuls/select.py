@@ -1,6 +1,6 @@
 from homeassistant.components.select import SelectEntity
 from homeassistant.const import CONF_USERNAME, CONF_PASSWORD, DOMAIN
-from .sensor import EnergyImpulsSession
+from .api import EnergyImpulsSession
 import logging
 
 _LOGGER = logging.getLogger(__name__)

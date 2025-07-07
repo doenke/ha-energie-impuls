@@ -3,7 +3,7 @@ from homeassistant.components.switch import SwitchEntity
 from homeassistant.helpers.restore_state import RestoreEntity
 from homeassistant.const import CONF_USERNAME, CONF_PASSWORD, DOMAIN
 from .const import WALLBOX_SETPOINT_URL
-from .sensor import EnergyImpulsSession
+from .api import EnergyImpulsSession
 import requests
 import logging
 

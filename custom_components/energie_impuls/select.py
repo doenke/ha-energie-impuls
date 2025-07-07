@@ -1,5 +1,5 @@
 from homeassistant.components.select import SelectEntity
-from homeassistant.const import CONF_USERNAME, CONF_PASSWORD
+from homeassistant.const import CONF_USERNAME, CONF_PASSWORD, DOMAIN
 from .sensor import EnergyImpulsSession
 import logging
 
@@ -49,3 +49,12 @@ class WallboxModeSelect(SelectEntity):
             3: "schnelles Überschussladen"
         }
         return mapping.get(code, "Unbekannt")
+    @property
+    def device_info(self):
+         return {
+            "identifiers": {(DOMAIN, f"wallbox_{hass.data[DOMAIN]["wb_device_id"]}")},
+            "name": "Energie Impuls Wallbox",
+            "manufacturer": "ABB",
+            "model": hass.data[DOMAIN]["wb_device_name"],
+            "configuration_url": "https://energie-impuls.site",
+        }

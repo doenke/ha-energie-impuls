@@ -62,13 +62,8 @@ class EnergieImpulsSensor(Entity):
 
     @property
     def device_info(self):
-         return {
-            "identifiers": {(DOMAIN,"Myid")},
-            "name": "Energie Impuls",
-            "manufacturer": "Planville",
-            "model": "Energie Impuls",
-            "configuration_url": "https://energie-impuls.site",
-        }
+         return EnergieImpulsDevice(self.hass).device_info
+        
 class WallboxSensor(Entity):
     def __init__(self, hass, session, name, unique_id, extract_func, unit=None, icon=None):
         self._session = session
@@ -94,13 +89,7 @@ class WallboxSensor(Entity):
 
     @property
     def device_info(self):
-         return {
-            "identifiers": {(DOMAIN, f"wallbox_{self.hass.data[DOMAIN]["wb_device_id"]}")},
-            "name": "Energie Impuls Wallbox",
-            "manufacturer": "ABB",
-            "model": self.hass.data[DOMAIN]["wb_device_name"],
-            "configuration_url": "https://energie-impuls.site",
-        }
+         return EnergieImpulsWallboxDevice(self.hass).device_info
         
 class VollladenStatusSensor(RestoreEntity, Entity):
     def __init__(self, hass):

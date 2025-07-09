@@ -10,7 +10,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass.data[DOMAIN] = {}
 
     
-    session = EnergyImpulsSession(entry.data["username"], entry.data["password"])
+    session = EnergyImpulsSession(hass)
 
     try:
         wallbox_data = session.get_wallbox_data()

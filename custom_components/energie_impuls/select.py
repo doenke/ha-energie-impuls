@@ -1,4 +1,5 @@
 from homeassistant.components.select import SelectEntity
+from .devices import EnergieImpulsWallboxDevice, EnergieImpulsDevice
 from .const import DOMAIN
 from .api import EnergyImpulsSession
 import logging

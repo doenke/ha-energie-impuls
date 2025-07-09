@@ -1,5 +1,5 @@
 from homeassistant.components.number import NumberEntity
-from .const import DOMAIN
+from .const import DOMAIN, WALLBOX_SETPOINT_URL
 from .api import EnergyImpulsSession
 import requests
 import logging
@@ -32,7 +32,7 @@ class HybridChargingCurrentNumber(NumberEntity):
         return self._state
     def update(self):
         try:
-            data = self._session.get_wallbox_data()
+            data = await self._session.async_get_wallbox_data()
             _LOGGER.debug(f"Wallboxdaten für hybrid_charging_current: {data}")
             self._state = data["_set_point"].get("hybrid_charging_current", 0)
             _LOGGER.info(f"Aktueller Hybridwert: {self._state}")

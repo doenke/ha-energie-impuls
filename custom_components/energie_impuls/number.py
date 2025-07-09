@@ -1,4 +1,5 @@
 from homeassistant.components.number import NumberEntity
+from .devices import EnergieImpulsWallboxDevice, EnergieImpulsDevice
 from .const import DOMAIN
 import logging
 

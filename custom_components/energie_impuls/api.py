@@ -1,7 +1,7 @@
 import aiohttp
 import async_timeout
 import logging
-from .const import LOGIN_URL, DATA_URL, WALLBOX_URL
+from .const import LOGIN_URL, DATA_URL, WALLBOX_URL, CONF_USERNAME, CONF_PASSWORD
 
 _LOGGER = logging.getLogger(__name__)
 

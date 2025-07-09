@@ -50,7 +50,7 @@ class HybridChargingCurrentNumber(NumberEntity):
                 "hybrid_charging_current": None if int(value) == 0 else int(value)
             }
 
-            response = await self._session.async_put( json=payload)
+            response = await self._session.async_put_wallbox_setpoint(payload)
             if response.status == 200:
                 self._state = payload["hybrid_charging_current"]
                 _LOGGER.info(f"Hybridwert erfolgreich gesetzt auf {self._state}")

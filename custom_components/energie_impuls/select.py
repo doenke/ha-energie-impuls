@@ -14,16 +14,16 @@ WALLBOX_MODES = [
 
 async def async_setup_entry(hass, entry, async_add_entities):
     session =  hass.data[DOMAIN]["session"]
-    async_add_entities([WallboxModeSelect(session)], update_before_add=True)
+    async_add_entities([WallboxModeSelect(hass,session)], update_before_add=True)
 
 class WallboxModeSelect(SelectEntity):
-    def __init__(self, session):
+    def __init__(self, hass, session):
         self._session = session
         self._attr_name = "Wallbox Lademodus"
         self._attr_unique_id = "energie_impuls_wallbox_mode"
         self._attr_options = WALLBOX_MODES
         self._attr_current_option = None
-
+        self.hass = hass
     def update(self):
         try:
             data = self._session.get_wallbox_data()

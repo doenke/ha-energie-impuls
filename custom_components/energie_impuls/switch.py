@@ -3,6 +3,7 @@ from homeassistant.components.switch import SwitchEntity
 from homeassistant.helpers.restore_state import RestoreEntity
 from .const import DOMAIN
 from .api import EnergyImpulsSession
+from .devices import
 import requests
 import logging
 
@@ -34,13 +35,7 @@ class EnergieImpulsSwitch(SwitchEntity):
 
     @property
     def device_info(self):
-         return {
-            "identifiers": {(DOMAIN, f"wallbox_{hass.data[DOMAIN]["wb_device_id"]}")},
-            "name": "Energie Impuls Wallbox",
-            "manufacturer": "ABB",
-            "model": hass.data[DOMAIN]["wb_device_name"],
-            "configuration_url": "https://energie-impuls.site",
-        }
+         return EnergieImpulsWallboxDevice(self.hass)
 
     @property
     def name(self):
@@ -99,13 +94,7 @@ class NightFullChargeSwitch(RestoreEntity, SwitchEntity):
 
     @property
     def device_info(self):
-         return {
-            "identifiers": {(DOMAIN, f"wallbox_{self.hass.data[DOMAIN]["wb_device_id"]}")},
-            "name": "Energie Impuls Wallbox",
-            "manufacturer": "ABB",
-            "model": self.hass.data[DOMAIN]["wb_device_name"],
-            "configuration_url": "https://energie-impuls.site",
-        }
+        return EnergieImpulsWallboxDevice(self.hass)
         
     def turn_on(self, **kwargs):
         _LOGGER.info("Vollladen über Nacht aktiviert")

@@ -7,7 +7,7 @@ class EnergieImpulsWallboxDevice():
     @property
     def device_info(self):
          return {
-            "identifiers": {(DOMAIN, f"wallbox_{hass.data[DOMAIN][CONF_WB_DEVICE_ID]}")},
+            "identifiers": {(DOMAIN, f"wallbox_{self.hass.data[DOMAIN][CONF_WB_DEVICE_ID]}")},
             "name": "Energie Impuls Wallbox",
             "manufacturer": "ABB",
             "model": self.hass.data[DOMAIN][CONF_WB_DEVICE_NAME ],

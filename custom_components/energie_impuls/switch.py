@@ -99,7 +99,7 @@ class NightFullChargeSwitch(RestoreEntity, SwitchEntity):
     @property
     def device_info(self):
          return {
-            "identifiers": {(DOMAIN, f"wallbox_{hass.data[DOMAIN]["wb_device_id"]}")},
+            "identifiers": {(DOMAIN, f"wallbox_{self.hass.data[DOMAIN]["wb_device_id"]}")},
             "name": "Energie Impuls Wallbox",
             "manufacturer": "ABB",
             "model": self.hass.data[DOMAIN]["wb_device_name"],

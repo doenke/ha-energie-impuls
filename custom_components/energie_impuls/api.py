@@ -2,7 +2,7 @@ import aiohttp
 import async_timeout
 import logging
 
-from .const import LOGIN_URL, DATA_URL, WALLBOX_URL
+from .const import LOGIN_URL, DATA_URL, WALLBOX_URL, WALLBOX_SETPOINT_URL ,DOMAIN, CONF_WB_DEVICE_ID
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -72,7 +72,7 @@ class EnergyImpulsSession:
             "Content-Type": "application/json"
         }
         try:
-            async with self._client.put(WALLBOX_SETPOINT_URL+self.hass., headers=headers, json=payload) as response:
+            async with self._client.put(WALLBOX_SETPOINT_URL+self.hass.data[DOMAIN][CONF_WB_DEVICE_ID], headers=headers, json=payload) as response:
                 if response.status not in (200, 201, 204):
                     raise Exception(f"Fehler beim PUT: {response.status} → {await response.text()}")
                 return True

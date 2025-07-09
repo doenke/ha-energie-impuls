@@ -1,5 +1,5 @@
 from homeassistant.components.select import SelectEntity
-from homeassistant.const import DOMAIN
+from .const import DOMAIN
 from .api import EnergyImpulsSession
 import logging
 

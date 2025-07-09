@@ -6,10 +6,10 @@ from .const import LOGIN_URL, DATA_URL, WALLBOX_URL
 _LOGGER = logging.getLogger(__name__)
 
 class EnergyImpulsSession:
-    def __init__(self, hass, username, password):
+    def __init__(self, hass):
         self.hass = hass
-        self.username = username
-        self.password = password
+        self.username = entry.data[CONF_USERNAME]
+        self.password = entry.data[CONF_PASSWORD]
         self.token = None
 
     async def async_get_token(self):

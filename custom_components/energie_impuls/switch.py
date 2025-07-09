@@ -1,7 +1,7 @@
 
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.helpers.restore_state import RestoreEntity
-from .const import DOMAIN
+from .const import DOMAIN, WALLBOX_SETPOINT_URL
 from .api import EnergyImpulsSession
 from .devices import
 import requests

@@ -72,7 +72,7 @@ class EnergyImpulsSession:
             "Content-Type": "application/json"
         }
         try:
-            async with self._client.put(WALLBOX_URL, headers=headers, json=payload) as response:
+            async with self._client.put(WALLBOX_SETPOINT_URL+self.hass., headers=headers, json=payload) as response:
                 if response.status not in (200, 201, 204):
                     raise Exception(f"Fehler beim PUT: {response.status} → {await response.text()}")
                 return True

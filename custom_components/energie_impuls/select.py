@@ -52,9 +52,6 @@ class WallboxModeSelect(SelectEntity):
     @property
     def device_info(self):
          return {
-            "identifiers": {(DOMAIN, f"wallbox_{hass.data[DOMAIN]["wb_device_id"]}")},
-            "name": "Energie Impuls Wallbox",
-            "manufacturer": "ABB",
-            "model": hass.data[DOMAIN]["wb_device_name"],
+            
             "configuration_url": "https://energie-impuls.site",
         }

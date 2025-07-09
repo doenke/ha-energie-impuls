@@ -35,13 +35,7 @@ class EnergieImpulsSwitch(SwitchEntity):
 
     @property
     def device_info(self):
-        return {
-            "identifiers": {(DOMAIN, f"wallbox_{self.hass.data[DOMAIN]['wb_device_id']}")},
-            "name": "Energie Impuls Wallbox",
-            "manufacturer": "ABB",
-            "model": self.hass.data[DOMAIN]["wb_device_name"],
-            "configuration_url": "https://energie-impuls.site",
-        }
+        return EnergieImpulsWallboxDevice(self.hass).device_info
 
     async def async_turn_on(self, **kwargs):
         try:
@@ -96,14 +90,7 @@ class NightFullChargeSwitch(RestoreEntity, SwitchEntity):
 
     @property
     def device_info(self):
-        return {
-            "identifiers": {(DOMAIN, f"wallbox_{self.hass.data[DOMAIN]['wb_device_id']}")},
-            "name": "Energie Impuls Wallbox",
-            "manufacturer": "ABB",
-            "model": self.hass.data[DOMAIN]["wb_device_name"],
-            "configuration_url": "https://energie-impuls.site",
-        }
-
+        return EnergieImpulsWallboxDevice(self.hass).device_info
     async def async_turn_on(self, **kwargs):
         _LOGGER.info("Vollladen über Nacht aktiviert")
         self._state = True

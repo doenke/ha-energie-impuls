@@ -76,7 +76,7 @@ class WallboxSensor(Entity):
         self._attr_unique_id = f"energie_impuls_{unique_id}"
         self._attr_unit_of_measurement = unit
         self._attr_icon = icon
-        
+        self.hass = hass
         self._state = None
 
     def update(self):
@@ -94,10 +94,10 @@ class WallboxSensor(Entity):
     @property
     def device_info(self):
          return {
-            "identifiers": {(DOMAIN, f"wallbox_{hass.data[DOMAIN]["wb_device_id"]}")},
+            "identifiers": {(DOMAIN, f"wallbox_{self.hass.data[DOMAIN]["wb_device_id"]}")},
             "name": "Energie Impuls Wallbox",
             "manufacturer": "ABB",
-            "model": hass.data[DOMAIN]["wb_device_name"],
+            "model": self.hass.data[DOMAIN]["wb_device_name"],
             "configuration_url": "https://energie-impuls.site",
         }
         

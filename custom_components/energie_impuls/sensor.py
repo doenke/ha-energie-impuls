@@ -18,18 +18,18 @@ SENSOR_TYPES = {
 async def async_setup_entry(hass, entry, async_add_entities):
     session = hass.data[DOMAIN]["session"]
 
-    sensors = [EnergieImpulsSensor(session, key) for key in SENSOR_TYPES]
+    sensors = [EnergieImpulsSensor(hass, session, key) for key in SENSOR_TYPES]
 
     # Zusätzliche Wallbox-Sensoren
     sensors.extend([
-        WallboxSensor(session, "Wallbox Modus", "wallbox_mode_str", lambda d: d["_state"]["mode_str"],None,"mdi:ev-plug-type2"),
-        WallboxSensor(session, "Wallbox Moduscode", "wallbox_mode", lambda d: d["_state"]["mode"]),
-        WallboxSensor(session, "Wallbox Verbrauch", "wallbox_consumption", lambda d: d["_state"]["consumption"], "kW","mdi:ev-station"),
-        WallboxSensor(session, "Wallbox Zeitstempel", "wallbox_timestamp", lambda d: d["_state"]["timestamp"]),
-        WallboxSensor(session, "Wallbox Seit Modus aktiv", "wallbox_mode_since", lambda d: d["_state"]["mode_since"]),
-        #WallboxSensor(session, "Wallbox Name", "wallbox_name", lambda d: d["name"]),
-        WallboxSensor(session, "Wallbox Standort-ID", "wallbox_location", lambda d: d["location"]),
-        VollladenStatusSensor(),
+        WallboxSensor(hass, session, "Wallbox Modus", "wallbox_mode_str", lambda d: d["_state"]["mode_str"],None,"mdi:ev-plug-type2"),
+        WallboxSensor(hass, session, "Wallbox Moduscode", "wallbox_mode", lambda d: d["_state"]["mode"]),
+        WallboxSensor(hass, session, "Wallbox Verbrauch", "wallbox_consumption", lambda d: d["_state"]["consumption"], "kW","mdi:ev-station"),
+        WallboxSensor(hass, session, "Wallbox Zeitstempel", "wallbox_timestamp", lambda d: d["_state"]["timestamp"]),
+        WallboxSensor(hass, session, "Wallbox Seit Modus aktiv", "wallbox_mode_since", lambda d: d["_state"]["mode_since"]),
+        #WallboxSensor(hass, session, "Wallbox Name", "wallbox_name", lambda d: d["name"]),
+        WallboxSensor(hass, session, "Wallbox Standort-ID", "wallbox_location", lambda d: d["location"]),
+        VollladenStatusSensor(hass, session),
         
     ])
 
@@ -37,7 +37,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
 
 class EnergieImpulsSensor(Entity):
-    def __init__(self, session, key):
+    def __init__(self, hass,  session, key):
         self._session = session
         self._key = key
         self._attr_name = SENSOR_TYPES[key]['name']
@@ -45,6 +45,7 @@ class EnergieImpulsSensor(Entity):
         self._attr_unit_of_measurement = SENSOR_TYPES[key].get("unit")
         self._attr_icon = SENSOR_TYPES[key].get("icon")
         self._state = None
+        self.hass = hass
 
     def update(self):
         try:
@@ -69,7 +70,7 @@ class EnergieImpulsSensor(Entity):
             "configuration_url": "https://energie-impuls.site",
         }
 class WallboxSensor(Entity):
-    def __init__(self, session, name, unique_id, extract_func, unit=None, icon=None):
+    def __init__(self, hass, session, name, unique_id, extract_func, unit=None, icon=None):
         self._session = session
         self._extract_func = extract_func
         self._attr_name = name
@@ -102,12 +103,13 @@ class WallboxSensor(Entity):
         }
         
 class VollladenStatusSensor(RestoreEntity, Entity):
-    def __init__(self):
+    def __init__(self, hass):
         self._attr_name = "Vollladen über Nacht jetzt aktiv"
         self._attr_unique_id = "vollladen_status_sensor"
         self._state = False
         self.entity_id = "binary_sensor.vollladen_uber_nacht_status"
         self._icon = "mdi:weather-night"
+        self.hass = hass
 
     async def async_added_to_hass(self):
         await super().async_added_to_hass()

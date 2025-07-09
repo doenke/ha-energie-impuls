@@ -9,8 +9,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     if DOMAIN not in hass.data:
         hass.data[DOMAIN] = {}
 
-    
-    session = EnergyImpulsSession(hass)
+
+    username = entry.data[CONF_USERNAME]
+    password = entry.data[CONF_PASSWORD]
+    session = EnergyImpulsSession(hass, username, password)
 
     try:
         wallbox_data = session.get_wallbox_data()

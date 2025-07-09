@@ -49,7 +49,7 @@ class EnergieImpulsSensor(Entity):
 
     def update(self):
         try:
-            data = self._session.get_data()
+            data = await self._session.async_get_data()
             self._state = data["flow"].get(self._key) or data["state"].get(self._key)
         except Exception as e:
             _LOGGER.error(f"Sensorfehler ({self._key}): {e}")
@@ -77,7 +77,7 @@ class WallboxSensor(Entity):
 
     def update(self):
         try:
-            data = self._session.get_wallbox_data()
+            data = await self._session.async_get_wallbox_data()
             self._state = self._extract_func(data)
         except Exception as e:
             _LOGGER.error(f"Fehler beim Abrufen von {self._attr_unique_id}: {e}")

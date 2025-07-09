@@ -8,12 +8,13 @@ _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(hass, entry, async_add_entities):
     session = hass.data[DOMAIN]["session"]
-    entity = HybridChargingCurrentNumber(session)
+    entity = HybridChargingCurrentNumber(hass,session)
     async_add_entities([entity], update_before_add=True)
 
 class HybridChargingCurrentNumber(NumberEntity):
-    def __init__(self, session):
+    def __init__(self, hass, session):
         self._session = session
+        self.hass = hass
         self._attr_name = "Hybrid Charging Current"
         self._attr_unique_id = "energie_impuls_hybrid_current"
         ##self._attr_device_class = "current"

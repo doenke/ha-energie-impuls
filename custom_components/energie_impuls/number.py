@@ -1,5 +1,5 @@
 from homeassistant.components.number import NumberEntity
-from homeassistant.const import CONF_USERNAME, CONF_PASSWORD
+from homeassistant.const import DOMAIN
 from .const import WALLBOX_SETPOINT_URL
 from .api import EnergyImpulsSession
 import requests
@@ -8,7 +8,7 @@ import logging
 _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(hass, entry, async_add_entities):
-    session = EnergyImpulsSession(entry.data[CONF_USERNAME], entry.data[CONF_PASSWORD])
+    session = EnergyImpulsSession()
     entity = HybridChargingCurrentNumber(session)
     async_add_entities([entity], update_before_add=True)
 

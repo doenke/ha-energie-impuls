@@ -10,6 +10,6 @@ class EnergieImpulsWallboxDevice():
             "identifiers": {(DOMAIN, f"wallbox_{hass.data[DOMAIN][CONF_WB_DEVICE_ID]}")},
             "name": "Energie Impuls Wallbox",
             "manufacturer": "ABB",
-            "model": hass.data[DOMAIN][CONF_WB_DEVICE_NAME ],
+            "model": self.hass.data[DOMAIN][CONF_WB_DEVICE_NAME ],
             "configuration_url": "https://energie-impuls.site",
         }

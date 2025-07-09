@@ -35,7 +35,7 @@ class EnergieImpulsSwitch(SwitchEntity):
 
     @property
     def device_info(self):
-         return EnergieImpulsWallboxDevice(self.hass)
+         return EnergieImpulsWallboxDevice(self.hass).device_info
 
     @property
     def name(self):

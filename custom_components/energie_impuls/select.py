@@ -1,5 +1,5 @@
 from homeassistant.components.select import SelectEntity
-from homeassistant.const import CONF_USERNAME, CONF_PASSWORD, DOMAIN
+from homeassistant.const import DOMAIN
 from .api import EnergyImpulsSession
 import logging
 
@@ -13,7 +13,7 @@ WALLBOX_MODES = [
 ]
 
 async def async_setup_entry(hass, entry, async_add_entities):
-    session = EnergyImpulsSession(entry.data[CONF_USERNAME], entry.data[CONF_PASSWORD])
+    session = EnergyImpulsSession()
     async_add_entities([WallboxModeSelect(session)], update_before_add=True)
 
 class WallboxModeSelect(SelectEntity):

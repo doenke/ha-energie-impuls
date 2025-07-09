@@ -10,6 +10,7 @@ _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(hass, entry, async_add_entities):
     session = hass.data[DOMAIN]["session"]
+    self.hass = hass
     switches = [
         EnergieImpulsSwitch(session, "Wallbox Sperre", "locked","mdi:lock"),
         EnergieImpulsSwitch(session, "Überschussladen", "surplus_charging","mdi:octagram-plus"),
@@ -101,7 +102,7 @@ class NightFullChargeSwitch(RestoreEntity, SwitchEntity):
             "identifiers": {(DOMAIN, f"wallbox_{hass.data[DOMAIN]["wb_device_id"]}")},
             "name": "Energie Impuls Wallbox",
             "manufacturer": "ABB",
-            "model": hass.data[DOMAIN]["wb_device_name"],
+            "model": self.hass.data[DOMAIN]["wb_device_name"],
             "configuration_url": "https://energie-impuls.site",
         }
         

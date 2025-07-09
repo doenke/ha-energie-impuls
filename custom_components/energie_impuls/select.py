@@ -27,7 +27,7 @@ class WallboxModeSelect(SelectEntity):
         self.hass = hass
     def update(self):
         try:
-            data = self._session.get_wallbox_data()
+            #data = self._session.get_wallbox_data()
             # Mapping der internen Modus-Codes zu benutzerfreundlichen Labels
             mode_code = data["_state"].get("mode")
             self._attr_current_option = self._map_code_to_label(mode_code)

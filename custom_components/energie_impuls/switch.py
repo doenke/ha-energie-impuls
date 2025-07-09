@@ -68,7 +68,7 @@ class EnergieImpulsSwitch(SwitchEntity):
 
     def update(self):
         try:
-            data = self._session.get_wallbox_data()
+            data = await self._session.async_get_wallbox_data()
             self._state = data["_set_point"].get(self._key, False)
         except Exception as e:
             _LOGGER.error(f"Updatefehler Switch {self._key}: {e}")

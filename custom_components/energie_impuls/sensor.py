@@ -16,7 +16,7 @@ SENSOR_TYPES = {
 }
 
 async def async_setup_entry(hass, entry, async_add_entities):
-    session = EnergyImpulsSession()
+    session = hass.data[DOMAIN]["session"]
 
     sensors = [EnergieImpulsSensor(session, key) for key in SENSOR_TYPES]
 

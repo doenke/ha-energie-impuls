@@ -3,7 +3,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from .automation_nightfull import VollladenAutomatik
 from .sensor import EnergyImpulsSession
-from .const import DOMAIN, DEFAULT_WALLBOX_NAME, DEFAULT_WALLBOX_ID, CONF_USERNAME, CONF_PASSWORD, CONF_WB_DEVICE_NAME, CONF_WB_DEVICE_ID
+from .const import DOMAIN, CONF_USERNAME, CONF_PASSWORD, CONF_WB_DEVICE_NAME, CONF_WB_DEVICE_ID
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     if DOMAIN not in hass.data:
@@ -16,11 +16,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     try:
         wallbox_data = session.get_wallbox_data()
-        device_name = wallbox_data.get("name", WALLBOX_NAME)
+        device_name = wallbox_data.get("name", "Wallbox")
         device_id = str(wallbox_data.get("id", "wallbox"))
     except Exception as e:
-        wb_device_name = DEFAULT_WALLBOX_NAME
-        wb_device_id = DEFAULT_WALLBOX_ID
+        wb_device_name = "Wallbox"
+        wb_device_id = "Wallbox ID"
 
     hass.data[DOMAIN][CONF_WB_DEVICE_NAME] = wb_device_name
     hass.data[DOMAIN][CONF_WB_DEVICE_ID] = wb_device_id

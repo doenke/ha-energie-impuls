@@ -13,7 +13,7 @@ WALLBOX_MODES = [
 ]
 
 async def async_setup_entry(hass, entry, async_add_entities):
-    session = EnergyImpulsSession()
+    session =  hass.data[DOMAIN]["session"]
     async_add_entities([WallboxModeSelect(session)], update_before_add=True)
 
 class WallboxModeSelect(SelectEntity):

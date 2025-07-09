@@ -16,8 +16,6 @@ SENSOR_TYPES = {
 }
 
 async def async_setup_entry(hass, entry, async_add_entities):
-    username = entry.data[CONF_USERNAME]
-    password = entry.data[CONF_PASSWORD]
     session = EnergyImpulsSession()
 
     sensors = [EnergieImpulsSensor(session, key) for key in SENSOR_TYPES]

@@ -51,7 +51,4 @@ class WallboxModeSelect(SelectEntity):
         return mapping.get(code, "Unbekannt")
     @property
     def device_info(self):
-         return {
-            
-            "configuration_url": "https://energie-impuls.site",
-        }
+         return EnergieImpulsWallboxDevice(self.hass).device_info

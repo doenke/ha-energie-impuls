@@ -57,7 +57,7 @@ class EnergieImpulsSwitch(SwitchEntity):
             "Authorization": f"Bearer {self._session.token}",
             "Content-Type": "application/json"
         }
-        async with self._session.put(WALLBOX_SETPOINT_URL, headers=headers, json={self._key: value}) as response:
+        async with self._session.async_put_wallbox_setpoint(headers=headers, json={self._key: value}) as response:
             if response.status in (200, 201, 204):
                 self._state = value
             else:

@@ -1,6 +1,5 @@
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.helpers.restore_state import RestoreEntity
-from homeassistant.const import CONF_USERNAME, CONF_PASSWORD
 from .const import WALLBOX_SETPOINT_URL, DOMAIN
 from .api import EnergyImpulsSession
 import logging
@@ -8,7 +7,7 @@ import logging
 _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(hass, entry, async_add_entities):
-    session = EnergyImpulsSession(hass, entry.data[CONF_USERNAME], entry.data[CONF_PASSWORD])
+    session = hass.data[DOMAIN]["session"]
     switches = [
         EnergieImpulsSwitch(hass, session, "Wallbox Sperre", "locked", "mdi:lock"),
         EnergieImpulsSwitch(hass, session, "Überschussladen", "surplus_charging", "mdi:octagram-plus"),

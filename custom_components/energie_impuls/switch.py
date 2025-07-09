@@ -10,23 +10,24 @@ _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(hass, entry, async_add_entities):
     session = hass.data[DOMAIN]["session"]
-    self.hass = hass
+
     switches = [
-        EnergieImpulsSwitch(session, "Wallbox Sperre", "locked","mdi:lock"),
-        EnergieImpulsSwitch(session, "Überschussladen", "surplus_charging","mdi:octagram-plus"),
+        EnergieImpulsSwitch(hass, session, "Wallbox Sperre", "locked","mdi:lock"),
+        EnergieImpulsSwitch(hass, session, "Überschussladen", "surplus_charging","mdi:octagram-plus"),
         NightFullChargeSwitch(hass),
     ]
     async_add_entities(switches, update_before_add=True)
 
 class EnergieImpulsSwitch(SwitchEntity):
-    def __init__(self, session, name, key,icon=None):
+    def __init__(self, hass, session, name, key,icon=None):
         self._session = session
         self._name = name
         self._key = key
         self._state = False
         self._attr_unique_id = f"energie_impuls_switch_{key}"
         self._attr_icon = icon
-
+        self.hass = hass
+        
     @property
     def is_on(self):
         return self._state

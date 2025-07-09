@@ -38,7 +38,7 @@ class WallboxModeSelect(SelectEntity):
         # Optional: sende API-Aufruf zur Modusumschaltung
         # Hier z. B. Session PUT auf /setpoint mit gewünschtem Modus
         self._attr_current_option = option
-        self.async_write_ha_state()
+        
 
     def _map_code_to_label(self, code):
         # Optional: Mapping von internen Werten auf Labels

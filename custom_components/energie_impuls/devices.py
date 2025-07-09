@@ -10,7 +10,7 @@ class EnergieImpulsWallboxDevice():
             "identifiers": {(DOMAIN, f"wallbox_{self.hass.data[DOMAIN][CONF_WB_DEVICE_ID]}")},
             "name": "Energie Impuls Wallbox",
             "manufacturer": "Planville",
-            "model": self.hass.data[DOMAIN][CONF_WB_DEVICE_ID],
+            "model": self.hass.data[DOMAIN][CONF_WB_DEVICE_NAME],
             "configuration_url": "https://energie-impuls.site",
         }
 

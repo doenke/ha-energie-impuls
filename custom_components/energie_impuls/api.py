@@ -8,8 +8,8 @@ _LOGGER = logging.getLogger(__name__)
 class EnergyImpulsSession:
     def __init__(self, hass):
         self.hass = hass
-        self.username = entry.data[CONF_USERNAME]
-        self.password = entry.data[CONF_PASSWORD]
+        self.username = hass.data[CONF_USERNAME]
+        self.password = hass.data[CONF_PASSWORD]
         self.token = None
 
     async def async_get_token(self):

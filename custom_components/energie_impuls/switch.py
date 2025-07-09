@@ -53,11 +53,11 @@ class EnergieImpulsSwitch(SwitchEntity):
             _LOGGER.error(f"Fehler beim Deaktivieren von {self._key}: {e}")
 
     async def _async_set_state(self, value):
-        async with self._session.async_put_wallbox_setpoint( json={self._key: value}) as response:
-            if response.status in (200, 201, 204):
-                self._state = value
-            else:
-                raise Exception(f"Fehler bei API: {response.status}")
+        response = await self._session.async_put_wallbox_setpoint({self._key: value})
+        if response.status in (200, 201, 204):
+            self._state = value
+        else:
+            raise Exception(f"Fehler bei API: {response.status}")
 
     async def async_update(self):
         try:

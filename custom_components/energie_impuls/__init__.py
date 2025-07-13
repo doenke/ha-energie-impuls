@@ -5,6 +5,8 @@ from .automation_nightfull import VollladenAutomatik
 from .api import EnergyImpulsSession  # ← richtiger Import!
 from .const import DOMAIN, CONF_USERNAME, CONF_PASSWORD, CONF_WB_DEVICE_NAME, CONF_WB_DEVICE_ID
 
+from .coordinator import EnergieImpulsCoordinator, WallboxCoordinator
+
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     if DOMAIN not in hass.data:
@@ -16,6 +18,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     hass.data[DOMAIN]["session"] = session
 
+    energie_coordinator = EnergieImpulsCoordinator(hass, session)
+    await energie_coordinator.async_config_entry_first_refresh()
+    
+    wallbox_coordinator = WallboxCoordinator(hass, session)
+    await wallbox_coordinator.async_config_entry_first_refresh()
+
+
+    
     # 🔄 Asynchron Wallbox-Daten abrufen
     try:
         wallbox_data = await session.async_get_wallbox_data()
@@ -28,6 +38,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.data[DOMAIN][CONF_WB_DEVICE_NAME] = wb_device_name
     hass.data[DOMAIN][CONF_WB_DEVICE_ID] = wb_device_id
 
+    hass.data[DOMAIN]["coordinator_energie"] = energie_coordinator
+    hass.data[DOMAIN]["coordinator_wallbox"] = wallbox_coordinator
+    
     # Plattformen laden
     await hass.config_entries.async_forward_entry_setups(
         entry, ["sensor", "switch", "number", "select"]

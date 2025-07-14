@@ -12,7 +12,7 @@ class EnergieImpulsCoordinator(DataUpdateCoordinator):
             hass,
             _LOGGER,
             name="energie_impuls_data",
-            update_interval=timedelta(seconds=30),
+            update_interval=timedelta(seconds=15),
         )
         self.session = session
 

@@ -17,17 +17,17 @@ SENSOR_TYPES = {
 }
 
 async def async_setup_entry(hass, entry, async_add_entities):
-    session = hass.data[DOMAIN]["session"]
     energie_coordinator = hass.data[DOMAIN]["coordinator_energie"]
+    wallbox_coordinator = hass.data[DOMAIN]["coordinator_wallbox"]
     sensors = [EnergieImpulsSensor(hass, energie_coordinator, key) for key in SENSOR_TYPES]
 
     sensors.extend([
-        WallboxSensor(hass, session, "Wallbox Modus", "wallbox_mode_str", lambda d: d["_state"]["mode_str"], None, "mdi:ev-plug-type2"),
-        WallboxSensor(hass, session, "Wallbox Moduscode", "wallbox_mode", lambda d: d["_state"]["mode"]),
-        WallboxSensor(hass, session, "Wallbox Verbrauch", "wallbox_consumption", lambda d: d["_state"]["consumption"], "kW", "mdi:ev-station"),
-        WallboxSensor(hass, session, "Wallbox Zeitstempel", "wallbox_timestamp", lambda d: d["_state"]["timestamp"]),
-        WallboxSensor(hass, session, "Wallbox Seit Modus aktiv", "wallbox_mode_since", lambda d: d["_state"]["mode_since"]),
-        WallboxSensor(hass, session, "Wallbox Standort-ID", "wallbox_location", lambda d: d["location"]),
+        WallboxSensor(hass, wallbox_coordinator, "Wallbox Modus", "wallbox_mode_str", lambda d: d["_state"]["mode_str"], None, "mdi:ev-plug-type2"),
+        WallboxSensor(hass, wallbox_coordinator, "Wallbox Moduscode", "wallbox_mode", lambda d: d["_state"]["mode"]),
+        WallboxSensor(hass, wallbox_coordinator, "Wallbox Verbrauch", "wallbox_consumption", lambda d: d["_state"]["consumption"], "kW", "mdi:ev-station"),
+        WallboxSensor(hass, wallbox_coordinator, "Wallbox Zeitstempel", "wallbox_timestamp", lambda d: d["_state"]["timestamp"]),
+        WallboxSensor(hass, wallbox_coordinator, "Wallbox Seit Modus aktiv", "wallbox_mode_since", lambda d: d["_state"]["mode_since"]),
+        WallboxSensor(hass, wallbox_coordinator, "Wallbox Standort-ID", "wallbox_location", lambda d: d["location"]),
         VollladenStatusSensor(hass),
     ])
 
@@ -60,9 +60,11 @@ class EnergieImpulsSensor(CoordinatorEntity,Entity):
 
 
 class WallboxSensor(Entity):
-    def __init__(self, hass, session, name, unique_id, extract_func, unit=None, icon=None):
+    def __init__(self, hass, coordinator, name, unique_id, extract_func, unit=None, icon=None):
+        super().__init__(coordinator)
+        self.coordinator = coordinator
         self.hass = hass
-        self._session = session
+       
         self._extract_func = extract_func
         self._attr_name = name
         self._attr_unique_id = f"energie_impuls_{unique_id}"
@@ -70,16 +72,9 @@ class WallboxSensor(Entity):
         self._attr_icon = icon
         self._state = None
 
-    async def async_update(self):
-        try:
-            data = await self._session.async_get_wallbox_data()
-            self._state = self._extract_func(data)
-        except Exception as e:
-            _LOGGER.error(f"Fehler beim Abrufen von {self._attr_unique_id}: {e}")
-            self._state = None
-
     @property
     def state(self):
+        self._state = self._extract_func(data)
         return self._state
 
     @property

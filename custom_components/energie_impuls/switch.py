@@ -1,25 +1,26 @@
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.helpers.restore_state import RestoreEntity
-from .devices import EnergieImpulsWallboxDevice, EnergieImpulsDevice
-from .const import WALLBOX_SETPOINT_URL, DOMAIN
-from .api import EnergyImpulsSession
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from .devices import EnergieImpulsWallboxDevice
+from .const import DOMAIN
 import logging
 
 _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(hass, entry, async_add_entities):
-    session = hass.data[DOMAIN]["session"]
+    coordinator = hass.data[DOMAIN]["wallbox_coordinator"]
     switches = [
-        EnergieImpulsSwitch(hass, session, "Wallbox Sperre", "locked", "mdi:lock"),
-        EnergieImpulsSwitch(hass, session, "Überschussladen", "surplus_charging", "mdi:octagram-plus"),
+        EnergieImpulsSwitch(hass, coordinator, "Wallbox Sperre", "locked", "mdi:lock"),
+        EnergieImpulsSwitch(hass, coordinator, "Überschussladen", "surplus_charging", "mdi:octagram-plus"),
         NightFullChargeSwitch(hass),
     ]
     async_add_entities(switches, update_before_add=True)
 
-class EnergieImpulsSwitch(SwitchEntity):
-    def __init__(self, hass, session, name, key, icon=None):
+class EnergieImpulsSwitch(CoordinatorEntity, SwitchEntity):
+    def __init__(self, hass, coordinator, name, key, icon=None):
+        super().__init__(coordinator)
         self.hass = hass
-        self._session = session
+        self._coordinator = coordinator
         self._name = name
         self._key = key
         self._state = False
@@ -40,28 +41,31 @@ class EnergieImpulsSwitch(SwitchEntity):
 
     async def async_turn_on(self, **kwargs):
         try:
-            await self._session.async_get_token()
+            await self._coordinator.session.async_get_token()
             await self._async_set_state(True)
+            await self._coordinator.async_request_refresh()
         except Exception as e:
             _LOGGER.error(f"Fehler beim Aktivieren von {self._key}: {e}")
 
     async def async_turn_off(self, **kwargs):
         try:
-            await self._session.async_get_token()
+            await self._coordinator.session.async_get_token()
             await self._async_set_state(False)
+            await self._coordinator.async_request_refresh()
         except Exception as e:
             _LOGGER.error(f"Fehler beim Deaktivieren von {self._key}: {e}")
 
     async def _async_set_state(self, value):
-        response = await self._session.async_put_wallbox_setpoint({self._key: value})
+        response = await self._coordinator.session.async_put_wallbox_setpoint({self._key: value})
         if response.status in (200, 201, 204):
             self._state = value
         else:
             raise Exception(f"Fehler bei API: {response.status}")
 
     async def async_update(self):
+        await self._coordinator.async_request_refresh()
         try:
-            data = await self._session.async_get_wallbox_data()
+            data = self._coordinator.data
             self._state = data["_set_point"].get(self._key, False)
         except Exception as e:
             _LOGGER.error(f"Updatefehler Switch {self._key}: {e}")
@@ -88,6 +92,7 @@ class NightFullChargeSwitch(RestoreEntity, SwitchEntity):
     @property
     def device_info(self):
         return EnergieImpulsWallboxDevice(self.hass).device_info
+
     async def async_turn_on(self, **kwargs):
         _LOGGER.info("Vollladen über Nacht aktiviert")
         self._state = True

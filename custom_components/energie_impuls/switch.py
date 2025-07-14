@@ -42,6 +42,7 @@ class EnergieImpulsSwitch(CoordinatorEntity, SwitchEntity):
         try:
             await self._coordinator.session.async_get_token()
             await self._async_set_state(True)
+            self._coordinator.data["_set_point"].set(self._key, True)
             await self._coordinator.async_request_refresh()
         except Exception as e:
             _LOGGER.error(f"Fehler beim Aktivieren von {self._key}: {e}")
@@ -50,6 +51,7 @@ class EnergieImpulsSwitch(CoordinatorEntity, SwitchEntity):
         try:
             await self._coordinator.session.async_get_token()
             await self._async_set_state(False)
+            self._coordinator.data["_set_point"].set(self._key, False)
             await self._coordinator.async_request_refresh()
         except Exception as e:
             _LOGGER.error(f"Fehler beim Deaktivieren von {self._key}: {e}")

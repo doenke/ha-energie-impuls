@@ -40,26 +40,22 @@ class EnergieImpulsSwitch(CoordinatorEntity, SwitchEntity):
 
     async def async_turn_on(self, **kwargs):
         try:
-            await self._coordinator.session.async_get_token()
             await self._async_set_state(True)
-            self._coordinator.data["_set_point"].set(self._key, True)
-            #await self._coordinator.async_request_refresh()
         except Exception as e:
             _LOGGER.error(f"Fehler beim Aktivieren von {self._key}: {e}")
 
     async def async_turn_off(self, **kwargs):
         try:
-            await self._coordinator.session.async_get_token()
             await self._async_set_state(False)
-            self._coordinator.data["_set_point"].set(self._key, False)
-            #await self._coordinator.async_request_refresh()
         except Exception as e:
             _LOGGER.error(f"Fehler beim Deaktivieren von {self._key}: {e}")
 
     async def _async_set_state(self, value):
+        await self._coordinator.session.async_get_token()
         response = await self._coordinator.session.async_put_wallbox_setpoint({self._key: value})
         if response.status in (200, 201, 204):
-            await self._coordinator.async_request_refresh()
+            #await self._coordinator.async_request_refresh()
+            self._coordinator.data["_set_point"].set(self._key, value)
         else:
             raise Exception(f"Fehler bei API: {response.status}")
 

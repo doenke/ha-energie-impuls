@@ -45,12 +45,12 @@ class HybridChargingCurrentNumber(CoordinatorEntity, NumberEntity):
             }
 
             response = await self.coordinator.session.async_put_wallbox_setpoint(payload)
-            if response.status in (200, 201, 204):
-                _LOGGER.info(f"Hybridwert erfolgreich gesetzt auf {payload['hybrid_charging_current']}")
-                await self.coordinator.async_request_refresh()
-            else:
-                text = await response.text()
-                raise Exception(f"Fehler beim Setzen: {response.status} → {text}")
+            #if response.status in (200, 201, 204):
+            #    _LOGGER.info(f"Hybridwert erfolgreich gesetzt auf {payload['hybrid_charging_current']}")
+            #    await self.coordinator.async_request_refresh()
+            #else:
+            #    text = await response.text()
+            #    raise Exception(f"Fehler beim Setzen: {response.status} → {text}")
         except Exception as e:
             _LOGGER.error(f"Fehler beim Setzen von hybrid_charging_current: {e}")
 

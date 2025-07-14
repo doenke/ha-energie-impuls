@@ -74,7 +74,7 @@ class WallboxSensor(CoordinatorEntity,Entity):
 
     @property
     def state(self):
-        self._state = self._extract_func(data)
+        self._state = self._extract_func(self.coordinator.data)
         return self._state
 
     @property

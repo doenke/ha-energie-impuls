@@ -28,7 +28,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     
     # 🔄 Asynchron Wallbox-Daten abrufen
     try:
-        wallbox_data = await session.async_get_wallbox_data()
+        wallbox_data = wallbox_coordinator.data
         wb_device_name = wallbox_data.get("name", "Wallbox")
         wb_device_id = str(wallbox_data.get("id", "wallbox"))
     except Exception as e:

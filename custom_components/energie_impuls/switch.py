@@ -28,7 +28,7 @@ class EnergieImpulsSwitch(CoordinatorEntity, SwitchEntity):
 
     @property
     def is_on(self):
-        return data["_set_point"].get(self._key, False)
+        return self._coordinator.data["_set_point"].get(self._key, False)
 
     @property
     def name(self):

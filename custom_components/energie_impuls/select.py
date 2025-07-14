@@ -9,7 +9,7 @@ _LOGGER = logging.getLogger(__name__)
 WALLBOX_MODES = [
     "Schnellladen",
     "reines Überschussladen",
-    "Schnelles Überschussladen",
+    "Hybridladen",
     "Nicht laden"
 ]
 
@@ -47,7 +47,7 @@ class WallboxModeSelect(SelectEntity):
             0: "nicht laden",
             1: "Schnellladen",
             2: "reines Überschussladen",
-            3: "schnelles Überschussladen"
+            3: "Hybridladen"
         }
         return mapping.get(code, "Unbekannt")
     @property

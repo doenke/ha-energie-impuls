@@ -51,7 +51,8 @@ class EnergieImpulsSensor(CoordinatorEntity,Entity):
         data = self.coordinator.data
         if data is None:
             return None
-        return data.get("flow", {}).get(self._key) or data.get("state", {}).get(self._key)
+        value = data.get("flow", {}).get(self._key) or data.get("state", {}).get(self._key) 
+        return 0 if value is None else value
 
 
     @property
@@ -75,7 +76,7 @@ class WallboxSensor(CoordinatorEntity,Entity):
     @property
     def state(self):
         self._state = self._extract_func(self.coordinator.data)
-        return self._state
+        return 0 if self._state is None else self._state
 
     @property
     def device_info(self):

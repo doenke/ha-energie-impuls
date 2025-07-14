@@ -59,7 +59,7 @@ class EnergieImpulsSensor(CoordinatorEntity,Entity):
         return EnergieImpulsDevice(self.hass).device_info
 
 
-class WallboxSensor(Entity):
+class WallboxSensor(CoordinatorEntity,Entity):
     def __init__(self, hass, coordinator, name, unique_id, extract_func, unit=None, icon=None):
         super().__init__(coordinator)
         self.coordinator = coordinator

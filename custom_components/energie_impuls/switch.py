@@ -55,7 +55,8 @@ class EnergieImpulsSwitch(CoordinatorEntity, SwitchEntity):
         response = await self._coordinator.session.async_put_wallbox_setpoint({self._key: value})
         if response.status in (200, 201, 204):
             #await self._coordinator.async_request_refresh()
-            self._coordinator.data["_set_point"].set(self._key, value)
+            if isinstance(self._coordinator.data, dict) and "_set_point" in self._coordinator.data:
+                self._coordinator.data["_set_point"][self._key] = value
         else:
             raise Exception(f"Fehler bei API: {response.status}")
 

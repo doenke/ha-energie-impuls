@@ -8,7 +8,7 @@ _LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(hass, entry, async_add_entities):
-    coordinator = hass.data[DOMAIN]["wallbox_coordinator"]
+    coordinator = hass.data[DOMAIN]["coordinator_wallbox"]
     entity = HybridChargingCurrentNumber(hass, coordinator)
     async_add_entities([entity], update_before_add=True)
 

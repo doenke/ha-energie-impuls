@@ -23,13 +23,12 @@ class EnergieImpulsSwitch(CoordinatorEntity, SwitchEntity):
         self._coordinator = coordinator
         self._name = name
         self._key = key
-        self._state = False
         self._attr_unique_id = f"energie_impuls_switch_{key}"
         self._attr_icon = icon
 
     @property
     def is_on(self):
-        return self._state
+        return data["_set_point"].get(self._key, False)
 
     @property
     def name(self):
@@ -58,17 +57,12 @@ class EnergieImpulsSwitch(CoordinatorEntity, SwitchEntity):
     async def _async_set_state(self, value):
         response = await self._coordinator.session.async_put_wallbox_setpoint({self._key: value})
         if response.status in (200, 201, 204):
-            self._state = value
+            await self._coordinator.async_request_refresh()
         else:
             raise Exception(f"Fehler bei API: {response.status}")
 
     async def async_update(self):
         await self._coordinator.async_request_refresh()
-        try:
-            data = self._coordinator.data
-            self._state = data["_set_point"].get(self._key, False)
-        except Exception as e:
-            _LOGGER.error(f"Updatefehler Switch {self._key}: {e}")
 
 class NightFullChargeSwitch(RestoreEntity, SwitchEntity):
     def __init__(self, hass):

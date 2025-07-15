@@ -27,7 +27,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
 class WallboxModeSelect(CoordinatorEntity, SelectEntity):
     def __init__(self, hass, coordinator):
-        self.coordinator = coordinator
+        super().__init__(coordinator)
         self._attr_name = "Wallbox Lademodus"
         self._attr_unique_id = "energie_impuls_wallbox_mode"
         self._attr_options = WALLBOX_MODES

@@ -38,7 +38,7 @@ class WallboxModeSelect(CoordinatorEntity, SelectEntity):
         await self.coordinator.async_request_refresh()
 
     @property
-    def current_option(self)
+    def current_option(self):
         try:
             if self.coordinator.data["_set_point"]["locked"] == True:
                 return NICHTLADEN

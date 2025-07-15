@@ -31,7 +31,6 @@ class WallboxModeSelect(CoordinatorEntity, SelectEntity):
         self._attr_name = "Wallbox Lademodus"
         self._attr_unique_id = "energie_impuls_wallbox_mode"
         self._attr_options = WALLBOX_MODES
-        self._attr_current_option = None
         self.hass = hass
     
     async def async_update(self):
@@ -52,7 +51,7 @@ class WallboxModeSelect(CoordinatorEntity, SelectEntity):
         except:
             return ERROR
         
-    def select_option(self, option: str):
+   async def async_select_option(self, option: str):
         if option == SCHNELLLADEN:
             payload = {
                 "locked": False,
@@ -77,8 +76,14 @@ class WallboxModeSelect(CoordinatorEntity, SelectEntity):
             "locked": True
             }
             await self.coordinator.session.async_put_wallbox_setpoint(payload)
-        
 
+       try:
+            response = await self.coordinator.session.async_put_wallbox_setpoint(payload)
+            if response.status in (200, 201, 204):
+                await self.coordinator.async_request_refresh()
+       except:
+           _LOGGER.error(f"Fehler beim Setzen des Lademodus: {e}")
+           
     @property
     def device_info(self):
          return EnergieImpulsWallboxDevice(self.hass).device_info

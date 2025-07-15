@@ -57,31 +57,31 @@ class WallboxModeSelect(CoordinatorEntity, SelectEntity):
                 "locked": False,
                 "surplus_charging": False
                 }
-            await self.coordinator.session.async_put_wallbox_setpoint(payload)
+            
         elif option == UEBERSCHUSS:
             payload = {
                 "locked": False,
                 "surplus_charging": True
                 }
-            await self.coordinator.session.async_put_wallbox_setpoint(payload)
+            
         elif option == HYBRID:
             payload = {
                 "locked": False,
                 "surplus_charging": False,
                 "hybrid_charging_current": 6
                 }
-            await self.coordinator.session.async_put_wallbox_setpoint(payload)
+            
         elif option == NICHTLADEN:
             payload = {
             "locked": True
             }
-            await self.coordinator.session.async_put_wallbox_setpoint(payload)
+           
 
-       try:
+        try:
             response = await self.coordinator.session.async_put_wallbox_setpoint(payload)
             if response.status in (200, 201, 204):
                 await self.coordinator.async_request_refresh()
-       except:
+        except:
            _LOGGER.error(f"Fehler beim Setzen des Lademodus: {e}")
            
     @property

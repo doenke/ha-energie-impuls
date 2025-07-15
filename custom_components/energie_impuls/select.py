@@ -43,7 +43,7 @@ class WallboxModeSelect(CoordinatorEntity, SelectEntity):
             if self.coordinator.data["_set_point"]["locked"] == True:
                 return NICHTLADEN
             if self.coordinator.data["_set_point"]["surplus_charging"] == True:
-                if self.coordinator.data["_set_point"]get("hybrid_charging_current", 0) == 0:
+                if self.coordinator.data["_set_point"].get("hybrid_charging_current", 0) == 0:
                     return UEBERSCHUSS
                 else:
                     return HYBRID
@@ -54,15 +54,30 @@ class WallboxModeSelect(CoordinatorEntity, SelectEntity):
         
     def select_option(self, option: str):
         if option == SCHNELLLADEN:
+            payload = {
+                "locked": False,
+                "surplus_charging": False
+                }
+            await self.coordinator.session.async_put_wallbox_setpoint(payload)
         elif option == UEBERSCHUSS:
+            payload = {
+                "locked": False,
+                "surplus_charging": True
+                }
+            await self.coordinator.session.async_put_wallbox_setpoint(payload)
         elif option == HYBRID:
-        elif option == NICHTLADEN:
-
-        payload = {
+            payload = {
+                "locked": False,
+                "surplus_charging": False,
                 "hybrid_charging_current": 6
+                }
+            await self.coordinator.session.async_put_wallbox_setpoint(payload)
+        elif option == NICHTLADEN:
+            payload = {
+            "locked": True
             }
-
-            response = await self.coordinator.session.async_put_wallbox_setpoint(payload)
+            await self.coordinator.session.async_put_wallbox_setpoint(payload)
+        
 
     @property
     def device_info(self):

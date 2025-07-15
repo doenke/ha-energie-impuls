@@ -51,7 +51,7 @@ class WallboxModeSelect(CoordinatorEntity, SelectEntity):
         except:
             return ERROR
         
-   async def async_select_option(self, option: str):
+    async def async_select_option(self, option: str):
         if option == SCHNELLLADEN:
             payload = {
                 "locked": False,

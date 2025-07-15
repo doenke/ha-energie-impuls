@@ -7,12 +7,18 @@ import logging
 
 _LOGGER = logging.getLogger(__name__)
 
+SCHNELLLADEN = "Schnellladen"
+UEBERSCHUSS = "reines Überschussladen"
+HYBRID = "Hybridladen"
+NICHTLADEN = "nicht laden"
+ERROR = "Fehler"
+
 WALLBOX_MODES = [
-    "Schnellladen",
-    "reines Überschussladen",
-    "Hybridladen",
-    "Nicht laden",
-    "Fehler"
+    SCHNELLLADEN,
+    UEBERSCHUSS,
+    HYBRID,
+    NICHTLADEN,
+    ERROR
 ]
 
 async def async_setup_entry(hass, entry, async_add_entities):
@@ -35,38 +41,29 @@ class WallboxModeSelect(CoordinatorEntity, SelectEntity):
     def current_option(self)
         try:
             if self.coordinator.data["_set_point"]["locked"] == True:
-                return 0
+                return NICHTLADEN
             if self.coordinator.data["_set_point"]["surplus_charging"] == True:
                 if self.coordinator.data["_set_point"]get("hybrid_charging_current", 0) == 0:
-                    return 2
+                    return UEBERSCHUSS
                 else:
-                    return 3
+                    return HYBRID
             else:
-                return 1
+                return SCHNELLLADEN
         except:
-            return 4
+            return ERROR
         
     def select_option(self, option: str):
-        if option == "1":
-        elif option == "2":
-        elif option == "3":
-        elif option == "4":
+        if option == SCHNELLLADEN:
+        elif option == UEBERSCHUSS:
+        elif option == HYBRID:
+        elif option == NICHTLADEN:
 
         payload = {
-                "hybrid_charging_current": None if int(value) == 0 else int(value)
+                "hybrid_charging_current": 6
             }
 
             response = await self.coordinator.session.async_put_wallbox_setpoint(payload)
-    def _map_code_to_label(self, code):
-        # Optional: Mapping von internen Werten auf Labels
-        mapping = {
-            0: "nicht laden",
-            1: "Schnellladen",
-            2: "reines Überschussladen",
-            3: "Hybridladen"
-            4: "Fehler"
-        }
-        return mapping.get(code, "Unbekannt")
+
     @property
     def device_info(self):
          return EnergieImpulsWallboxDevice(self.hass).device_info

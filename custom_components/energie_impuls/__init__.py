@@ -1,7 +1,7 @@
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.event import async_track_time_interval
-from homeassistant.helpers.event import async_track_state_change
+from homeassistant.helpers.event import async_track_state_change_event
 from datetime import timedelta
 
 from .automation import AutomatikController
@@ -64,7 +64,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     auto_entity_id = hass.data[DOMAIN][CONF_AUTO_SWITCH_ENTITY].entity_id
 
     # Registrieren
-    async_track_state_change(hass, [mode_entity_id, auto_entity_id], _handle_state_change)
+    async_track_state_change_event(hass, [mode_entity_id, auto_entity_id], _handle_state_change)
 
     
     return True

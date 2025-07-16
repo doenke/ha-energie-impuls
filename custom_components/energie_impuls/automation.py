@@ -10,8 +10,11 @@ class AutomatikController:
         self.energy_coordinator = energy_coordinator
 
         self.automations = []
-        self.automations.add
-        
+        self.automations.append(HybridAutomatikController(hass,wallbox_coordinator,energie_coordinator))
+
+     async def async_update(self):
+        for auto in self.automations:
+             await auto.async_update()
 class HybridAutomatikController:
     def __init__(self, hass, wallbox_coordinator, energy_coordinator):
         self.hass = hass

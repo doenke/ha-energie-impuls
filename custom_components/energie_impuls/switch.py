@@ -60,7 +60,7 @@ class AutomaticModeActiveSwitch(RestoreEntity, SwitchEntity):
     def __init__(self, hass):
         self.hass = hass
         self._state = False
-        self._attr_name = "Automatik"
+        self._attr_name = "Automatik aktiv"
         self._attr_unique_id = "energie_impuls_automatic_status"
         self._attr_icon = "mdi:weather-night"
         hass.data[DOMAIN][CONF_AUTO_SWITCH_ENTITY] = self

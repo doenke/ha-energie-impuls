@@ -54,6 +54,18 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     #await hass.data[DOMAIN]["automatik"].async_initialize()
     async_track_time_interval(hass, hass.data[DOMAIN]["automatik_controller"].async_update, timedelta(minutes=1))
+
+    async def _handle_state_change(entity_id, old_state, new_state):
+        await automatik_controller.async_update()
+
+    # Entitäten, die beobachtet werden sollen
+    mode_entity_id = hass.data[DOMAIN][CONF_MODE_ENTITY].entity_id
+    auto_entity_id = hass.data[DOMAIN][CONF_AUTO_SWITCH_ENTITY].entity_id
+
+    # Registrieren
+    async_track_state_change(hass, [mode_entity_id, auto_entity_id], _handle_state_change)
+
+    
     return True
 
 

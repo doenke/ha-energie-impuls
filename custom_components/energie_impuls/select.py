@@ -33,14 +33,13 @@ async def async_setup_entry(hass, entry, async_add_entities):
     entities = [
           WallboxModeSelect(hass,wallbox_coordinator),
           AutomaticModeActiveSwitch(hass),
-          WallboxAutomaticModeSelect(hass,wallbox_coordinator)
+          WallboxAutomaticModeSelect(hass)
           ]
 
     async_add_entities(entities, update_before_add=True)
 
-class WallboxAutomaticModeSelect(CoordinatorEntity, RestoreEntity, SelectEntity):
-    def __init__(self, hass, coordinator):
-        super().__init__(coordinator)
+class WallboxAutomaticModeSelect(RestoreEntity, SelectEntity):
+    def __init__(self, hass):
         self._attr_name = "Wallbox Automatikmodus"
         self._attr_unique_id = "energie_impuls_automatic_mode"
         self._attr_options = AUTOMATIC_MODES

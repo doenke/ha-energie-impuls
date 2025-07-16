@@ -77,6 +77,7 @@ class WallboxModeSelect(CoordinatorEntity, SelectEntity):
             payload = NICHTLADEN_JSON
 
         try:
+            await self.hass.data[DOMAIN][CONF_AUTO_SWITCH_ENTITY].async_turn_off()
             await self.coordinator.async_set_wallbox_mode(payload)
         except Exception as e:
            _LOGGER.error(f"Fehler beim Setzen des Lademodus: {e}")

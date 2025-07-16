@@ -20,7 +20,6 @@ class EnergieImpulsSwitch(CoordinatorEntity, SwitchEntity):
     def __init__(self, hass, coordinator, name, key, icon=None):
         super().__init__(coordinator)
         self.hass = hass
-        self._coordinator = coordinator
         self._name = name
         self._key = key
         self._attr_unique_id = f"energie_impuls_switch_{key}"
@@ -28,7 +27,7 @@ class EnergieImpulsSwitch(CoordinatorEntity, SwitchEntity):
 
     @property
     def is_on(self):
-        return self._coordinator.data["_set_point"].get(self._key, False)
+        return self.coordinator.data["_set_point"].get(self._key, False)
 
     @property
     def name(self):
@@ -51,15 +50,15 @@ class EnergieImpulsSwitch(CoordinatorEntity, SwitchEntity):
             _LOGGER.error(f"Fehler beim Deaktivieren von {self._key}: {e}")
 
     async def _async_set_state(self, value):
-        await self._coordinator.session.async_get_token()
-        response = await self._coordinator.session.async_put_wallbox_setpoint({self._key: value})
+        await self.coordinator.session.async_get_token()
+        response = await self.coordinator.session.async_put_wallbox_setpoint({self._key: value})
         
-        #await self._coordinator.async_request_refresh()
-        if isinstance(self._coordinator.data, dict) and "_set_point" in self._coordinator.data:
-            self._coordinator.data["_set_point"][self._key] = value
+        #await self.coordinator.async_request_refresh()
+        if isinstance(self.coordinator.data, dict) and "_set_point" in self.coordinator.data:
+            self.coordinator.data["_set_point"][self._key] = value
 
     async def async_update(self):
-        await self._coordinator.async_request_refresh()
+        await self.coordinator.async_request_refresh()
 
 class NightFullChargeSwitch(RestoreEntity, SwitchEntity):
     def __init__(self, hass):

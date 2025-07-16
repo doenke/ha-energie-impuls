@@ -8,9 +8,26 @@ import logging
 _LOGGER = logging.getLogger(__name__)
 
 SCHNELLLADEN = "Schnellladen"
+SCHNELLLADEN_JSON = {
+                "locked": False,
+                "surplus_charging": False
+                }
 UEBERSCHUSS = "reines Überschussladen"
+UEBERSCHUSS_JSON = {
+                "locked": False,
+                "surplus_charging": True,
+                "hybrid_charging_current": None
+                }
 HYBRID = "Hybridladen"
+HYBRID_JSON =  {
+                "locked": False,
+                "surplus_charging": True,
+                "hybrid_charging_current": 6
+                }
 NICHTLADEN = "nicht laden"
+NICHTLADEN_JSON =  {
+            "locked": True
+            }
 ERROR = "Fehler"
 
 WALLBOX_MODES = [
@@ -53,35 +70,19 @@ class WallboxModeSelect(CoordinatorEntity, SelectEntity):
         
     async def async_select_option(self, option: str):
         if option == SCHNELLLADEN:
-            payload = {
-                "locked": False,
-                "surplus_charging": False
-                }
-            
+            payload = SCHNELLLADEN_JSON
         elif option == UEBERSCHUSS:
-            payload = {
-                "locked": False,
-                "surplus_charging": True
-                }
-            
+            payload = UEBERSCHUSS_JSON
         elif option == HYBRID:
-            payload = {
-                "locked": False,
-                "surplus_charging": False,
-                "hybrid_charging_current": 6
-                }
-            
+            payload = HYBRID_JSON
         elif option == NICHTLADEN:
-            payload = {
-            "locked": True
-            }
-           
+            payload = NICHTLADEN_JSON
 
         try:
             response = await self.coordinator.session.async_put_wallbox_setpoint(payload)
             if response.status in (200, 201, 204):
                 await self.coordinator.async_request_refresh()
-        except:
+        except as e::
            _LOGGER.error(f"Fehler beim Setzen des Lademodus: {e}")
            
     @property

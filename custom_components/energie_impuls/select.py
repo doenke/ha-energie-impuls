@@ -63,24 +63,8 @@ class WallboxAutomaticModeSelect(CoordinatorEntity, RestoreEntity, SelectEntity)
     def current_option(self):
         return self._attr_current_option
         
-    #async def async_select_option(self, option: str):
-    #    if option == AM_SCHNELLLADEN:
-    #        payload = SCHNELLLADEN_JSON
-    #    elif option == AM_UEBERSCHUSS:
-    #        payload = UEBERSCHUSS_JSON
-    #    elif option == AM_HYBRIDAUTOMATIK:
-    #        payload = HYBRID_JSON
-    #    elif option == AM_UEBERSCHUSS_NACHT:
-    #        payload = NICHTLADEN_JSON
-    #    else:
-    #      return
-
-    #    try:
-    #        await self.coordinator.async_set_wallbox_mode(payload)
-    #        self._attr_current_option = option
-    #        self.async_write_ha_state()
-    #    except Exception as e:
-    #       _LOGGER.error(f"Fehler beim Setzen des Lademodus: {e}")
+    async def async_select_option(self, option: str):
+        self.async_write_ha_state()
            
     @property
     def device_info(self):

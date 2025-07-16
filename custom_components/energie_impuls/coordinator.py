@@ -37,3 +37,14 @@ class WallboxCoordinator(DataUpdateCoordinator):
             return await self.session.async_get_wallbox_data()
         except Exception as err:
             raise UpdateFailed(f"Fehler beim Abrufen der Wallbox-Daten: {err}") from err
+
+
+    async def async_set_wallbox_mode(self, payload: dict):
+            """Setze den Wallbox-Modus und aktualisiere die Koordinatordaten."""
+            try:
+                updated_setpoint = await self.session.async_put_wallbox_setpoint(payload)
+                self.data["_set_point"].update(updated_setpoint)
+                self.async_set_updated_data(self.data)  # Triggert Entities zur Aktualisierung
+            except Exception as e:
+                _LOGGER.error(f"Fehler beim Setzen des Wallbox-Modus: {e}")
+                raise

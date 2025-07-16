@@ -1,4 +1,6 @@
 from datetime import datetime, timedelta
+from .const import DOMAIN, SCHNELLLADEN, SCHNELLLADEN_JSON, UEBERSCHUSS, UEBERSCHUSS_JSON, HYBRID, HYBRID_JSON, NICHTLADEN, NICHTLADEN_JSON, ERROR 
+from .const import AM_SCHNELLLADEN, AM_UEBERSCHUSS, AM_HYBRIDAUTOMATIK, AM_UEBERSCHUSS_NACHT, AM_HYBRIDAUTOMATIK_NACHT, AM_MANUAL
 
 class HybridAutomatikController:
     def __init__(self, hass, wallbox_coordinator, energy_coordinator, mode_entity, auto_switch):

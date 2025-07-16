@@ -63,10 +63,13 @@ MIN_HYBRID_MINUTES = 10
 
 async def async_setup_entry(hass, entry, async_add_entities):
     wallbox_coordinator = hass.data[DOMAIN]["coordinator_wallbox"]
-    async_add_entities([WallboxModeSelect(hass,wallbox_coordinator)], update_before_add=True)
-    async_add_entities([AutomaticModeActiveSwitch(hass)], update_before_add=True)
-    async_add_entities([WallboxAutomaticModeSelect(hass,wallbox_coordinator)], update_before_add=True)
+    entities = [
+          WallboxModeSelect(hass,wallbox_coordinator),
+          AutomaticModeActiveSwitch(hass),
+          WallboxAutomaticModeSelect(hass,wallbox_coordinator)
+          ]
 
+    async_add_entities(entities, update_before_add=True)
 
 class WallboxAutomaticModeSelect(CoordinatorEntity, RestoreEntity, SelectEntity):
     def __init__(self, hass, coordinator):
@@ -76,6 +79,7 @@ class WallboxAutomaticModeSelect(CoordinatorEntity, RestoreEntity, SelectEntity)
         self._attr_options = AUTOMATIC_MODES
         self.hass = hass
         self._key = AM_MANUAL
+        hass.data[DOMAIN][CONF_MODE_ENTITY] = self
 
     async def async_added_to_hass(self):
         await super().async_added_to_hass()
@@ -122,6 +126,7 @@ class AutomaticModeActiveSwitch(RestoreEntity, SwitchEntity):
         self._attr_name = "Automatik"
         self._attr_unique_id = "energie_impuls_automatic_status"
         self._attr_icon = "mdi:weather-night"
+        hass.data[DOMAIN][CONF_AUTO_SWITCH_ENTITY] = self
 
     async def async_added_to_hass(self):
         await super().async_added_to_hass()

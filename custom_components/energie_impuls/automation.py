@@ -20,7 +20,7 @@ class AutomatikController:
         self.automations = []
         self.automations.append(HybridAutomatikController(hass,wallbox_coordinator,energy_coordinator))
 
-     async def async_disconnected(self):
+     async def async_reset(self):
           self.hass.data[DOMAIN][CONF_AUTO_SWITCH_ENTITY].async_turn_on()
      
      async def async_update(self, now: Optional[datetime] = None):

@@ -3,42 +3,11 @@ from homeassistant.components.switch import SwitchEntity
 from homeassistant.helpers.restore_state import RestoreEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .devices import EnergieImpulsWallboxDevice, EnergieImpulsDevice
-from .const import DOMAIN
+from .const import DOMAIN, SCHNELLLADEN, SCHNELLLADEN_JSON, UEBERSCHUSS, UEBERSCHUSS_JSON, HYBRID, HYBRID_JSON, NICHTLADEN, NICHTLADEN_JSON, ERROR 
+from .const import AM_SCHNELLLADEN, AM_UEBERSCHUSS, AM_HYBRIDAUTOMATIK, AM_UEBERSCHUSS_NACHT, AM_HYBRIDAUTOMATIK_NACHT, AM_MANUAL
 
 import logging
-
 _LOGGER = logging.getLogger(__name__)
-
-SCHNELLLADEN = "Schnellladen"
-SCHNELLLADEN_JSON = {
-                "locked": False,
-                "surplus_charging": False
-                }
-UEBERSCHUSS = "reines Überschussladen"
-UEBERSCHUSS_JSON = {
-                "locked": False,
-                "surplus_charging": True,
-                "hybrid_charging_current": None
-                }
-HYBRID = "Hybridladen"
-HYBRID_JSON =  {
-                "locked": False,
-                "surplus_charging": True,
-                "hybrid_charging_current": 6
-                }
-NICHTLADEN = "nicht laden"
-NICHTLADEN_JSON =  {
-            "locked": True
-            }
-ERROR = "Fehler"
-
-# Automatiklabel
-AM_SCHNELLLADEN = SCHNELLLADEN
-AM_UEBERSCHUSS = UEBERSCHUSS
-AM_HYBRIDAUTOMATIK = "Hybridautomatik"
-AM_UEBERSCHUSS_NACHT = "Überschuss, über Nacht voll"
-AM_HYBRIDAUTOMATIK_NACHT = "Hybrid, über Nacht voll"
-AM_MANUAL = "Manuell"
 
 WALLBOX_MODES = [
     SCHNELLLADEN,
@@ -56,6 +25,7 @@ AUTOMATIC_MODES = [
   AM_HYBRIDAUTOMATIK_NACHT,
   AM_MANUAL
 ]
+
 
 async def async_setup_entry(hass, entry, async_add_entities):
     wallbox_coordinator = hass.data[DOMAIN]["coordinator_wallbox"]

@@ -9,12 +9,29 @@ class AutomatikController:
         self.wallbox_coordinator = wallbox_coordinator
         self.energy_coordinator = energy_coordinator
 
+        self.activeMode = None
+        self.oldMode = None
+          
         self.automations = []
         self.automations.append(HybridAutomatikController(hass,wallbox_coordinator,energie_coordinator))
 
      async def async_update(self):
         for auto in self.automations:
-             await auto.async_update()
+             if self.activeMode != auto.mode and self.oldMode == auto.mode:
+                  # dieser Modus ist der alte, welcher abgewählt wurde
+                  auto.finish()
+
+        for auto in self.automations:
+             if self.activeMode == auto.mode and self.oldMode != auto.mode:
+                  # dieser Modus ist der Neue, welcher gerade gewählt wurde
+                  auto.start()
+
+        
+        for auto in self.automations:
+             if self.activeMode == auto.mode and self.oldMode == auto.mode:
+                  # dieser Modus ist nach wie vor der gewählte
+                  await auto._async_update()
+             auto.maintenance()  
 
 class AutomatikBase:     
      def __init__(self, hass, wallbox_coordinator, energy_coordinator):
@@ -27,10 +44,18 @@ class AutomatikBase:
         self.mode = AM_MANUAL
         self.isActive = False
 
-
-     def _justActivated(self):
+     def activate(self)
+     def start(self):
           self.isActive = True
-          await self.async_justActivated()
+          self.activate()
+
+     def deactivate(self):
+     def finish(self):
+          self.isActive = False
+          self.deactivate()
+
+     def maintenance(self)
+     
      async def async_getValues(self)
      
      async def async_justActivated(self)
@@ -38,8 +63,13 @@ class AutomatikBase:
      async def async_update(self):
 
      async def _async_update(self):
-          if (not self.isActive) and self.isAutoEnabled and self.isCurrentOption:
-               self._justActivated()
+          if self.isAutoEnabled and self.isCurrentOption:
+               
+               await async_getValues()
+               
+               if (not self.isActive)
+                    self._justActivated()
+          
                
           self.async_update()
           
@@ -66,7 +96,7 @@ class HybridAutomatikController(AutomatikBase):
         self.last_below = None
         self.last_check = None
         self.currently_in_hybrid = None
-         self.pv=0
+        self.pv=0
 
     async def async_getValues(self):
         try:
@@ -76,39 +106,23 @@ class HybridAutomatikController(AutomatikBase):
  
      
     async def async_update(self):
-        # Nur wenn Automatik aktiv und Hybridautomatik ausgewählt
-        if not self.auto_switch.is_on or self.mode_entity.current_option != self.mode:
-            return
-
         now = datetime.now()
-        pv = 0
-
-        try:
-            pv = float(self.energy_coordinator.data["flow"].get("pv", 0))
-        except Exception:
-            return
-
-        # Bei erstmaligem Aufruf direkt entscheiden
-        if not self.last_check:
-            await self._apply_initial_state(pv)
-            self.last_check = now
-            return
 
         # Bei PV > MIN_HYBRID
-        if pv >= self.MIN_HYBRID:
+        if self.pv >= self.MIN_HYBRID:
             self.last_above = now
-            if self.currently_in_hybrid is False and self.last_below:
+            if self.isActive is False and self.last_below:
                 if (now - self.last_below) >= timedelta(minutes=self.MIN_HYBRID_MINUTES):
-                    await self._set_mode("Hybridladen")
+                    await self._set_mode(HYBRID)
         else:
             self.last_below = now
-            if self.currently_in_hybrid is True and self.last_above:
+            if self.isActive is True and self.last_above:
                 if (now - self.last_above) >= timedelta(minutes=self.MIN_HYBRID_MINUTES):
-                    await self._set_mode("nicht laden")
+                    await self._set_mode(NICHTLADEN)
 
         self.last_check = now
 
-    async def async_justActivated(self):
+    async def async_activate(self):
         if self.pv >= self.MIN_HYBRID:
             await self._set_mode(HYBRID)
         else:
@@ -125,8 +139,6 @@ class HybridAutomatikController(AutomatikBase):
 
         try:
             await self.wallbox_coordinator.async_set_wallbox_mode(payload)
-            self.mode_entity._attr_current_option = mode_name
             self.mode_entity.async_write_ha_state()
-            self.currently_in_hybrid = mode_name == HYBRID
         except Exception as e:
             _LOGGER.error(f"[HybridAutomatikController] Fehler beim Setzen des Modus {mode_name}: {e}")

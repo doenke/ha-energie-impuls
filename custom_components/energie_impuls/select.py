@@ -115,7 +115,8 @@ class WallboxAutomaticModeSelect(CoordinatorEntity, RestoreEntity, SelectEntity)
          return EnergieImpulsWallboxDevice(self.hass).device_info
 
 class AutomaticModeActiveSwitch(RestoreEntity, SwitchEntity):
-    def __init__(self, hass):
+    def __init__(self, hass, coordinator):
+        super().__init__(coordinator)
         self.hass = hass
         self._state = False
         self._attr_name = "Automatik"

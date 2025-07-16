@@ -3,12 +3,12 @@ from .const import DOMAIN, SCHNELLLADEN, SCHNELLLADEN_JSON, UEBERSCHUSS, UEBERSC
 from .const import AM_SCHNELLLADEN, AM_UEBERSCHUSS, AM_HYBRIDAUTOMATIK, AM_UEBERSCHUSS_NACHT, AM_HYBRIDAUTOMATIK_NACHT, AM_MANUAL
 
 class HybridAutomatikController:
-    def __init__(self, hass, wallbox_coordinator, energy_coordinator, mode_entity, auto_switch):
+    def __init__(self, hass, wallbox_coordinator, energy_coordinator):
         self.hass = hass
         self.wallbox_coordinator = wallbox_coordinator
         self.energy_coordinator = energy_coordinator
-        self.mode_entity = mode_entity  # WallboxModeSelect-Entity
-        self.auto_switch = auto_switch  # AutomaticModeActiveSwitch-Entity
+        self.mode_entity = hass.data[DOMAIN][CONF_MODE_ENTITY]  # WallboxModeSelect-Entity
+        self.auto_switch = hass.data[DOMAIN][CONF_AUTO_SWITCH_ENTITY]  # AutomaticModeActiveSwitch-Entity
 
         self.MIN_HYBRID = 1.5
         self.MIN_HYBRID_MINUTES = 10
@@ -20,7 +20,7 @@ class HybridAutomatikController:
 
     async def async_update(self):
         # Nur wenn Automatik aktiv und Hybridautomatik ausgewählt
-        if not self.auto_switch.is_on or self.mode_entity.current_option != "Hybridautomatik":
+        if not self.auto_switch.is_on or self.mode_entity.current_option != AM_HYBRIDAUTOMATIK:
             return
 
         now = datetime.now()
@@ -59,14 +59,8 @@ class HybridAutomatikController:
 
     async def _set_mode(self, mode_name):
         payloads = {
-            "Hybridladen": {
-                "locked": False,
-                "surplus_charging": True,
-                "hybrid_charging_current": 6
-            },
-            "nicht laden": {
-                "locked": True
-            }
+            HYBRID: HYBRID_JSON,
+            NICHTLADEN: NICHTLADEN_JSON
         }
         payload = payloads.get(mode_name)
         if not payload:
@@ -76,6 +70,6 @@ class HybridAutomatikController:
             await self.wallbox_coordinator.async_set_wallbox_mode(payload)
             self.mode_entity._attr_current_option = mode_name
             self.mode_entity.async_write_ha_state()
-            self.currently_in_hybrid = mode_name == "Hybridladen"
+            self.currently_in_hybrid = mode_name == HYBRID
         except Exception as e:
             _LOGGER.error(f"[HybridAutomatikController] Fehler beim Setzen des Modus {mode_name}: {e}")

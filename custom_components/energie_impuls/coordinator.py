@@ -42,14 +42,14 @@ class WallboxCoordinator(DataUpdateCoordinator):
     async def async_set_wallbox_mode(self, payload: dict):
             """Setze den Wallbox-Modus und aktualisiere die Koordinatordaten."""
             try:
+                updated_setpoint = await self.session.async_put_wallbox_setpoint(payload)
                 if not isinstance(updated_setpoint, dict):
                     raise ValueError("Erwartete Antwort ist ein Dict mit Wallbox-Setpoint")
 
                 # Füge die neuen Setpoint-Daten ein:
                 if "_set_point" not in self.data:
                     self.data["_set_point"] = {}
-
-                updated_setpoint = await self.session.async_put_wallbox_setpoint(payload)
+                
                 self.data["_set_point"].update(updated_setpoint)
                 self.async_set_updated_data(self.data)  # Triggert Entities zur Aktualisierung
             except Exception as e:

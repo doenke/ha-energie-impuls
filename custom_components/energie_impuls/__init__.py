@@ -1,6 +1,7 @@
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.event import async_track_time_interval
+from homeassistant.helpers.event import async_track_time_change
 from homeassistant.helpers.event import async_track_state_change_event
 from datetime import timedelta
 
@@ -55,7 +56,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.data[DOMAIN]["automatik_controller"] = automatik_controller
     
     async_track_time_interval(hass, hass.data[DOMAIN]["automatik_controller"].async_update, timedelta(minutes=1))
-
+    async_track_time_change(hass, hass.data[DOMAIN]["automatik_controller"].async_midnight,hour=0, minute=0, second=25)
+    
     async def _handle_state_change(entity_id, old_state, new_state):
         await automatik_controller.async_update()
 

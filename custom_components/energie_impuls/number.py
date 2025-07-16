@@ -45,6 +45,8 @@ class HybridChargingCurrentNumber(CoordinatorEntity, NumberEntity):
             }
 
             await self.coordinator.async_set_wallbox_mode(payload)
+            await self.hass.data[DOMAIN][CONF_AUTO_SWITCH_ENTITY].async_turn_off()
+
         except Exception as e:
             _LOGGER.error(f"Fehler beim Setzen von hybrid_charging_current: {e}")
 

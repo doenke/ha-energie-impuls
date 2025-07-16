@@ -109,6 +109,7 @@ class WallboxAutomaticModeSelect(RestoreEntity, SelectEntity):
         return self._attr_current_option
         
     async def async_select_option(self, option: str):
+        self._attr_current_option = option
         await self.hass.data[DOMAIN][CONF_AUTO_SWITCH_ENTITY].async_turn_on()
         self.async_write_ha_state()
            

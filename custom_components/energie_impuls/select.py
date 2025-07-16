@@ -114,6 +114,9 @@ class WallboxAutomaticModeSelect(RestoreEntity, SelectEntity):
         self._attr_current_option = option
         await self.hass.data[DOMAIN][CONF_AUTO_SWITCH_ENTITY].async_turn_on()
         self.async_write_ha_state()
+        controller = self.hass.data[DOMAIN].get("automatik_controller")
+        if controller:
+            await controller.async_update()
            
     @property
     def device_info(self):

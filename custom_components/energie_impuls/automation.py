@@ -23,7 +23,7 @@ class AutomatikController:
         self.automations.append(UeberschussAutomatikController(hass,wallbox_coordinator,energy_coordinator,AM_UEBERSCHUSS))
 
                                 
-    async def async_midnight(self, now: Optional[datetime] = None):
+     async def async_midnight(self, now: Optional[datetime] = None):
          # Wenn Wallbox gesperrt, dann Überschussladen aktivieren. 
          # Damit greift dann wieder "Fahrzeug nicht angeschlossen" (Status 2) für den Reset
          if self.wallbox_coordinator..data["_state"].get("mode", None) == 1:

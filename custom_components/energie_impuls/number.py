@@ -1,7 +1,7 @@
 from homeassistant.components.number import NumberEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .devices import EnergieImpulsWallboxDevice
-from .const import DOMAIN
+from .const import DOMAIN,CONF_AUTO_SWITCH_ENTITY
 import logging
 
 _LOGGER = logging.getLogger(__name__)

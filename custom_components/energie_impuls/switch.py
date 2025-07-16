@@ -12,7 +12,6 @@ async def async_setup_entry(hass, entry, async_add_entities):
     switches = [
         EnergieImpulsSwitch(hass, coordinator, "Wallbox Sperre", "locked", "mdi:lock"),
         EnergieImpulsSwitch(hass, coordinator, "Überschussladen", "surplus_charging", "mdi:octagram-plus"),
-        NightFullChargeSwitch(hass),
     ]
     async_add_entities(switches, update_before_add=True)
 
@@ -55,38 +54,3 @@ class EnergieImpulsSwitch(CoordinatorEntity, SwitchEntity):
     async def async_update(self):
         await self.coordinator.async_request_refresh()
 
-class NightFullChargeSwitch(RestoreEntity, SwitchEntity):
-    def __init__(self, hass):
-        self.hass = hass
-        self._state = False
-        self._attr_name = "Vollladen über Nacht"
-        self._attr_unique_id = "energie_impuls_night_fullcharge"
-        self._attr_icon = "mdi:weather-night"
-
-    async def async_added_to_hass(self):
-        await super().async_added_to_hass()
-        old_state = await self.async_get_last_state()
-        if old_state is not None:
-            self._state = old_state.state == "on"
-            _LOGGER.info(f"Zustand wiederhergestellt: {self._state}")
-
-    @property
-    def is_on(self):
-        return self._state
-
-    @property
-    def device_info(self):
-        return EnergieImpulsWallboxDevice(self.hass).device_info
-
-    async def async_turn_on(self, **kwargs):
-        _LOGGER.info("Vollladen über Nacht aktiviert")
-        self._state = True
-        self.async_write_ha_state()
-
-    async def async_turn_off(self, **kwargs):
-        _LOGGER.info("Vollladen über Nacht deaktiviert")
-        self._state = False
-        self.async_write_ha_state()
-
-    async def async_update(self):
-        pass

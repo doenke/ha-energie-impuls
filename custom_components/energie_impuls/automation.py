@@ -18,8 +18,11 @@ class AutomatikController:
         self.oldMode = None
           
         self.automations = []
-        self.automations.append(HybridAutomatikController(hass,wallbox_coordinator,energy_coordinator))
+        self.automations.append(HybridAutomatikController(hass,wallbox_coordinator,energy_coordinator,AM_HYBRIDAUTOMATIK))
+        self.automations.append(SchnellladenAutomatikController(hass,wallbox_coordinator,energy_coordinator,AM_SCHNELLLADEN))
+        self.automations.append(UeberschussAutomatikController(hass,wallbox_coordinator,energy_coordinator,AM_UEBERSCHUSS))
 
+                                
     async def async_midnight(self, now: Optional[datetime] = None):
          # Wenn Wallbox gesperrt, dann Überschussladen aktivieren. 
          # Damit greift dann wieder "Fahrzeug nicht angeschlossen" (Status 2) für den Reset
@@ -57,7 +60,8 @@ class AutomatikController:
         self.oldMode = self.activeMode
 
 class AutomatikBase:     
-     def __init__(self, hass, wallbox_coordinator, energy_coordinator):
+     def __init__(self, hass, wallbox_coordinator, energy_coordinator, mode):
+        self.mode = mode
         self.hass = hass
         self.wallbox_coordinator = wallbox_coordinator
         self.energy_coordinator = energy_coordinator
@@ -105,7 +109,9 @@ class AutomatikBase:
      async def _set_mode(self, mode_name):
         payloads = {
             HYBRID: HYBRID_JSON,
-            NICHTLADEN: NICHTLADEN_JSON
+            NICHTLADEN: NICHTLADEN_JSON,
+            SCHNELLLADEN: SCHNELLLADEN_JSON,
+            UEBERSCHUSS: UEBERSCHUSS_JSON
         }
         payload = payloads.get(mode_name)
         if not payload:
@@ -119,11 +125,9 @@ class AutomatikBase:
 
 
 class HybridAutomatikController(AutomatikBase):
-    def __init__(self, hass, wallbox_coordinator, energy_coordinator):
-        super().__init__(hass, wallbox_coordinator, energy_coordinator)
+    def __init__(self, hass, wallbox_coordinator, energy_coordinator, mode):
+        super().__init__(hass, wallbox_coordinator, energy_coordinator, mode)
 
-        self.mode = AM_HYBRIDAUTOMATIK
-         
         self.MIN_HYBRID = 1.5
         self.MIN_HYBRID_MINUTES = 10
 
@@ -162,4 +166,10 @@ class HybridAutomatikController(AutomatikBase):
         else:
             await self._set_mode(NICHTLADEN)
 
-    
+class SchnellladenAutomatikController(AutomatikBase):     
+    async def async_activate(self):
+       await self._set_mode(SCHNELLLADEN)
+
+class UeberschussAutomatikController(AutomatikBase):
+    async def async_activate(self):
+       await self._set_mode(UEBERSCHUSS)

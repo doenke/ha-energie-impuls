@@ -47,8 +47,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     )
 
     # Automatik-Logik initialisieren
-    #hass.data[DOMAIN]["automatik"] = VollladenAutomatik(hass)
-    #await hass.data[DOMAIN]["automatik"].async_initialize()
+    hass.data[DOMAIN]["automatik"] = Automatik(hass)
+    await hass.data[DOMAIN]["automatik"].async_initialize()
 
     return True
 

@@ -8,7 +8,7 @@ _LOGGER = logging.getLogger(__name__)
 class VollladenAutomatik:
     def __init__(self, hass):
         self.hass = hass
-        self.enabled_entity = "switch.vollladen_uber_nacht"
+        self.enabled_entity = "switch.energie_impuls_automatic_status"
         self.sensor_pv = "sensor.energie_impuls_pv_erzeugung"
         self.sensor_verbrauch = "sensor.energie_impuls_wallbox_verbrauch"
         self._active = False

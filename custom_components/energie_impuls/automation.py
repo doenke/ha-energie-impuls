@@ -20,20 +20,25 @@ class AutomatikController:
         for auto in self.automations:
              if self.activeMode != auto.mode and self.oldMode == auto.mode:
                   # dieser Modus ist der alte, welcher abgewählt wurde
-                  auto.finish()
+                  await auto.async_getValues()
+                  await auto.async_finish()
 
         for auto in self.automations:
              if self.activeMode == auto.mode and self.oldMode != auto.mode:
                   # dieser Modus ist der Neue, welcher gerade gewählt wurde
-                  auto.start()
+                  await auto.async_getValues()
+                  await auto.async_start()
         
         for auto in self.automations:
+             
              if self.activeMode == auto.mode and self.oldMode == auto.mode:
                   # dieser Modus ist nach wie vor der gewählte
+                  await auto.async_getValues()
                   await auto.async_worker()
-             await auto.async_maintenance()  
+             else:
+                  await auto.async_maintenance()  
              
-        self.oldMode = self.Mode
+        self.oldMode = self.activeMode
 
 class AutomatikBase:     
      def __init__(self, hass, wallbox_coordinator, energy_coordinator):

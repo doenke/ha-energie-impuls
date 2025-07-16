@@ -107,6 +107,19 @@ Nach erfolgreichem Login wird ein Zugriffstoken gespeichert und automatisch erne
   - oder `switch.vollladen_uber_nacht` deaktiviert wird
 - Stellt dann ursprüngliche Werte wieder her
 
+## 🧑‍💻 Wünsche an Planville
+- Bereitstellung der Gesamt-Zählerwerte über die API, um das HA Energie Dashboard auch ohne die unzuverlässige China Cloud nutzen zu können
+- Zugriff auf den Wechselrichter, um den Modus einstellen zu könnn, ob Last zuerst aus dem Netz oder aus der Batterie genommen wird, um eine Schonfunktion für die Batterie zu bauen
+- Eine lokale API, um den Umweg über das Internet unnötig zu machen
+- Zugriff auf die API über einen festen Token
+
+## TODO
+- Alle Parameter konfigurierbar machen
+- Solarprognose einbauen
+   - Strombedarf Auto
+   - Solarprognose
+   - Automatisch Modus bestimmen, um morgen früh voll zu sein 
+
 ## 🧑‍💻 Mitwirken
 
 Pull Requests, Bug Reports und Verbesserungsvorschläge sind willkommen. Bitte beschreibe deine Änderungen klar und verständlich.

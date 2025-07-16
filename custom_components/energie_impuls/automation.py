@@ -30,7 +30,7 @@ class AutomatikController:
         for auto in self.automations:
              if self.activeMode == auto.mode and self.oldMode == auto.mode:
                   # dieser Modus ist nach wie vor der gewählte
-                  await auto._async_update()
+                  await auto.async_worker()
              auto.maintenance()  
 
 class AutomatikBase:     
@@ -44,34 +44,33 @@ class AutomatikBase:
         self.mode = AM_MANUAL
         self.isActive = False
 
-     def activate(self)
-     def start(self):
-          self.isActive = True
-          self.activate()
-
-     def deactivate(self):
-     def finish(self):
-          self.isActive = False
-          self.deactivate()
-
-     def maintenance(self)
-     
-     async def async_getValues(self)
-     
-     async def async_justActivated(self)
-     
-     async def async_update(self):
-
-     async def _async_update(self):
-          if self.isAutoEnabled and self.isCurrentOption:
-               
-               await async_getValues()
-               
-               if (not self.isActive)
-                    self._justActivated()
+     async def async_activate(self):
+          pass
           
-               
-          self.async_update()
+     async def async_start(self):
+          self.isActive = True
+          await self.async_activate()
+
+     async def async_deactivate(self):
+          pass
+          
+     async def async_finish(self):
+          self.isActive = False
+          await self.async_deactivate()
+
+     async def async_maintenance(self):
+          pass
+     async def async_async_worker(self):
+          pass
+     
+     async def async_getValues(self):
+          pass
+     
+     async def async_justActivated(self):
+          pass
+
+     async def async_worker(self):
+          pass
           
      
      @property
@@ -85,9 +84,9 @@ class AutomatikBase:
 
 class HybridAutomatikController(AutomatikBase):
     def __init__(self, hass, wallbox_coordinator, energy_coordinator):
-        super.__init__(hass, wallbox_coordinator, energy_coordinator)
+        super().__init__(hass, wallbox_coordinator, energy_coordinator)
 
-         self.mode = AM_HYBRIDAUTOMATIK
+        self.mode = AM_HYBRIDAUTOMATIK
          
         self.MIN_HYBRID = 1.5
         self.MIN_HYBRID_MINUTES = 10
@@ -95,7 +94,6 @@ class HybridAutomatikController(AutomatikBase):
         self.last_above = None
         self.last_below = None
         self.last_check = None
-        self.currently_in_hybrid = None
         self.pv=0
 
     async def async_getValues(self):
@@ -105,7 +103,7 @@ class HybridAutomatikController(AutomatikBase):
             self.pv=0
  
      
-    async def async_update(self):
+    async def async_worker(self):
         now = datetime.now()
 
         # Bei PV > MIN_HYBRID

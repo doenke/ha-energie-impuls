@@ -80,7 +80,7 @@ class WallboxModeSelect(CoordinatorEntity, SelectEntity):
 
         try:
             response = await self.coordinator.session.async_set_wallbox_mode(payload)
-        except as e::
+        except as e:
            _LOGGER.error(f"Fehler beim Setzen des Lademodus: {e}")
            
     @property

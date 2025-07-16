@@ -59,6 +59,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     async def _handle_state_change(entity_id, old_state, new_state):
         await automatik_controller.async_update()
 
+    # Das Auto wird abgeklemmt. Die Automatik kann sich wieder einschalten/zurücksetzen
     async def handle_mode_change(event):
         old = event.data.get("old_state")
         new = event.data.get("new_state")

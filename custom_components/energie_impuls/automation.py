@@ -19,7 +19,7 @@ class AutomatikController:
         self.automations = []
         self.automations.append(HybridAutomatikController(hass,wallbox_coordinator,energy_coordinator))
 
-     async def async_update(self):
+     async def async_update(self, now: Optional[datetime] = None):
         self.activeMode = self.hass.data[DOMAIN][CONF_MODE_ENTITY].current_option
         for auto in self.automations:
              if self.activeMode != auto.mode and self.oldMode == auto.mode:

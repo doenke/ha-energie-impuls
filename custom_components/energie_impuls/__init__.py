@@ -59,12 +59,21 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     async def _handle_state_change(entity_id, old_state, new_state):
         await automatik_controller.async_update()
 
+    async def handle_mode_change(event):
+        old = event.data.get("old_state")
+        new = event.data.get("new_state")
+    
+        if old and new:
+            if old.state != "2" and new.state == "2":
+                await hass.data[DOMAIN]["automatik_controller"].async_disconnected()
+    
     # Entitäten, die beobachtet werden sollen
     mode_entity_id = hass.data[DOMAIN][CONF_MODE_ENTITY].entity_id
     auto_entity_id = hass.data[DOMAIN][CONF_AUTO_SWITCH_ENTITY].entity_id
 
     # Registrieren
     async_track_state_change_event(hass, [mode_entity_id, auto_entity_id], _handle_state_change)
+    async_track_state_change_event(hass,"sensor.wallbox_mode_code", handle_mode_change)
 
     
     return True

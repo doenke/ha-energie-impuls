@@ -66,9 +66,9 @@ class HybridAutomatikController:
 
     async def _apply_initial_state(self, pv):
         if pv >= self.MIN_HYBRID:
-            await self._set_mode("Hybridladen")
+            await self._set_mode(HYBRID)
         else:
-            await self._set_mode("nicht laden")
+            await self._set_mode(NICHTLADEN)
 
     async def _set_mode(self, mode_name):
         payloads = {

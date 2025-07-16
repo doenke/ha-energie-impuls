@@ -38,7 +38,6 @@ class EnergieImpulsSensor(CoordinatorEntity,Entity):
     def __init__(self, hass, coordinator, key):
         self.hass = hass
         super().__init__(coordinator)
-        self.coordinator = coordinator
         self._key = key
         self._attr_name = SENSOR_TYPES[key]['name']
         self._attr_unique_id = f"energie_impuls_{key}"
@@ -63,7 +62,6 @@ class EnergieImpulsSensor(CoordinatorEntity,Entity):
 class WallboxSensor(CoordinatorEntity,Entity):
     def __init__(self, hass, coordinator, name, unique_id, extract_func, unit=None, icon=None):
         super().__init__(coordinator)
-        self.coordinator = coordinator
         self.hass = hass
        
         self._extract_func = extract_func

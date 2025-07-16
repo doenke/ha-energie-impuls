@@ -13,7 +13,7 @@ class AutomatikController:
         self.oldMode = None
           
         self.automations = []
-        self.automations.append(HybridAutomatikController(hass,wallbox_coordinator,energie_coordinator))
+        self.automations.append(HybridAutomatikController(hass,wallbox_coordinator,energy_coordinator))
 
      async def async_update(self):
         self.activeMode = self.hass.data[DOMAIN][CONF_MODE_ENTITY].current_option
@@ -31,7 +31,7 @@ class AutomatikController:
              if self.activeMode == auto.mode and self.oldMode == auto.mode:
                   # dieser Modus ist nach wie vor der gewählte
                   await auto.async_worker()
-             auto.maintenance()  
+             await auto.async_maintenance()  
              
         self.oldMode = self.Mode
 
@@ -62,9 +62,7 @@ class AutomatikBase:
 
      async def async_maintenance(self):
           pass
-     async def async_async_worker(self):
-          pass
-     
+          
      async def async_getValues(self):
           pass
      
@@ -82,6 +80,21 @@ class AutomatikBase:
      @property
      def isCurrentOption(self):
           return self.mode_entity.current_option == self.mode
+
+     async def _set_mode(self, mode_name):
+        payloads = {
+            HYBRID: HYBRID_JSON,
+            NICHTLADEN: NICHTLADEN_JSON
+        }
+        payload = payloads.get(mode_name)
+        if not payload:
+            return
+
+        try:
+            await self.wallbox_coordinator.async_set_wallbox_mode(payload)
+            self.mode_entity.async_write_ha_state()
+        except Exception as e:
+            _LOGGER.error(f"[HybridAutomatikController] Fehler beim Setzen des Modus {mode_name}: {e}")
 
 
 class HybridAutomatikController(AutomatikBase):
@@ -128,17 +141,4 @@ class HybridAutomatikController(AutomatikBase):
         else:
             await self._set_mode(NICHTLADEN)
 
-    async def _set_mode(self, mode_name):
-        payloads = {
-            HYBRID: HYBRID_JSON,
-            NICHTLADEN: NICHTLADEN_JSON
-        }
-        payload = payloads.get(mode_name)
-        if not payload:
-            return
-
-        try:
-            await self.wallbox_coordinator.async_set_wallbox_mode(payload)
-            self.mode_entity.async_write_ha_state()
-        except Exception as e:
-            _LOGGER.error(f"[HybridAutomatikController] Fehler beim Setzen des Modus {mode_name}: {e}")
+    

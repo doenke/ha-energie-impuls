@@ -66,7 +66,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     
         if old and new:
             if old.state != "2" and new.state == "2":
-                await hass.data[DOMAIN]["automatik_controller"].async_disconnected()
+                await hass.data[DOMAIN]["automatik_controller"].async_reset()
     
     # Entitäten, die beobachtet werden sollen
     mode_entity_id = hass.data[DOMAIN][CONF_MODE_ENTITY].entity_id

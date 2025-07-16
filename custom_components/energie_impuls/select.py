@@ -66,6 +66,7 @@ class WallboxModeSelect(CoordinatorEntity, SelectEntity):
             return ERROR
         
     async def async_select_option(self, option: str):
+        self._attr_current_option = option
         if option == SCHNELLLADEN:
             payload = SCHNELLLADEN_JSON
         elif option == UEBERSCHUSS:

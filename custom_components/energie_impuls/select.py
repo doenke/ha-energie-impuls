@@ -59,7 +59,7 @@ class WallboxModeSelect(CoordinatorEntity, SelectEntity):
             if self.coordinator.data["_set_point"]["locked"] == True:
                 return NICHTLADEN
             if self.coordinator.data["_set_point"]["surplus_charging"] == True:
-                if self.coordinator.data["_set_point"].get("hybrid_charging_current") or 0 == 0:
+                if (self.coordinator.data["_set_point"].get("hybrid_charging_current") or 0) == 0:
                     return UEBERSCHUSS
                 else:
                     return HYBRID

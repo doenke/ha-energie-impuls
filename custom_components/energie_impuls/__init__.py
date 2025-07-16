@@ -6,7 +6,7 @@ from datetime import timedelta
 
 from .automation import AutomatikController
 from .api import EnergyImpulsSession
-from .const import DOMAIN, CONF_USERNAME, CONF_PASSWORD, CONF_WB_DEVICE_NAME, CONF_WB_DEVICE_ID
+from .const import DOMAIN, CONF_USERNAME, CONF_PASSWORD, CONF_WB_DEVICE_NAME, CONF_WB_DEVICE_ID, CONF_MODE_ENTITY, CONF_AUTO_SWITCH_ENTITY
 
 from .coordinator import EnergieImpulsCoordinator, WallboxCoordinator
 

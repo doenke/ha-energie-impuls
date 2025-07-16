@@ -64,7 +64,7 @@ MIN_HYBRID_MINUTES = 10
 async def async_setup_entry(hass, entry, async_add_entities):
     wallbox_coordinator = hass.data[DOMAIN]["coordinator_wallbox"]
     async_add_entities([WallboxModeSelect(hass,wallbox_coordinator)], update_before_add=True)
-    async_add_entities([AutomaticModeActiveSwitch(hass,wallbox_coordinator)], update_before_add=True)
+    async_add_entities([WallboxAutomaticModeSelect(hass,wallbox_coordinator)], update_before_add=True)
 
 
 class WallboxAutomaticModeSelect(CoordinatorEntity, RestoreEntity, SelectEntity):
@@ -113,44 +113,6 @@ class WallboxAutomaticModeSelect(CoordinatorEntity, RestoreEntity, SelectEntity)
     @property
     def device_info(self):
          return EnergieImpulsWallboxDevice(self.hass).device_info
-
-class AutomaticModeActiveSwitch(RestoreEntity, SwitchEntity):
-    def __init__(self, hass, coordinator):
-        super().__init__(coordinator)
-        self.hass = hass
-        self._state = False
-        self._attr_name = "Automatik"
-        self._attr_unique_id = "energie_impuls_automatic_status"
-        self._attr_icon = "mdi:weather-night"
-
-    async def async_added_to_hass(self):
-        await super().async_added_to_hass()
-        old_state = await self.async_get_last_state()
-        if old_state is not None:
-            self._state = old_state.state == "on"
-            _LOGGER.info(f"Zustand wiederhergestellt: {self._state}")
-
-    @property
-    def is_on(self):
-        return self._state
-
-    @property
-    def device_info(self):
-        return EnergieImpulsWallboxDevice(self.hass).device_info
-
-    async def async_turn_on(self, **kwargs):
-        _LOGGER.info("Ladeautomatik aktiviert")
-        self._state = True
-        self.async_write_ha_state()
-
-    async def async_turn_off(self, **kwargs):
-        _LOGGER.info("Ladeautomatik deaktiviert")
-        self._state = False
-        self.async_write_ha_state()
-
-    async def async_update(self):
-        pass
-
 
 
 class WallboxModeSelect(CoordinatorEntity, SelectEntity):

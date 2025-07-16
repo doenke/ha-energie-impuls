@@ -17,7 +17,6 @@ class HybridChargingCurrentNumber(CoordinatorEntity, NumberEntity):
     def __init__(self, hass, coordinator):
         super().__init__(coordinator)
         self.hass = hass
-        self.coordinator = coordinator
         self._attr_name = "Hybrid Charging Current"
         self._attr_unique_id = "energie_impuls_hybrid_current"
         self._attr_unit_of_measurement = "A"

@@ -50,6 +50,7 @@ class EnergieImpulsSwitch(CoordinatorEntity, SwitchEntity):
             _LOGGER.error(f"Fehler beim Deaktivieren von {self._key}: {e}")
 
     async def _async_set_state(self, value):
+        await hass.data[DOMAIN][CONF_AUTO_SWITCH_ENTITY].async_turn_off()
         await self.coordinator.async_set_wallbox_mode({self._key: value})
         
     async def async_update(self):

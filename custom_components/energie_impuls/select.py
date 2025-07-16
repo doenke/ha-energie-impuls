@@ -79,7 +79,7 @@ class WallboxModeSelect(CoordinatorEntity, SelectEntity):
             payload = NICHTLADEN_JSON
 
         try:
-            response = await self.coordinator.session.async_set_wallbox_mode(payload)
+            await self.coordinator.session.async_set_wallbox_mode(payload)
         except as e:
            _LOGGER.error(f"Fehler beim Setzen des Lademodus: {e}")
            

@@ -68,7 +68,6 @@ class AutomatikBase:
         self.mode_entity = hass.data[DOMAIN][CONF_MODE_ENTITY]  # WallboxModeSelect-Entity
         self.auto_switch = hass.data[DOMAIN][CONF_AUTO_SWITCH_ENTITY]  # AutomaticModeActiveSwitch-Entity
 
-        self.mode = AM_MANUAL
         self.isActive = False
 
      async def async_activate(self):

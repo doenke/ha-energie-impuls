@@ -29,7 +29,7 @@ class HybridChargingCurrentNumber(CoordinatorEntity, NumberEntity):
     @property
     def native_value(self):
         try:
-            return self.coordinator.data["_set_point"].get("hybrid_charging_current", 0)
+            return self.coordinator.data["_set_point"].get("hybrid_charging_current") or 0
         except Exception as e:
             _LOGGER.error(f"Hybridwert nicht verfügbar: {e}")
             return 0

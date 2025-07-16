@@ -2,7 +2,7 @@ from homeassistant.components.switch import SwitchEntity
 from homeassistant.helpers.restore_state import RestoreEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .devices import EnergieImpulsWallboxDevice
-from .const import DOMAIN
+from .const import DOMAIN, CONF_AUTO_SWITCH_ENTITY
 import logging
 
 _LOGGER = logging.getLogger(__name__)
@@ -12,6 +12,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
     switches = [
         EnergieImpulsSwitch(hass, coordinator, "Wallbox Sperre", "locked", "mdi:lock"),
         EnergieImpulsSwitch(hass, coordinator, "Überschussladen", "surplus_charging", "mdi:octagram-plus"),
+        AutomaticModeActiveSwitch(hass),
     ]
     async_add_entities(switches, update_before_add=True)
 
@@ -54,3 +55,39 @@ class EnergieImpulsSwitch(CoordinatorEntity, SwitchEntity):
     async def async_update(self):
         await self.coordinator.async_request_refresh()
 
+class AutomaticModeActiveSwitch(RestoreEntity, SwitchEntity):
+    def __init__(self, hass):
+        self.hass = hass
+        self._state = False
+        self._attr_name = "Automatik"
+        self._attr_unique_id = "energie_impuls_automatic_status"
+        self._attr_icon = "mdi:weather-night"
+        hass.data[DOMAIN][CONF_AUTO_SWITCH_ENTITY] = self
+
+    async def async_added_to_hass(self):
+        await super().async_added_to_hass()
+        old_state = await self.async_get_last_state()
+        if old_state is not None:
+            self._state = old_state.state == "on"
+            _LOGGER.info(f"Zustand wiederhergestellt: {self._state}")
+
+    @property
+    def is_on(self):
+        return self._state
+
+    @property
+    def device_info(self):
+        return EnergieImpulsWallboxDevice(self.hass).device_info
+
+    async def async_turn_on(self, **kwargs):
+        _LOGGER.info("Ladeautomatik aktiviert")
+        self._state = True
+        self.async_write_ha_state()
+
+    async def async_turn_off(self, **kwargs):
+        _LOGGER.info("Ladeautomatik deaktiviert")
+        self._state = False
+        self.async_write_ha_state()
+
+    async def async_update(self):
+        pass

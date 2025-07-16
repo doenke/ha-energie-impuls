@@ -16,6 +16,7 @@ class AutomatikController:
         self.automations.append(HybridAutomatikController(hass,wallbox_coordinator,energie_coordinator))
 
      async def async_update(self):
+        self.activeMode = self.hass.data[DOMAIN][CONF_MODE_ENTITY].current_option
         for auto in self.automations:
              if self.activeMode != auto.mode and self.oldMode == auto.mode:
                   # dieser Modus ist der alte, welcher abgewählt wurde
@@ -25,13 +26,14 @@ class AutomatikController:
              if self.activeMode == auto.mode and self.oldMode != auto.mode:
                   # dieser Modus ist der Neue, welcher gerade gewählt wurde
                   auto.start()
-
         
         for auto in self.automations:
              if self.activeMode == auto.mode and self.oldMode == auto.mode:
                   # dieser Modus ist nach wie vor der gewählte
                   await auto.async_worker()
              auto.maintenance()  
+             
+        self.oldMode = self.Mode
 
 class AutomatikBase:     
      def __init__(self, hass, wallbox_coordinator, energy_coordinator):

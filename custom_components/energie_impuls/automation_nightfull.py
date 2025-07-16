@@ -5,7 +5,7 @@ import logging
 
 _LOGGER = logging.getLogger(__name__)
 
-class VollladenAutomatik:
+class Automatik:
     def __init__(self, hass):
         self.hass = hass
         self.enabled_entity = "switch.energie_impuls_automatic_status"

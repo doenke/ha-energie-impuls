@@ -1,8 +1,9 @@
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.event import async_track_time_interval
 
-from .automation_nightfull import VollladenAutomatik
-from .api import EnergyImpulsSession  # ← richtiger Import!
+from .automation import HybridAutomatikController
+from .api import EnergyImpulsSession
 from .const import DOMAIN, CONF_USERNAME, CONF_PASSWORD, CONF_WB_DEVICE_NAME, CONF_WB_DEVICE_ID
 
 from .coordinator import EnergieImpulsCoordinator, WallboxCoordinator
@@ -47,9 +48,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     )
 
     # Automatik-Logik initialisieren
-    hass.data[DOMAIN]["automatik"] = Automatik(hass)
-    await hass.data[DOMAIN]["automatik"].async_initialize()
+    #hass.data[DOMAIN]["automatik"] = Automatik(hass)
+    hass.data[DOMAIN]["automatik_controller_hybrid"] = HybridAutomatikController(hass,wallbox_coordinator,energie_coordinator)
 
+    #await hass.data[DOMAIN]["automatik"].async_initialize()
+    async_track_time_interval(hass, hass.data[DOMAIN]["automatik_controller_hybrid"].async_update, timedelta(minutes=1))
     return True
 
 

@@ -21,10 +21,12 @@ class AutomatikController:
         self.automations.append(HybridAutomatikController(hass,wallbox_coordinator,energy_coordinator))
 
     async def async_midnight(self, now: Optional[datetime] = None):
-         #if self.wallbox_coordinator.data == 1:
-         # if self.activeMode <> AM_MANUAL:
-         # set await self.wallbox_coordinator.async_set_wallbox_mode(UEBERSCHUSS_JSON)
-         pass
+         # Wenn Wallbox gesperrt, dann Überschussladen aktivieren. 
+         # Damit greift dann wieder "Fahrzeug nicht angeschlossen" (Status 2) für den Reset
+         if self.wallbox_coordinator..data["_state"].get("mode", None) == 1:
+              if self.activeMode <> AM_MANUAL:
+                   await self.wallbox_coordinator.async_set_wallbox_mode(UEBERSCHUSS_JSON)
+         
      
      async def async_reset(self):
           self.hass.data[DOMAIN][CONF_AUTO_SWITCH_ENTITY].async_turn_on()

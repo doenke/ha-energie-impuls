@@ -75,7 +75,7 @@ class EnergyImpulsSession:
             async with self._client.put(WALLBOX_SETPOINT_URL+self.hass.data[DOMAIN][CONF_WB_DEVICE_ID], headers=headers, json=payload) as response:
                 if response.status not in (200, 201, 204):
                     raise Exception(f"Fehler beim PUT: {response.status} → {await response.text()}")
-                return True
+                return await response.json()
         except Exception as e:
             raise Exception(f"Fehler beim PUT an Wallbox: {e}") from e
 

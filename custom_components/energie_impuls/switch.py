@@ -50,13 +50,9 @@ class EnergieImpulsSwitch(CoordinatorEntity, SwitchEntity):
             _LOGGER.error(f"Fehler beim Deaktivieren von {self._key}: {e}")
 
     async def _async_set_state(self, value):
-        await self.coordinator.session.async_get_token()
-        response = await self.coordinator.session.async_set_wallbox_mode({self._key: value})
+        #await self.coordinator.session.async_get_token()
+        await self.coordinator.session.async_set_wallbox_mode({self._key: value})
         
-        #await self.coordinator.async_request_refresh()
-        #if isinstance(self.coordinator.data, dict) and "_set_point" in self.coordinator.data:
-        #    self.coordinator.data["_set_point"][self._key] = value
-
     async def async_update(self):
         await self.coordinator.async_request_refresh()
 

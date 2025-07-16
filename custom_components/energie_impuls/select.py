@@ -57,10 +57,6 @@ AUTOMATIC_MODES = [
   AM_MANUAL
 ]
 
-MIN_HYBRID = 1.5
-MIN_HYBRID_MINUTES = 10
-
-
 async def async_setup_entry(hass, entry, async_add_entities):
     wallbox_coordinator = hass.data[DOMAIN]["coordinator_wallbox"]
     entities = [

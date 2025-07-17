@@ -36,8 +36,8 @@ class EnergieImpulsOptionsFlowHandler(config_entries.OptionsFlow):
                     CONF_PASSWORD: user_input[CONF_PASSWORD],
                 },
                 options={
-                    "min_hybrid": user_input["min_hybrid"],
-                    "min_hybrid_minutes": user_input["min_hybrid_minutes"],
+                    CONF_AUTO_MIN_PV: user_input[CONF_AUTO_MIN_PV],
+                    CONF_AUTO_MINUTES: user_input[CONF_AUTO_MINUTES],
                 },
             )
             await self.hass.config_entries.async_reload(self.config_entry.entry_id)
@@ -51,7 +51,7 @@ class EnergieImpulsOptionsFlowHandler(config_entries.OptionsFlow):
             data_schema=vol.Schema({
                 vol.Required(CONF_USERNAME, default=current_data.get(CONF_USERNAME, "")): str,
                 vol.Required(CONF_PASSWORD, default=current_data.get(CONF_PASSWORD, "")): str,
-                vol.Required("min_hybrid", default=current_options.get("min_hybrid", DEFAULT_MIN_HYBRID)): float,
-                vol.Required("min_hybrid_minutes", default=current_options.get("min_hybrid_minutes", DEFAULT_MIN_HYBRID_MINUTES)): int,
+                vol.Required("min_hybrid", default=current_options.get(CONF_AUTO_MIN_PV, DEFAULT_MIN_HYBRID)): float,
+                vol.Required("min_hybrid_minutes", default=current_options.get(CONF_AUTO_MINUTES, DEFAULT_MIN_HYBRID_MINUTES)): int,
             }),
         )

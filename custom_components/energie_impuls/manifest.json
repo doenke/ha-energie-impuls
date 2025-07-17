@@ -1,12 +1,10 @@
 {
   "domain": "energie_impuls",
   "name": "Energie Impuls",
-  "version": "1.0.114",
+  "codeowners": ["@doenke"],
   "config_flow": true,
   "documentation": "https://github.com/doenke/ha-energie-impuls",
+  "iot_class": "cloud_polling",
   "requirements": [],
-  "codeowners": [
-    "@doenke"
-  ],
-  "iot_class": "cloud_polling"
+  "version": "1.0.114"
 }

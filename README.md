@@ -89,6 +89,10 @@ Diese Modi lassen sich bequem über das select.wallbox_automatikmodus-Entity aus
 ## Überschreiben der Automatik
 Sobald irgendein Parameter von Hand umgestellt wird, so schaltet sich die Automatik ab. Wenn der Wallbox-Zustand sich auf "Fahrzeug nicht verbunden" (Auto wurde abgeklemmt) ändert, dann aktiviert sich die Automatik von selbst wieder, um den nächsten Ladevorgang wieder über die Automatik zu steuern. Wer das nicht möchte, der sollte den Automatik-Modus "Manuell" auswählen.
 
+## ⚙️ Optionen (über UI)
+- `Mindest-PV-Leistung in kW`: Schaltschwelle für Logikfunktionen. Ab diesem Solarertrag schalten die Logiken um
+- `Dauer der Über-/Unterschreitung in Minuten`: Die Schaltschwelle muss für diese Anzahl Minuten über- oder unterschrittenwerden, damit umgeschaltet wird.
+
 # 🧑‍💻 Wünsche an Planville
 - Bereitstellung der Gesamt-Zählerwerte über die API, um das HA Energie Dashboard auch ohne die unzuverlässige China Cloud nutzen zu können
 - Zugriff auf den Wechselrichter, um den Modus einstellen zu könnn, ob Last zuerst aus dem Netz oder aus der Batterie genommen wird, um eine Schonfunktion für die Batterie zu bauen

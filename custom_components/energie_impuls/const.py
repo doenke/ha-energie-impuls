@@ -13,6 +13,8 @@ CONF_USERNAME = "username"
 CONF_PASSWORD = "password"
 CONF_AUTO_MIN_PV = "auto_min_pv"
 CONF_AUTO_MINUTES = "auto_minutes"
+DEFAULT_AUTO_MIN_PV = 1.5
+DEFAULT_AUTO_MINUTES = 10
 
 CONF_SESSION = "session"
 

@@ -13,25 +13,13 @@ Diese benutzerdefinierte Home Assistant-Integration verbindet dein Smart Home mi
   - Lademodus statt einzelne Wallbox-Schalter
   - Ladeautomatik um bei maximiertem Eigenverbrauch trotzdem morgens das Auto voll geladen zu haben
 
-
----
-
-## 🧰 Voraussetzungen
-
-- Home Assistant ≥ 2023.0
-- Aktiver Account bei [energie-impuls.site](https://energie-impuls.site)
-- Internetzugang vom Home Assistant Core aus
-
 ---
 
 ## 🔧 Installation über HACS (empfohlen)
 
 1. Öffne HACS → **Integrationen**
 2. Klicke auf das Menü (⋮) → **Benutzerdefiniertes Repository hinzufügen**
-3. Gib folgendes ein: https://github.com/doenke/ha-energie-impuls
-
-
-Wähle **Integration** als Typ.
+3. Gib folgendes ein: https://github.com/doenke/ha-energie-impuls, Wähle **Integration** als Typ.
 4. Nach Installation: Home Assistant neustarten
 5. Gehe zu **Einstellungen → Geräte & Dienste → Integration hinzufügen**
 6. Wähle **Energie Impuls**, trage Benutzername und Passwort ein
@@ -42,8 +30,6 @@ Wähle **Integration** als Typ.
 
 1. Lade das [ZIP-Archiv](https://github.com/doenke/ha-energie-impuls/archive/refs/heads/main.zip) herunter
 2. Entpacke es und kopiere den Ordner `custom_components/energie_impuls/` nach: config/custom_components/energie_impuls/
-
-
 3. Starte Home Assistant neu
 
 ---

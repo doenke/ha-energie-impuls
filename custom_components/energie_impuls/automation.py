@@ -11,18 +11,18 @@ _LOGGER = logging.getLogger(__name__)
 class AutomatikController:
      def __init__(self, hass):
         self.hass = hass
-        self.wallbox_coordinator = wallbox_coordinator
-        self.energy_coordinator = energy_coordinator
+        self.wallbox_coordinator = self.hass.data[DOMAIN]["coordinator_wallbox"]
+        self.energy_coordinator =  self.hass.data[DOMAIN]["coordinator_energie"]
 
         self.activeMode = None
         self.oldMode = None
           
         self.automations = []
-        self.automations.append(HybridAutomatikController(hass,wallbox_coordinator,energy_coordinator,AM_HYBRIDAUTOMATIK))
-        self.automations.append(SchnellladenAutomatikController(hass,wallbox_coordinator,energy_coordinator,AM_SCHNELLLADEN))
-        self.automations.append(UeberschussAutomatikController(hass,wallbox_coordinator,energy_coordinator,AM_UEBERSCHUSS))
-        self.automations.append(HybridNachtAutomatikController(hass,wallbox_coordinator,energy_coordinator,AM_HYBRIDAUTOMATIK_NACHT))
-        self.automations.append(UeberschussNachtAutomatikController(hass,wallbox_coordinator,energy_coordinator,AM_UEBERSCHUSS_NACHT))
+        self.automations.append(AutomatikControllerPVGrenze(hass,AM_HYBRIDAUTOMATIK),HYBRID,NICHTLADEN)
+        self.automations.append(SchnellladenAutomatikController(hass,AM_SCHNELLLADEN))
+        self.automations.append(UeberschussAutomatikController(hass,AM_UEBERSCHUSS))
+        self.automations.append(AutomatikControllerPVGrenze(hass,AM_HYBRIDAUTOMATIK_NACHT,HYBRID,SCHNELLLADEN))
+        self.automations.append(AutomatikControllerPVGrenze(hass,AM_UEBERSCHUSS_NACHT,UEBERSCHUSS,SCHNELLLADEN))
      
                                 
      async def async_midnight(self, now: Optional[datetime] = None):
@@ -62,11 +62,11 @@ class AutomatikController:
         self.oldMode = self.activeMode
 
 class AutomatikBase:     
-     def __init__(self, hass, wallbox_coordinator, energy_coordinator, mode):
+     def __init__(self, hass, mode):
         self.mode = mode
         self.hass = hass
-        self.wallbox_coordinator = wallbox_coordinator
-        self.energy_coordinator = energy_coordinator
+        self.wallbox_coordinator = self.hass.data[DOMAIN]["coordinator_wallbox"]
+        self.energy_coordinator =  self.hass.data[DOMAIN]["coordinator_energie"]
         self.mode_entity = hass.data[DOMAIN][CONF_MODE_ENTITY]  # WallboxModeSelect-Entity
         self.auto_switch = hass.data[DOMAIN][CONF_AUTO_SWITCH_ENTITY]  # AutomaticModeActiveSwitch-Entity
 
@@ -131,8 +131,12 @@ class AutomatikBase:
         except Exception as e:
             _LOGGER.error(f"[HybridAutomatikController] Fehler beim Setzen des Modus {mode_name}: {e}")
 
-
-class HybridAutomatikController(AutomatikBase):
+class AutomatikControllerPVGrenze(AutomatikBase):
+    def __init__(self, hass, mode, offaction, onaction):
+         super().__init__(hass, mode)
+         self.offaction = offaction
+         self.onaction = onaction 
+     
     async def async_worker(self):
         now = datetime.now()
         try:
@@ -145,12 +149,12 @@ class HybridAutomatikController(AutomatikBase):
             self.last_above = now
             if self.isActive is False and self.last_below:
                 if (now - self.last_below) >= timedelta(minutes=self.MIN_HYBRID_MINUTES):
-                    await self._set_mode(HYBRID)
+                    await self._set_mode(self.onaction)
         else:
             self.last_below = now
             if self.isActive is True and self.last_above:
                 if (now - self.last_above) >= timedelta(minutes=self.MIN_HYBRID_MINUTES):
-                    await self._set_mode(NICHTLADEN)
+                    await self._set_mode(self.offaction)
 
         self.last_check = now
 
@@ -160,9 +164,9 @@ class HybridAutomatikController(AutomatikBase):
         except Exception:
             self.pv=0
         if self.pv >= self.MIN_HYBRID:
-            await self._set_mode(HYBRID)
+            await self._set_mode(self.onaction)
         else:
-            await self._set_mode(NICHTLADEN)
+            await self._set_mode(self.offaction)
 
 class SchnellladenAutomatikController(AutomatikBase):     
     async def async_activate(self):
@@ -172,68 +176,5 @@ class UeberschussAutomatikController(AutomatikBase):
     async def async_activate(self):
        await self._set_mode(UEBERSCHUSS)
 
-class HybridNachtAutomatikController(AutomatikBase):
-    async def async_worker(self):
-        now = datetime.now()
-        try:
-            self.pv = float(self.energy_coordinator.data["flow"].get("pv", 0))
-        except Exception:
-            self.pv=0
 
-        # Bei PV > MIN_HYBRID
-        if self.pv >= self.MIN_HYBRID:
-            self.last_above = now
-            if self.isActive is False and self.last_below:
-                if (now - self.last_below) >= timedelta(minutes=self.MIN_HYBRID_MINUTES):
-                    await self._set_mode(HYBRID)
-        else:
-            self.last_below = now
-            if self.isActive is True and self.last_above:
-                if (now - self.last_above) >= timedelta(minutes=self.MIN_HYBRID_MINUTES):
-                    await self._set_mode(SCHNELLLADEN)
 
-        self.last_check = now
-
-    async def async_activate(self):
-        try:
-            self.pv = float(self.energy_coordinator.data["flow"].get("pv", 0))
-        except Exception:
-            self.pv=0
-
-        if self.pv >= self.MIN_HYBRID:
-            await self._set_mode(HYBRID)
-        else:
-            await self._set_mode(SCHNELLLADEN)
-
-class UeberschussNachtAutomatikController(AutomatikBase):
-    async def async_worker(self):
-        now = datetime.now()
-        try:
-            self.pv = float(self.energy_coordinator.data["flow"].get("pv", 0))
-        except Exception:
-            self.pv=0
-         
-        # Bei PV > MIN_HYBRID
-        if self.pv >= self.MIN_HYBRID:
-            self.last_above = now
-            if self.isActive is False and self.last_below:
-                if (now - self.last_below) >= timedelta(minutes=self.MIN_HYBRID_MINUTES):
-                    await self._set_mode(UEBERSCHUSS)
-        else:
-            self.last_below = now
-            if self.isActive is True and self.last_above:
-                if (now - self.last_above) >= timedelta(minutes=self.MIN_HYBRID_MINUTES):
-                    await self._set_mode(SCHNELLLADEN)
-
-        self.last_check = now
-
-    async def async_activate(self):
-         try:
-            self.pv = float(self.energy_coordinator.data["flow"].get("pv", 0))
-         except Exception:
-            self.pv=0
-              
-         if self.pv >= self.MIN_HYBRID:
-            await self._set_mode(UEBERSCHUSS)
-        else:
-            await self._set_mode(SCHNELLLADEN)

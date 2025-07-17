@@ -16,7 +16,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
     ]
     async_add_entities(switches, update_before_add=True)
 
-class EnergieImpulsSwitch(CoordinatorEntity, SwitchEntity, EnergieImpulsWallboxDeviceInfoMixin):
+class EnergieImpulsSwitch(EnergieImpulsWallboxDeviceInfoMixin,CoordinatorEntity, SwitchEntity):
     def __init__(self, hass, coordinator, name, key, icon=None):
         super().__init__(coordinator)
         self.hass = hass
@@ -52,7 +52,7 @@ class EnergieImpulsSwitch(CoordinatorEntity, SwitchEntity, EnergieImpulsWallboxD
     async def async_update(self):
         await self.coordinator.async_request_refresh()
 
-class AutomaticModeActiveSwitch(RestoreEntity, SwitchEntity, EnergieImpulsWallboxDeviceInfoMixin):
+class AutomaticModeActiveSwitch(EnergieImpulsWallboxDeviceInfoMixin,RestoreEntity, SwitchEntity):
     def __init__(self, hass):
         super().__init__()
         self.hass = hass

@@ -9,7 +9,7 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class AutomatikController:
-     def __init__(self, hass, wallbox_coordinator, energy_coordinator):
+     def __init__(self, hass):
         self.hass = hass
         self.wallbox_coordinator = wallbox_coordinator
         self.energy_coordinator = energy_coordinator

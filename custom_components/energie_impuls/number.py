@@ -13,7 +13,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
     async_add_entities([entity], update_before_add=True)
 
 
-class HybridChargingCurrentNumber(CoordinatorEntity, NumberEntity, EnergieImpulsWallboxDeviceInfoMixin):
+class HybridChargingCurrentNumber(EnergieImpulsWallboxDeviceInfoMixin,CoordinatorEntity, NumberEntity):
     def __init__(self, hass, coordinator):
         super().__init__(coordinator)
         self.hass = hass

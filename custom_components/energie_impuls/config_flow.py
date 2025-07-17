@@ -57,8 +57,8 @@ class EnergieImpulsOptionsFlowHandler(config_entries.OptionsFlow):
                     CONF_AUTO_MINUTES: user_input[CONF_AUTO_MINUTES],
                 },
             )
-            _LOGGER.warning(f"Neue entry.options: {self._entry.options}")
             await self.hass.config_entries.async_reload(self._entry.entry_id)
+            _LOGGER.warning(f"Neue entry.options: {self._entry.options}")
             return self.async_create_entry(title="", data={})
     
         # 🛠 Hier ist der kritische Punkt: Entweder Optionen oder Fallback auf Defaults

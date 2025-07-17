@@ -63,7 +63,7 @@ class EnergieImpulsOptionsFlowHandler(config_entries.OptionsFlow):
             data_schema=vol.Schema({
                 vol.Required(CONF_USERNAME, default=current_data.get(CONF_USERNAME, "")): str,
                 vol.Required(CONF_PASSWORD, default=current_data.get(CONF_PASSWORD, "")): str,
-                vol.Required(CONF_AUTO_MIN_PV, default=current_options.get(CONF_AUTO_MIN_PV, DEFAULT_AUTO_MIN_PV)): float,
+                vol.Required(CONF_AUTO_MIN_PV, default=current_options.get(CONF_AUTO_MIN_PV, DEFAULT_AUTO_MIN_PV)): vol.Coerce(float),
                 vol.Required(CONF_AUTO_MINUTES, default=current_options.get(CONF_AUTO_MINUTES, DEFAULT_AUTO_MINUTES)): int,
             }),
         )

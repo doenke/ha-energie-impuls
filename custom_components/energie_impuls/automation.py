@@ -18,7 +18,7 @@ class AutomatikController:
         self.oldMode = None
           
         self.automations = []
-        self.automations.append(AutomatikControllerPVGrenze(hass,AM_HYBRIDAUTOMATIK),HYBRID,NICHTLADEN)
+        self.automations.append(AutomatikControllerPVGrenze(hass,AM_HYBRIDAUTOMATIK,HYBRID,NICHTLADEN))
         self.automations.append(SchnellladenAutomatikController(hass,AM_SCHNELLLADEN))
         self.automations.append(UeberschussAutomatikController(hass,AM_UEBERSCHUSS))
         self.automations.append(AutomatikControllerPVGrenze(hass,AM_HYBRIDAUTOMATIK_NACHT,HYBRID,SCHNELLLADEN))

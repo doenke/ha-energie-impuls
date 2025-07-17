@@ -3,7 +3,7 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.helpers.restore_state import RestoreEntity
 from .const import DOMAIN
 from .api import EnergyImpulsSession
-from .devices import EnergieImpulsWallboxDevice, EnergieImpulsDevice
+from .devices import EnergieImpulsWallboxDeviceInfoMixin, EnergieImpulsDeviceInfoMixin
 import logging
 
 _LOGGER = logging.getLogger(__name__)

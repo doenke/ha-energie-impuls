@@ -16,7 +16,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
     ]
     async_add_entities(switches, update_before_add=True)
 
-class EnergieImpulsSwitch(CoordinatorEntity, SwitchEntity):
+class EnergieImpulsSwitch(CoordinatorEntity, SwitchEntity, EnergieImpulsWallboxDeviceInfoMixin):
     def __init__(self, hass, coordinator, name, key, icon=None):
         super().__init__(coordinator)
         self.hass = hass
@@ -32,10 +32,6 @@ class EnergieImpulsSwitch(CoordinatorEntity, SwitchEntity):
     @property
     def name(self):
         return self._name
-
-    @property
-    def device_info(self):
-        return EnergieImpulsWallboxDevice(self.hass).device_info
 
     async def async_turn_on(self, **kwargs):
         try:
@@ -56,7 +52,7 @@ class EnergieImpulsSwitch(CoordinatorEntity, SwitchEntity):
     async def async_update(self):
         await self.coordinator.async_request_refresh()
 
-class AutomaticModeActiveSwitch(RestoreEntity, SwitchEntity):
+class AutomaticModeActiveSwitch(RestoreEntity, SwitchEntity, EnergieImpulsWallboxDeviceInfoMixin):
     def __init__(self, hass):
         self.hass = hass
         self._state = False
@@ -75,10 +71,6 @@ class AutomaticModeActiveSwitch(RestoreEntity, SwitchEntity):
     @property
     def is_on(self):
         return self._state
-
-    @property
-    def device_info(self):
-        return EnergieImpulsWallboxDevice(self.hass).device_info
 
     async def async_turn_on(self, **kwargs):
         _LOGGER.info("Ladeautomatik aktiviert")

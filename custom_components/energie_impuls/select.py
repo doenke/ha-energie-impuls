@@ -113,7 +113,3 @@ class WallboxAutomaticModeSelect(RestoreEntity, SelectEntity,EnergieImpulsWallbo
         controller = self.hass.data[DOMAIN].get("automatik_controller")
         if controller:
             await controller.async_update()
-           
-    @property
-    def device_info(self):
-         return EnergieImpulsWallboxDevice(self.hass).device_info

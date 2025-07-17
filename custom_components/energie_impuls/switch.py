@@ -1,7 +1,7 @@
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.helpers.restore_state import RestoreEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
-from .devices import EnergieImpulsWallboxDevice
+from .devices import EnergieImpulsWallboxDeviceInfoMixin
 from .const import DOMAIN, CONF_AUTO_SWITCH_ENTITY
 import logging
 

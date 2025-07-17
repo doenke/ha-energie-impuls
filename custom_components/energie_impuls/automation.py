@@ -9,8 +9,9 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class AutomatikController:
-     def __init__(self, hass):
+     def __init__(self, hass, entry):
         self.hass = hass
+        self.entry = entry
         self.wallbox_coordinator = self.hass.data[DOMAIN]["coordinator_wallbox"]
         self.energy_coordinator =  self.hass.data[DOMAIN]["coordinator_energie"]
 
@@ -18,11 +19,11 @@ class AutomatikController:
         self.oldMode = None
           
         self.automations = [
-              AutomatikControllerPVGrenze(hass, AM_HYBRIDAUTOMATIK, NICHTLADEN, HYBRID),
-              SchnellladenAutomatikController(hass, AM_SCHNELLLADEN),
-              UeberschussAutomatikController(hass, AM_UEBERSCHUSS),
-              AutomatikControllerPVGrenze(hass, AM_HYBRIDAUTOMATIK_NACHT, SCHNELLLADEN, HYBRID),
-              AutomatikControllerPVGrenze(hass, AM_UEBERSCHUSS_NACHT, SCHNELLLADEN, UEBERSCHUSS),
+              AutomatikControllerPVGrenze(hass, entry, AM_HYBRIDAUTOMATIK, NICHTLADEN, HYBRID),
+              SchnellladenAutomatikController(hass, entry, AM_SCHNELLLADEN),
+              UeberschussAutomatikController(hass, entry, AM_UEBERSCHUSS),
+              AutomatikControllerPVGrenze(hass, entry, AM_HYBRIDAUTOMATIK_NACHT, SCHNELLLADEN, HYBRID),
+              AutomatikControllerPVGrenze(hass, entry, AM_UEBERSCHUSS_NACHT, SCHNELLLADEN, UEBERSCHUSS),
         ]
 
      
@@ -64,9 +65,10 @@ class AutomatikController:
         self.oldMode = self.activeMode
 
 class AutomatikBase:     
-     def __init__(self, hass, mode):
+     def __init__(self, hass, entry, mode):
         self.mode = mode
         self.hass = hass
+        self.entry = entry  
         self.wallbox_coordinator = self.hass.data[DOMAIN]["coordinator_wallbox"]
         self.energy_coordinator =  self.hass.data[DOMAIN]["coordinator_energie"]
         self.mode_entity = hass.data[DOMAIN][CONF_MODE_ENTITY]  # WallboxModeSelect-Entity
@@ -146,15 +148,15 @@ class AutomatikControllerPVGrenze(AutomatikBase):
             self.pv=0
 
         # Bei PV > MIN_HYBRID
-        if self.pv >= self.hass.config_entries.async_get_entry(entry_id).options.get(CONF_AUTO_MIN_PV, DEFAULT_AUTO_MIN_PV):
+        if self.pv >= self.entry.options.get(CONF_AUTO_MIN_PV, DEFAULT_AUTO_MIN_PV):
             self.last_above = now
             if self.isActive is False and self.last_below:
-                if (now - self.last_below) >= timedelta(minutes=self.hass.config_entries.async_get_entry(entry_id).options.get(CONF_AUTO_MINUTES, DEFAULT_AUTO_MINUTES)):
+                if (now - self.last_below) >= timedelta(minutes=self.entry.options.get(CONF_AUTO_MINUTES, DEFAULT_AUTO_MINUTES)):
                     await self._set_mode(self.onaction)
         else:
             self.last_below = now
             if self.isActive is True and self.last_above:
-                if (now - self.last_above) >= timedelta(minutes=self.hass.config_entries.async_get_entry(entry_id).options.get(CONF_AUTO_MINUTES, DEFAULT_AUTO_MINUTES)):
+                if (now - self.last_above) >= timedelta(minutes=self.entry.options.get(CONF_AUTO_MINUTES, DEFAULT_AUTO_MINUTES)):
                     await self._set_mode(self.offaction)
 
         self.last_check = now
@@ -164,7 +166,7 @@ class AutomatikControllerPVGrenze(AutomatikBase):
             self.pv = float(self.energy_coordinator.data["flow"].get("pv", 0))
         except Exception:
             self.pv=0
-        if self.pv >= self.hass.config_entries.async_get_entry(entry_id).options.get(CONF_AUTO_MIN_PV, DEFAULT_AUTO_MIN_PV):
+        if self.pv >= self.entry.options.get(CONF_AUTO_MIN_PV, DEFAULT_AUTO_MIN_PV):
             await self._set_mode(self.onaction)
         else:
             await self._set_mode(self.offaction)

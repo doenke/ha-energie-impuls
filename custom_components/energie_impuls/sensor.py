@@ -34,7 +34,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
     async_add_entities(sensors, update_before_add=True)
 
 
-class EnergieImpulsSensor(CoordinatorEntity,Entity,EnergieImpulsDeviceInfoMixin):
+class EnergieImpulsSensor(EnergieImpulsDeviceInfoMixin,CoordinatorEntity,Entity):
     def __init__(self, hass, coordinator, key):
         self.hass = hass
         super().__init__(coordinator)
@@ -54,7 +54,7 @@ class EnergieImpulsSensor(CoordinatorEntity,Entity,EnergieImpulsDeviceInfoMixin)
         return 0 if value is None else value
 
 
-class WallboxSensor(CoordinatorEntity,Entity,EnergieImpulsWallboxDeviceInfoMixin):
+class WallboxSensor(EnergieImpulsWallboxDeviceInfoMixin,CoordinatorEntity,Entity):
     def __init__(self, hass, coordinator, name, unique_id, extract_func, unit=None, icon=None):
         super().__init__(coordinator)
         self.hass = hass

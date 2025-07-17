@@ -51,8 +51,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     )
 
     # Automatik-Logik initialisieren
-    #hass.data[DOMAIN]["automatik"] = Automatik(hass)
-    automatik_controller = AutomatikController(hass, wallbox_coordinator, energie_coordinator)
+    automatik_controller = AutomatikController(hass)
     hass.data[DOMAIN]["automatik_controller"] = automatik_controller
     
     async_track_time_interval(hass, hass.data[DOMAIN]["automatik_controller"].async_update, timedelta(minutes=1))

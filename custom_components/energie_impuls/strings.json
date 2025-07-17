@@ -1,5 +1,29 @@
 
 {
   "title": "Energie Impuls",
-  "description": "Integration zur Visualisierung und Steuerung von Energieflüssen"
+  "description": "Integration zur Steuerung des Energie-Impuls mit erweiterter Ladeautomatik"
+  "config": {
+    "step": {
+      "user": {
+        "title": "Verbindung zu Energie Impuls",
+        "description": "Bitte gib deine Zugangsdaten ein.",
+        "data": {
+          "username": "Benutzername",
+          "password": "Passwort"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Erweiterte Optionen",
+        "description": "Einstellungen für den Automatikmodus",
+        "data": {
+          "auto_min_pv": "Mindest-PV-Leistung in kW",
+          "auto_minutes": "Über-/Unterscheitungsdauer in Minuten"
+        }
+      }
+    }
+  }
 }

@@ -1,8 +1,19 @@
 from homeassistant import config_entries
 import voluptuous as vol
-from .const import DOMAIN, CONF_USERNAME, CONF_PASSWORD,CONF_AUTO_MIN_PV,CONF_AUTO_MINUTES,DEFAULT_AUTO_MIN_PV,DEFAULT_AUTO_MINUTES
+from .const import (
+    DOMAIN,
+    CONF_USERNAME,
+    CONF_PASSWORD,
+    CONF_AUTO_MIN_PV,
+    CONF_AUTO_MINUTES,
+    DEFAULT_AUTO_MIN_PV,
+    DEFAULT_AUTO_MINUTES,
+)
+
 
 class EnergieImpulsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+    """Konfigurations-Flow für Energie Impuls."""
+
     async def async_step_user(self, user_input=None):
         errors = {}
         if user_input is not None:
@@ -21,14 +32,17 @@ class EnergieImpulsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
 
 class EnergieImpulsOptionsFlowHandler(config_entries.OptionsFlow):
-    def __init__(self, config_entry):
-        self.config_entry = config_entry
+    """Options-Flow für Energie Impuls."""
+
+    def __init__(self, entry: config_entries.ConfigEntry):
+        super().__init__()  # wichtig für Kompatibilität ab 2025.12
+        self._entry = entry
 
     async def async_step_init(self, user_input=None):
         if user_input is not None:
-            # Speichern und reload anstoßen
+            # Speichern und Reload der Integration anstoßen
             self.hass.config_entries.async_update_entry(
-                self.config_entry,
+                self._entry,
                 data={
                     CONF_USERNAME: user_input[CONF_USERNAME],
                     CONF_PASSWORD: user_input[CONF_PASSWORD],
@@ -38,11 +52,11 @@ class EnergieImpulsOptionsFlowHandler(config_entries.OptionsFlow):
                     CONF_AUTO_MINUTES: user_input[CONF_AUTO_MINUTES],
                 },
             )
-            await self.hass.config_entries.async_reload(self.config_entry.entry_id)
+            await self.hass.config_entries.async_reload(self._entry.entry_id)
             return self.async_create_entry(title="", data={})
 
-        current_data = self.config_entry.data
-        current_options = self.config_entry.options
+        current_data = self._entry.data
+        current_options = self._entry.options
 
         return self.async_show_form(
             step_id="init",

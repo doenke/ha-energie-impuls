@@ -1,9 +1,6 @@
 from .const import DOMAIN,CONF_WB_DEVICE_NAME, CONF_WB_DEVICE_ID
 
-class EnergieImpulsWallboxDevice():
-    def __init__(self, hass):
-        self.hass=hass
-
+class EnergieImpulsWallboxDeviceInfoMixin():
     @property
     def device_info(self):
          return {
@@ -17,10 +14,7 @@ class EnergieImpulsWallboxDevice():
 
 
 
-class EnergieImpulsDevice():
-    def __init__(self, hass):
-        self.hass=hass
-
+class EnergieImpulsDeviceInfoMixin():
     @property
     def device_info(self):
          return {

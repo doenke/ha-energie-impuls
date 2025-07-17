@@ -57,13 +57,24 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     async_track_time_interval(hass, hass.data[DOMAIN]["automatik_controller"].async_update, timedelta(minutes=1))
     async_track_time_change(hass, hass.data[DOMAIN]["automatik_controller"].async_midnight,hour=0, minute=0, second=25)
     
-    async def _handle_state_change(entity_id, old_state, new_state):
-        await automatik_controller.async_update()
+    #async def _handle_state_change(entity_id, old_state, new_state):
+    #    await automatik_controller.async_update()
 
+    async def _handle_state_change(event):
+#        entity_id = event.data.get("entity_id")
+#        old_state = event.data.get("old_state")
+#        new_state = event.data.get("new_state")
+        await automatik_controller.async_update()
+    
     # Das Auto wird abgeklemmt. Die Automatik kann sich wieder einschalten/zurücksetzen
-    async def handle_mode_change(entity_id, old_state, new_state):
-        if old_state and new_state:
-            if old_state != "2" and new_state == "2":
+    #async def handle_mode_change(entity_id, old_state, new_state):
+    #    if old_state and new_state:
+    #        if old_state != "2" and new_state == "2":
+    #            await hass.data[DOMAIN]["automatik_controller"].async_reset()
+
+    async def handle_mode_change(event):
+        if event.data.get("old_state") and event.data.get("new_state"):
+            if event.data.get("old_state") != "2" and event.data.get("new_state") == "2":
                 await hass.data[DOMAIN]["automatik_controller"].async_reset()
     
     # Entitäten, die beobachtet werden sollen

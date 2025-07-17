@@ -135,8 +135,8 @@ class AutomatikBase:
             _LOGGER.error(f"[HybridAutomatikController] Fehler beim Setzen des Modus {mode_name}: {e}")
 
 class AutomatikControllerPVGrenze(AutomatikBase):
-    def __init__(self, hass, mode, offaction, onaction):
-         super().__init__(hass, mode)
+    def __init__(self, hass, entry, mode, offaction, onaction):
+         super().__init__(hass, mode, entry)
          self.offaction = offaction
          self.onaction = onaction 
      

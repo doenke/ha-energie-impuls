@@ -44,8 +44,6 @@ class EnergieImpulsOptionsFlowHandler(config_entries.OptionsFlow):
 
     async def async_step_init(self, user_input=None):
         if user_input is not None:
-            # Richtig: neue Optionen speichern in `options`, Zugangsdaten weiter in `data`
-            _LOGGER.warning(f"User Input: {user_input}")
             self.hass.config_entries.async_update_entry(
                 self._entry,
                 data={  # Zugangsdaten bleiben in data
@@ -58,7 +56,6 @@ class EnergieImpulsOptionsFlowHandler(config_entries.OptionsFlow):
                 },
             )
             await self.hass.config_entries.async_reload(self._entry.entry_id)
-            _LOGGER.warning(f"Neue entry.options: {self._entry.options}")
             return self.async_abort(reason="options_updated")
     
         # 🛠 Hier ist der kritische Punkt: Entweder Optionen oder Fallback auf Defaults

@@ -57,6 +57,7 @@ class EnergieImpulsOptionsFlowHandler(config_entries.OptionsFlow):
                     CONF_AUTO_MINUTES: user_input[CONF_AUTO_MINUTES],
                 },
             )
+            _LOGGER.warning(f"Neue entry.options: {self._entry.options}")
             await self.hass.config_entries.async_reload(self._entry.entry_id)
             return self.async_create_entry(title="", data={})
     

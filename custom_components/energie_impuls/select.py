@@ -39,7 +39,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
 
 
-class WallboxModeSelect(CoordinatorEntity, SelectEntity):
+class WallboxModeSelect(CoordinatorEntity, SelectEntity,EnergieImpulsWallboxDeviceInfoMixin):
     def __init__(self, hass, coordinator):
         super().__init__(coordinator)
         self._attr_name = "Wallbox Lademodus"
@@ -81,12 +81,8 @@ class WallboxModeSelect(CoordinatorEntity, SelectEntity):
             await self.coordinator.async_set_wallbox_mode(payload)
         except Exception as e:
            _LOGGER.error(f"Fehler beim Setzen des Lademodus: {e}")
-           
-    @property
-    def device_info(self):
-         return EnergieImpulsWallboxDevice(self.hass).device_info
 
-class WallboxAutomaticModeSelect(RestoreEntity, SelectEntity):
+class WallboxAutomaticModeSelect(RestoreEntity, SelectEntity,EnergieImpulsWallboxDeviceInfoMixin):
     def __init__(self, hass):
         self._attr_name = "Wallbox Automatikmodus"
         self._attr_unique_id = "energie_impuls_automatic_mode"

@@ -1,7 +1,7 @@
 {
   "domain": "energie_impuls",
   "name": "Energie Impuls",
-  "version": "1.0.108",
+  "version": "1.0.109",
   "config_flow": true,
   "documentation": "https://github.com/doenke/ha-energie-impuls",
   "requirements": [],

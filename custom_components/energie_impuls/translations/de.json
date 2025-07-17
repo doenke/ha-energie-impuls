@@ -1,0 +1,25 @@
+{
+  "config": {
+    "abort": {
+      "options_updated": "Optionen erfolgreich gespeichert."
+    },
+    "step": {
+      "user": {
+        "title": "Verbindung zu Energie Impuls",
+        "description": "Bitte gib deine Zugangsdaten ein.",
+        "data": {
+          "username": "Benutzername",
+          "password": "Passwort"
+        }
+      },
+      "init": {
+        "title": "Erweiterte Optionen",
+        "description": "Einstellungen für den Automatikmodus",
+        "data": {
+          "auto_min_pv": "Mindest-PV-Leistung in kW",
+          "auto_minutes": "Dauer in Minuten"
+        }
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from typing import Optional
-from .const import DOMAIN, CONF_AUTO_SWITCH_ENTITY, CONF_MODE_ENTITY
+from .const import DOMAIN, CONF_AUTO_SWITCH_ENTITY, CONF_MODE_ENTITY, CONF_AUTO_MINUTES, CONF_AUTO_MIN_PV
 from .const import SCHNELLLADEN, SCHNELLLADEN_JSON, UEBERSCHUSS, UEBERSCHUSS_JSON, HYBRID, HYBRID_JSON, NICHTLADEN, NICHTLADEN_JSON, ERROR 
 from .const import AM_SCHNELLLADEN, AM_UEBERSCHUSS, AM_HYBRIDAUTOMATIK, AM_UEBERSCHUSS_NACHT, AM_HYBRIDAUTOMATIK_NACHT, AM_MANUAL
 
@@ -73,8 +73,6 @@ class AutomatikBase:
         self.auto_switch = hass.data[DOMAIN][CONF_AUTO_SWITCH_ENTITY]  # AutomaticModeActiveSwitch-Entity
 
         self.isActive = False
-        self.MIN_HYBRID = 1.5
-        self.MIN_HYBRID_MINUTES = 10
 
         self.last_above = None
         self.last_below = None
@@ -148,25 +146,25 @@ class AutomatikControllerPVGrenze(AutomatikBase):
             self.pv=0
 
         # Bei PV > MIN_HYBRID
-        if self.pv >= self.MIN_HYBRID:
+        if self.pv >= self.hass.data[DOMAIN]["CONF_AUTO_MIN_PV"]:
             self.last_above = now
             if self.isActive is False and self.last_below:
-                if (now - self.last_below) >= timedelta(minutes=self.MIN_HYBRID_MINUTES):
+                if (now - self.last_below) >= timedelta(minutes=self.hass.data[DOMAIN]["CONF_AUTO_MINUTES"]):
                     await self._set_mode(self.onaction)
         else:
             self.last_below = now
             if self.isActive is True and self.last_above:
-                if (now - self.last_above) >= timedelta(minutes=self.MIN_HYBRID_MINUTES):
+                if (now - self.last_above) >= timedelta(minutes=self.hass.data[DOMAIN]["CONF_AUTO_MINUTES"]):
                     await self._set_mode(self.offaction)
 
         self.last_check = now
-
+     
     async def async_activate(self):
         try:
             self.pv = float(self.energy_coordinator.data["flow"].get("pv", 0))
         except Exception:
             self.pv=0
-        if self.pv >= self.MIN_HYBRID:
+        if self.pv >= self.hass.data[DOMAIN]["CONF_AUTO_MIN_PV"]:
             await self._set_mode(self.onaction)
         else:
             await self._set_mode(self.offaction)

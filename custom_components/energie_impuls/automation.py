@@ -17,12 +17,14 @@ class AutomatikController:
         self.activeMode = None
         self.oldMode = None
           
-        self.automations = []
-        self.automations.append(AutomatikControllerPVGrenze(hass,AM_HYBRIDAUTOMATIK,HYBRID,NICHTLADEN))
-        self.automations.append(SchnellladenAutomatikController(hass,AM_SCHNELLLADEN))
-        self.automations.append(UeberschussAutomatikController(hass,AM_UEBERSCHUSS))
-        self.automations.append(AutomatikControllerPVGrenze(hass,AM_HYBRIDAUTOMATIK_NACHT,HYBRID,SCHNELLLADEN))
-        self.automations.append(AutomatikControllerPVGrenze(hass,AM_UEBERSCHUSS_NACHT,UEBERSCHUSS,SCHNELLLADEN))
+        self.automations = [
+              AutomatikControllerPVGrenze(hass, AM_HYBRIDAUTOMATIK, NICHTLADEN, HYBRID),
+              SchnellladenAutomatikController(hass, AM_SCHNELLLADEN),
+              UeberschussAutomatikController(hass, AM_UEBERSCHUSS),
+              AutomatikControllerPVGrenze(hass, AM_HYBRIDAUTOMATIK_NACHT, SCHNELLLADEN, HYBRID),
+              AutomatikControllerPVGrenze(hass, AM_UEBERSCHUSS_NACHT, SCHNELLLADEN, UEBERSCHUSS),
+        ]
+
      
                                 
      async def async_midnight(self, now: Optional[datetime] = None):

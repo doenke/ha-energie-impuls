@@ -18,8 +18,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     username = entry.data[CONF_USERNAME]
     password = entry.data[CONF_PASSWORD]
-    hass.data[DOMAIN]["CONF_AUTO_MIN_PV"] = entry.options.get(CONF_AUTO_MIN_PV, DEFAULT_AUTO_MIN_PV)
-    hass.data[DOMAIN]["CONF_AUTO_MINUTES"] = entry.options.get(CONF_AUTO_MINUTES ,DEFAULT_AUTO_MINUTES)
     session = EnergyImpulsSession(hass, username, password)
 
     hass.data[DOMAIN]["session"] = session

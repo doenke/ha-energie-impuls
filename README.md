@@ -1,6 +1,6 @@
 # Energie Impuls Integration für Home Assistant
 
-Diese benutzerdefinierte Home Assistant-Integration verbindet dein Smart Home mit dem Portal [energie-impuls.site](https://energie-impuls.site). Sie liest Energiedaten aus und ermöglicht das Steuern der Wallbox direkt über Home Assistant.
+Diese benutzerdefinierte Home Assistant-Integration verbindet dein Smart Home mit dem [Energie Impuls](https://energie-impuls.site). Sie liest Energiedaten aus und ermöglicht das Steuern der Wallbox direkt über Home Assistant. Ausserdem stellt sie intelligente Ladeautomatiken zur Verfügung.
 
 ## ⚙️ Funktionen
 
@@ -8,20 +8,10 @@ Diese benutzerdefinierte Home Assistant-Integration verbindet dein Smart Home mi
   - PV-Erzeugung, Netzeinspeisung, Haushaltsverbrauch,...
   - Batterie-SOC (State of Charge)
   - Wallbox-Verbrauch & -Modus
-- **Steuerbare Entitäten**:
-  - Wallbox-Sperre (`locked`)
-  - Überschussladen (`surplus_charging`)
-  - Ladestrom (`hybrid_charging_current`) in Ampere
+- **Wallbox-Steuerung, wie in der Energie-Impuls App**
 - **Logik-Elemente**:
-  - Automatik: „Vollladen über Nacht“
-    - aktiviert bei PV-Erzeugung = 0 über 10 Minuten
-    - Gibt Wallbox frei und läd mit voller Geschwindigkeit
-    - speichert und stellt Zustände automatisch wieder her, wenn der Ladestrom auf 0 abgesunken ist
-       - Wallbox-Sperre (`locked`)
-       - Überschussladen (`surplus_charging`)
-       - Ladestrom (`hybrid_charging_current`)
-
-    
+  - Lademodus statt einzelne Wallbox-Schalter
+  - Ladeautomatik um bei maximiertem Eigenverbrauch trotzdem morgens das Auto voll geladen zu haben
 
 
 ---

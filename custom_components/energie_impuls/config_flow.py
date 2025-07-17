@@ -15,8 +15,9 @@ class EnergieImpulsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         return self.async_show_form(step_id="user", data_schema=schema, errors=errors)
 
-    def async_get_options_flow(self, config_entry):
-        return EnergieImpulsOptionsFlowHandler(config_entry)
+@staticmethod
+def async_get_options_flow(config_entry):
+    return EnergieImpulsOptionsFlowHandler(config_entry)
 
 
 class EnergieImpulsOptionsFlowHandler(config_entries.OptionsFlow):

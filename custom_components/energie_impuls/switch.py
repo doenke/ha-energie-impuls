@@ -54,6 +54,7 @@ class EnergieImpulsSwitch(CoordinatorEntity, SwitchEntity, EnergieImpulsWallboxD
 
 class AutomaticModeActiveSwitch(RestoreEntity, SwitchEntity, EnergieImpulsWallboxDeviceInfoMixin):
     def __init__(self, hass):
+        super().__init__()
         self.hass = hass
         self._state = False
         self._attr_name = "Automatik aktiv"

@@ -12,11 +12,20 @@
           "username": "Benutzername",
           "password": "Passwort"
         }
-      },
+      }
+    }
+  },
+  "options": {
+    "abort": {
+      "options_updated": "Optionen erfolgreich gespeichert."
+    },
+    "step": {
       "init": {
         "title": "Erweiterte Optionen",
         "description": "Einstellungen für den Automatikmodus",
         "data": {
+          "username": "Benutzername",
+          "password": "Passwort",
           "auto_min_pv": "Mindest-PV-Leistung in kW",
           "auto_minutes": "Dauer der Über-/Unterschreitung in Minuten"
         }

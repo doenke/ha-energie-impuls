@@ -1,5 +1,7 @@
 from homeassistant import config_entries
 import voluptuous as vol
+
+
 from .const import (
     DOMAIN,
     CONF_USERNAME,
@@ -10,6 +12,8 @@ from .const import (
     DEFAULT_AUTO_MINUTES,
 )
 
+import logging
+_LOGGER = logging.getLogger(__name__)
 
 class EnergieImpulsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Konfigurations-Flow für Energie Impuls."""

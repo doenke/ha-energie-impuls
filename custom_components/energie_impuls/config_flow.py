@@ -1,9 +1,6 @@
 from homeassistant import config_entries
 import voluptuous as vol
-from .const import DOMAIN, CONF_USERNAME, CONF_PASSWORD
-
-DEFAULT_MIN_HYBRID = 1.5
-DEFAULT_MIN_HYBRID_MINUTES = 10
+from .const import DOMAIN, CONF_USERNAME, CONF_PASSWORD,CONF_AUTO_MIN_PV,CONF_AUTO_MINUTES,DEFAULT_AUTO_MIN_PV,DEFAULT_AUTO_MINUTES
 
 class EnergieImpulsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     async def async_step_user(self, user_input=None):
@@ -51,7 +48,7 @@ class EnergieImpulsOptionsFlowHandler(config_entries.OptionsFlow):
             data_schema=vol.Schema({
                 vol.Required(CONF_USERNAME, default=current_data.get(CONF_USERNAME, "")): str,
                 vol.Required(CONF_PASSWORD, default=current_data.get(CONF_PASSWORD, "")): str,
-                vol.Required("min_hybrid", default=current_options.get(CONF_AUTO_MIN_PV, DEFAULT_MIN_HYBRID)): float,
-                vol.Required("min_hybrid_minutes", default=current_options.get(CONF_AUTO_MINUTES, DEFAULT_MIN_HYBRID_MINUTES)): int,
+                vol.Required(CONF_AUTO_MIN_PV, default=current_options.get(CONF_AUTO_MIN_PV, DEFAULT_AUTO_MIN_PV)): float,
+                vol.Required(CONF_AUTO_MINUTES, default=current_options.get(CONF_AUTO_MINUTES, DEFAULT_AUTO_MINUTES)): int,
             }),
         )

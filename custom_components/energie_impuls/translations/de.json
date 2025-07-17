@@ -17,7 +17,7 @@
         "description": "Einstellungen für den Automatikmodus",
         "data": {
           "auto_min_pv": "Mindest-PV-Leistung in kW",
-          "auto_minutes": "Dauer in Minuten"
+          "auto_minutes": "Dauer der Über-/Unterschreitung in Minuten"
         }
       }
     }

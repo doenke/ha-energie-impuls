@@ -20,18 +20,14 @@ class EnergieImpulsSwitch(EnergieImpulsWallboxDeviceInfoMixin,CoordinatorEntity,
     def __init__(self, hass, coordinator, name, key, icon=None):
         super().__init__(coordinator)
         self.hass = hass
-        self._name = name
+        self._attr_name = name
         self._key = key
         self._attr_unique_id = f"energie_impuls_switch_{key}"
         self._attr_icon = icon
 
     @property
     def is_on(self):
-        return self.coordinator.data["_set_point"].get(self._key, False)
-
-    @property
-    def name(self):
-        return self._name
+        return self.coordinator.data.get("_set_point", {}).get(self._key, False)
 
     async def async_turn_on(self, **kwargs):
         try:
@@ -68,7 +64,9 @@ class AutomaticModeActiveSwitch(EnergieImpulsWallboxDeviceInfoMixin,RestoreEntit
         if old_state is not None:
             self._state = old_state.state == "on"
             _LOGGER.info(f"Zustand wiederhergestellt: {self._state}")
-
+        else:
+            self._state = False
+    
     @property
     def is_on(self):
         return self._state

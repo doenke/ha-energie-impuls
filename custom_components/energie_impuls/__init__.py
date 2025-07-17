@@ -7,7 +7,7 @@ from datetime import timedelta
 
 from .automation import AutomatikController
 from .api import EnergyImpulsSession
-from .const import DOMAIN, CONF_USERNAME, CONF_PASSWORD, CONF_WB_DEVICE_NAME, CONF_WB_DEVICE_ID, CONF_MODE_ENTITY, CONF_AUTO_SWITCH_ENTITY
+from .const import DOMAIN, CONF_USERNAME, CONF_PASSWORD, CONF_WB_DEVICE_NAME, CONF_WB_DEVICE_ID, CONF_MODE_ENTITY, CONF_AUTO_SWITCH_ENTITY, CONF_AUTO_MIN_PV, DEFAULT_AUTO_MIN_PV, DEFAULT_AUTO_MINUTES, CONF_AUTO_MINUTES 
 
 from .coordinator import EnergieImpulsCoordinator, WallboxCoordinator
 
@@ -18,10 +18,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     username = entry.data[CONF_USERNAME]
     password = entry.data[CONF_PASSWORD]
+    hass.data[DOMAIN]["CONF_AUTO_MIN_PV"] = entry.options.get(CONF_AUTO_MIN_PV, DEFAULT_AUTO_MIN_PV)
+    hass.data[DOMAIN]["CONF_AUTO_MINUTES"] = entry.options.get(CONF_AUTO_MINUTES ,DEFAULT_AUTO_MINUTES)
     session = EnergyImpulsSession(hass, username, password)
 
     hass.data[DOMAIN]["session"] = session
-
+    
     energie_coordinator = EnergieImpulsCoordinator(hass, session)
     await energie_coordinator.async_config_entry_first_refresh()
     

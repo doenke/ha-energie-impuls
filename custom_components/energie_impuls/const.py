@@ -11,6 +11,9 @@ CONF_MODE_ENTITY = "mode_entity"
 CONF_AUTO_SWITCH_ENTITY = "auto_switch_entity"
 CONF_USERNAME = "username"
 CONF_PASSWORD = "password"
+CONF_AUTO_MIN_PV = "auto_min_pv"
+CONF_AUTO_MINUTES = "auto_minutes"
+
 CONF_SESSION = "session"
 
 SCHNELLLADEN = "Schnellladen"

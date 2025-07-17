@@ -1,6 +1,5 @@
-from homeassistant.helpers.entity import Entity
+from homeassistant.components.sensor import SensorEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
-from homeassistant.helpers.restore_state import RestoreEntity
 from .const import DOMAIN
 from .api import EnergyImpulsSession
 from .devices import EnergieImpulsWallboxDeviceInfoMixin, EnergieImpulsDeviceInfoMixin
@@ -34,7 +33,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
     async_add_entities(sensors, update_before_add=True)
 
 
-class EnergieImpulsSensor(EnergieImpulsDeviceInfoMixin,CoordinatorEntity,Entity):
+class EnergieImpulsSensor(EnergieImpulsDeviceInfoMixin,CoordinatorEntity,SensorEntity):
     def __init__(self, hass, coordinator, key):
         self.hass = hass
         super().__init__(coordinator)
@@ -54,7 +53,7 @@ class EnergieImpulsSensor(EnergieImpulsDeviceInfoMixin,CoordinatorEntity,Entity)
         return 0 if value is None else value
 
 
-class WallboxSensor(EnergieImpulsWallboxDeviceInfoMixin,CoordinatorEntity,Entity):
+class WallboxSensor(EnergieImpulsWallboxDeviceInfoMixin,CoordinatorEntity,SensorEntity):
     def __init__(self, hass, coordinator, name, unique_id, extract_func, unit=None, icon=None):
         super().__init__(coordinator)
         self.hass = hass
@@ -68,7 +67,7 @@ class WallboxSensor(EnergieImpulsWallboxDeviceInfoMixin,CoordinatorEntity,Entity
     @property
     def state(self):
         self._state = self._extract_func(self.coordinator.data)
-        return 0 if self._state is None else self._state
+        return "" if self._state is None else self._state
 
 
 class ShortWallboxModeSensor(WallboxSensor):

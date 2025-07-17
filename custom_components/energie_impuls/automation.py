@@ -21,7 +21,9 @@ class AutomatikController:
         self.automations.append(HybridAutomatikController(hass,wallbox_coordinator,energy_coordinator,AM_HYBRIDAUTOMATIK))
         self.automations.append(SchnellladenAutomatikController(hass,wallbox_coordinator,energy_coordinator,AM_SCHNELLLADEN))
         self.automations.append(UeberschussAutomatikController(hass,wallbox_coordinator,energy_coordinator,AM_UEBERSCHUSS))
-
+        self.automations.append(HybridNachtAutomatikController(hass,wallbox_coordinator,energy_coordinator,AM_HYBRIDAUTOMATIK_NACHT))
+        self.automations.append(UeberschussNachtAutomatikController(hass,wallbox_coordinator,energy_coordinator,AM_UEBERSCHUSS_NACHT))
+     
                                 
      async def async_midnight(self, now: Optional[datetime] = None):
          # Wenn Wallbox gesperrt, dann Überschussladen aktivieren. 
@@ -69,6 +71,13 @@ class AutomatikBase:
         self.auto_switch = hass.data[DOMAIN][CONF_AUTO_SWITCH_ENTITY]  # AutomaticModeActiveSwitch-Entity
 
         self.isActive = False
+        self.MIN_HYBRID = 1.5
+        self.MIN_HYBRID_MINUTES = 10
+
+        self.last_above = None
+        self.last_below = None
+        self.last_check = None
+
 
      async def async_activate(self):
           pass
@@ -124,26 +133,12 @@ class AutomatikBase:
 
 
 class HybridAutomatikController(AutomatikBase):
-    def __init__(self, hass, wallbox_coordinator, energy_coordinator, mode):
-        super().__init__(hass, wallbox_coordinator, energy_coordinator, mode)
-
-        self.MIN_HYBRID = 1.5
-        self.MIN_HYBRID_MINUTES = 10
-
-        self.last_above = None
-        self.last_below = None
-        self.last_check = None
-        self.pv=0
-
-    async def async_getValues(self):
+    async def async_worker(self):
+        now = datetime.now()
         try:
             self.pv = float(self.energy_coordinator.data["flow"].get("pv", 0))
         except Exception:
             self.pv=0
- 
-     
-    async def async_worker(self):
-        now = datetime.now()
 
         # Bei PV > MIN_HYBRID
         if self.pv >= self.MIN_HYBRID:
@@ -160,6 +155,10 @@ class HybridAutomatikController(AutomatikBase):
         self.last_check = now
 
     async def async_activate(self):
+        try:
+            self.pv = float(self.energy_coordinator.data["flow"].get("pv", 0))
+        except Exception:
+            self.pv=0
         if self.pv >= self.MIN_HYBRID:
             await self._set_mode(HYBRID)
         else:
@@ -172,3 +171,69 @@ class SchnellladenAutomatikController(AutomatikBase):
 class UeberschussAutomatikController(AutomatikBase):
     async def async_activate(self):
        await self._set_mode(UEBERSCHUSS)
+
+class HybridNachtAutomatikController(AutomatikBase):
+    async def async_worker(self):
+        now = datetime.now()
+        try:
+            self.pv = float(self.energy_coordinator.data["flow"].get("pv", 0))
+        except Exception:
+            self.pv=0
+
+        # Bei PV > MIN_HYBRID
+        if self.pv >= self.MIN_HYBRID:
+            self.last_above = now
+            if self.isActive is False and self.last_below:
+                if (now - self.last_below) >= timedelta(minutes=self.MIN_HYBRID_MINUTES):
+                    await self._set_mode(HYBRID)
+        else:
+            self.last_below = now
+            if self.isActive is True and self.last_above:
+                if (now - self.last_above) >= timedelta(minutes=self.MIN_HYBRID_MINUTES):
+                    await self._set_mode(SCHNELLLADEN)
+
+        self.last_check = now
+
+    async def async_activate(self):
+        try:
+            self.pv = float(self.energy_coordinator.data["flow"].get("pv", 0))
+        except Exception:
+            self.pv=0
+
+        if self.pv >= self.MIN_HYBRID:
+            await self._set_mode(HYBRID)
+        else:
+            await self._set_mode(SCHNELLLADEN)
+
+class UeberschussNachtAutomatikController(AutomatikBase):
+    async def async_worker(self):
+        now = datetime.now()
+        try:
+            self.pv = float(self.energy_coordinator.data["flow"].get("pv", 0))
+        except Exception:
+            self.pv=0
+         
+        # Bei PV > MIN_HYBRID
+        if self.pv >= self.MIN_HYBRID:
+            self.last_above = now
+            if self.isActive is False and self.last_below:
+                if (now - self.last_below) >= timedelta(minutes=self.MIN_HYBRID_MINUTES):
+                    await self._set_mode(UEBERSCHUSS)
+        else:
+            self.last_below = now
+            if self.isActive is True and self.last_above:
+                if (now - self.last_above) >= timedelta(minutes=self.MIN_HYBRID_MINUTES):
+                    await self._set_mode(SCHNELLLADEN)
+
+        self.last_check = now
+
+    async def async_activate(self):
+         try:
+            self.pv = float(self.energy_coordinator.data["flow"].get("pv", 0))
+         except Exception:
+            self.pv=0
+              
+         if self.pv >= self.MIN_HYBRID:
+            await self._set_mode(UEBERSCHUSS)
+        else:
+            await self._set_mode(SCHNELLLADEN)

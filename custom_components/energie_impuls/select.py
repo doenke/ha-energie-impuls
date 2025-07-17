@@ -84,6 +84,7 @@ class WallboxModeSelect(CoordinatorEntity, SelectEntity,EnergieImpulsWallboxDevi
 
 class WallboxAutomaticModeSelect(RestoreEntity, SelectEntity,EnergieImpulsWallboxDeviceInfoMixin):
     def __init__(self, hass):
+        super().__init__()
         self._attr_name = "Wallbox Automatikmodus"
         self._attr_unique_id = "energie_impuls_automatic_mode"
         self._attr_options = AUTOMATIC_MODES

@@ -1,5 +1,6 @@
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 from datetime import timedelta
+from .const import PAYLOADS
 import logging
 
 from .const import DOMAIN
@@ -39,18 +40,8 @@ class WallboxCoordinator(DataUpdateCoordinator):
             raise UpdateFailed(f"Fehler beim Abrufen der Wallbox-Daten: {err}") from err
 
     async def set_mode(self, mode_name):
-        payloads = {
-            HYBRID: HYBRID_JSON,
-            NICHTLADEN: NICHTLADEN_JSON,
-            SCHNELLLADEN: SCHNELLLADEN_JSON,
-            UEBERSCHUSS: UEBERSCHUSS_JSON
-        }
-        payload = payloads.get(mode_name)
-        if not payload:
-            return
-
         try:
-            await self.async_set_wallbox_mode(payload)
+            await self.async_set_wallbox_mode(PAYLOADS.get(mode_name))
             _LOGGER.info(f"Wallbox-Modus gesetzt auf: {mode_name}")
         except Exception as e:
             _LOGGER.error(f"Fehler beim Setzen des Modus {mode_name}: {e}")

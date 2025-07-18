@@ -4,14 +4,14 @@ from homeassistant.helpers.restore_state import RestoreEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .devices import EnergieImpulsWallboxDeviceInfoMixin
 from .const import DOMAIN, CONF_AUTO_SWITCH_ENTITY, CONF_MODE_ENTITY, PAYLOADS
-from .const import SCHNELLLADEN, UEBERSCHUSS, HYBRID, NICHTLADEN, ERROR 
-from .const import AM_SCHNELLLADEN, AM_UEBERSCHUSS, AM_HYBRIDAUTOMATIK, AM_UEBERSCHUSS_NACHT, AM_HYBRIDAUTOMATIK_NACHT, AM_MANUAL
+from .const import SOFORTLADEN, UEBERSCHUSS, HYBRID, NICHTLADEN, ERROR 
+from .const import AM_SOFORTLADEN, AM_UEBERSCHUSS, AM_HYBRIDAUTOMATIK, AM_UEBERSCHUSS_NACHT, AM_HYBRIDAUTOMATIK_NACHT, AM_MANUAL
 
 import logging
 _LOGGER = logging.getLogger(__name__)
 
 WALLBOX_MODES = [
-    SCHNELLLADEN,
+    SOFORTLADEN,
     UEBERSCHUSS,
     HYBRID,
     NICHTLADEN,
@@ -19,7 +19,7 @@ WALLBOX_MODES = [
 ]
 
 AUTOMATIC_MODES = [
-  AM_SCHNELLLADEN,
+  AM_SOFORTLADEN,
   AM_UEBERSCHUSS,
   AM_HYBRIDAUTOMATIK,
   AM_UEBERSCHUSS_NACHT,
@@ -62,7 +62,7 @@ class WallboxModeSelect(EnergieImpulsWallboxDeviceInfoMixin,CoordinatorEntity, S
                 else:
                     return HYBRID
             else:
-                return SCHNELLLADEN
+                return SOFORTLADEN
         except:
             return ERROR
         

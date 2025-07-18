@@ -39,7 +39,7 @@ class WallboxCoordinator(DataUpdateCoordinator):
         except Exception as err:
             raise UpdateFailed(f"Fehler beim Abrufen der Wallbox-Daten: {err}") from err
 
-    async def set_mode(self, mode_name):
+    async def async_set_mode(self, mode_name):
         try:
             await self.async_set_wallbox_mode(PAYLOADS.get(mode_name))
             _LOGGER.info(f"Wallbox-Modus gesetzt auf: {mode_name}")

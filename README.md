@@ -1,6 +1,6 @@
 # Energie Impuls Integration für Home Assistant
 
-Diese benutzerdefinierte Home Assistant-Integration verbindet dein Smart Home mit dem [Energie Impuls](https://energie-impuls.site). Sie liest Energiedaten aus und ermöglicht das Steuern der Wallbox direkt über Home Assistant. Ausserdem stellt sie intelligente Ladeautomatiken zur Verfügung. Ziel ist es, den zum Laden verwendeten Solarstrom weiter zu optimieren und trotzdem ohne manuellen Eingriff
+Diese benutzerdefinierte Home Assistant-Integration verbindet dein Smart Home mit dem [Energie Impuls](https://energie-impuls.site) von Planville. Sie liest Energiedaten aus und ermöglicht das Steuern der Wallbox direkt über Home Assistant. Ausserdem stellt sie intelligente Ladeautomatiken zur Verfügung. Ziel ist es, den zum Laden verwendeten Solarstrom weiter zu optimieren und trotzdem ohne manuellen Eingriff am nächsten Morgen vollgetankt zu haben.
 
 ## ⚙️ Funktionen
 

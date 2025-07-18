@@ -80,9 +80,6 @@ class AutomatikBase:
      async def async_finish(self):
           self.isActive = False
           await self.async_deactivate()
-     
-     async def async_justActivated(self):
-          pass
 
      async def async_worker(self):
           pass

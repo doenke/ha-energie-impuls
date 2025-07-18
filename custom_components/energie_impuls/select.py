@@ -45,6 +45,7 @@ class WallboxModeSelect(EnergieImpulsWallboxDeviceInfoMixin,CoordinatorEntity, S
         self._attr_name = "Wallbox Lademodus"
         self._attr_unique_id = "energie_impuls_wallbox_mode"
         self._attr_options = WALLBOX_MODES
+        self._attr_icon = "mdi:ev-plug-type2"
         self.hass = hass
     
     async def async_update(self):
@@ -81,6 +82,7 @@ class WallboxAutomaticModeSelect(EnergieImpulsWallboxDeviceInfoMixin,RestoreEnti
         self._attr_name = "Wallbox Automatikmodus"
         self._attr_unique_id = "energie_impuls_automatic_mode"
         self._attr_options = AUTOMATIC_MODES
+        self._attr_icon = "mdi:auto-mode"
         self.hass = hass
         self._key = AM_MANUAL
         hass.data[DOMAIN][CONF_MODE_ENTITY] = self

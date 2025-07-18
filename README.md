@@ -106,6 +106,7 @@ Die Automatik analysiert regelmäßig die aktuelle PV-Erzeugung und entscheidet 
 | **Überschuss, über Nacht voll**    | Überschussladen, bei unzureichender PV‑Leistung wird auf Schnellladen umgeschaltet. Damit ist sichergestellt, dass das Auto am nächsten Morgen auf jeden Fall voll geladen ist.  | Überschuss | Normal  |
 | **Hybrid, über Nacht voll**    | Hybridladen, bei unzureichender PV‑Leistung wird auf Schnellladen umgeschaltet. Damit ist sichergestellt, dass das Auto am nächsten Morgen auf jeden Fall voll geladen ist.  | Hybrid | Normal  |
 | **Manuell**                | Diese Einstellung macht nichts und erlaubt eine dauerhafte manuelle Bedienung.  | - | - |
+
 Normal bedeutet, dass keine Wallbox-Features aktiviert sind. Die Wallbox läd einfach ganz normal.
  
 Diese Modi lassen sich bequem über das select.wallbox_automatikmodus-Entity auswählen.

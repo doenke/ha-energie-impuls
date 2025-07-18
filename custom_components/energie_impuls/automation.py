@@ -136,12 +136,12 @@ class AutomatikControllerPVGrenze(AutomatikBase):
             self.last_above = now
             if self.isActive is False and self.last_below:
                 if (now - self.last_below) >= timedelta(minutes=self.entry.options.get(CONF_AUTO_MINUTES, DEFAULT_AUTO_MINUTES)):
-                    await self._set_mode(self.onaction)
+                    await self.wallbox_coordinator.set_mode(self.onaction)
         else:
             self.last_below = now
             if self.isActive is True and self.last_above:
                 if (now - self.last_above) >= timedelta(minutes=self.entry.options.get(CONF_AUTO_MINUTES, DEFAULT_AUTO_MINUTES)):
-                    await self._set_mode(self.offaction)
+                    await self.wallbox_coordinator.set_mode(self.offaction)
 
         self.last_check = now
      
@@ -151,17 +151,17 @@ class AutomatikControllerPVGrenze(AutomatikBase):
         except Exception:
             self.pv=0
         if self.pv >= self.entry.options.get(CONF_AUTO_MIN_PV, DEFAULT_AUTO_MIN_PV):
-            await self._set_mode(self.onaction)
+            await self.wallbox_coordinator.set_mode(self.onaction)
         else:
-            await self._set_mode(self.offaction)
+            await self.wallbox_coordinator.set_mode(self.offaction)
 
 class SchnellladenAutomatikController(AutomatikBase):     
     async def async_activate(self):
-       await self._set_mode(SCHNELLLADEN)
+       await self.wallbox_coordinator.set_mode(SCHNELLLADEN)
 
 class UeberschussAutomatikController(AutomatikBase):
     async def async_activate(self):
-       await self._set_mode(UEBERSCHUSS)
+       await self.wallbox_coordinator.set_mode(UEBERSCHUSS)
 
 
 

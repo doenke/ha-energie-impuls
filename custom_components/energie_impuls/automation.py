@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta
 from typing import Optional
 from .const import DOMAIN, CONF_AUTO_SWITCH_ENTITY, CONF_MODE_ENTITY, CONF_AUTO_MINUTES, CONF_AUTO_MIN_PV, DEFAULT_AUTO_MINUTES, DEFAULT_AUTO_MIN_PV
-from .const import SCHNELLLADEN, UEBERSCHUSS, HYBRID, NICHTLADEN, ERROR 
-from .const import AM_SCHNELLLADEN, AM_UEBERSCHUSS, AM_HYBRIDAUTOMATIK, AM_UEBERSCHUSS_NACHT, AM_HYBRIDAUTOMATIK_NACHT, AM_MANUAL
+from .const import SOFORTLADEN, UEBERSCHUSS, HYBRID, NICHTLADEN, ERROR 
+from .const import AM_SOFORTLADEN, AM_UEBERSCHUSS, AM_HYBRIDAUTOMATIK, AM_UEBERSCHUSS_NACHT, AM_HYBRIDAUTOMATIK_NACHT, AM_MANUAL
 
 import logging
 _LOGGER = logging.getLogger(__name__)
@@ -20,10 +20,10 @@ class AutomatikController:
           
         self.automations = [
               AutomatikControllerPVGrenze(hass, entry, AM_HYBRIDAUTOMATIK, UEBERSCHUSS, HYBRID),
-              SchnellladenAutomatikController(hass, entry, AM_SCHNELLLADEN),
+              SchnellladenAutomatikController(hass, entry, AM_SOFORTLADEN),
               UeberschussAutomatikController(hass, entry, AM_UEBERSCHUSS),
-              AutomatikControllerPVGrenze(hass, entry, AM_HYBRIDAUTOMATIK_NACHT, SCHNELLLADEN, HYBRID),
-              AutomatikControllerPVGrenze(hass, entry, AM_UEBERSCHUSS_NACHT, SCHNELLLADEN, UEBERSCHUSS),
+              AutomatikControllerPVGrenze(hass, entry, AM_HYBRIDAUTOMATIK_NACHT, SOFORTLADEN, HYBRID),
+              AutomatikControllerPVGrenze(hass, entry, AM_UEBERSCHUSS_NACHT, SOFORTLADEN, UEBERSCHUSS),
         ]
 
    
@@ -134,7 +134,7 @@ class AutomatikControllerPVGrenze(AutomatikBase):
 
 class SchnellladenAutomatikController(AutomatikBase):     
     async def async_activate(self):
-       await self.wallbox_coordinator.async_set_mode(SCHNELLLADEN)
+       await self.wallbox_coordinator.async_set_mode(SOFORTLADEN)
 
 class UeberschussAutomatikController(AutomatikBase):
     async def async_activate(self):

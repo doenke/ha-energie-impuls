@@ -36,20 +36,16 @@ class AutomatikController:
         for auto in self.automations:
              if self.activeMode != auto.mode and self.oldMode == auto.mode:
                   # dieser Modus ist der alte, welcher abgewählt wurde
-                  await auto.async_getValues()
                   await auto.async_finish()
 
         for auto in self.automations:
              if self.activeMode == auto.mode and self.oldMode != auto.mode:
                   # dieser Modus ist der Neue, welcher gerade gewählt wurde
-                  await auto.async_getValues()
                   await auto.async_start()
         
         for auto in self.automations:
-             
              if self.activeMode == auto.mode and self.oldMode == auto.mode:
                   # dieser Modus ist nach wie vor der gewählte
-                  await auto.async_getValues()
                   await auto.async_worker()
              
         self.oldMode = self.activeMode

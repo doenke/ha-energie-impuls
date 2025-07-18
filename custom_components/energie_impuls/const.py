@@ -18,8 +18,8 @@ DEFAULT_AUTO_MINUTES = 10
 
 CONF_SESSION = "session"
 
-SCHNELLLADEN = "Schnellladen"
-SCHNELLLADEN_JSON = {
+SOFORTLADEN = "Sofortladen"
+SOFORTLADEN_JSON = {
                 "locked": False,
                 "surplus_charging": False
                 }
@@ -44,13 +44,13 @@ ERROR = "Fehler"
 PAYLOADS = {
             HYBRID: HYBRID_JSON,
             NICHTLADEN: NICHTLADEN_JSON,
-            SCHNELLLADEN: SCHNELLLADEN_JSON,
+            SOFORTLADEN: SOFORTLADEN_JSON,
             UEBERSCHUSS: UEBERSCHUSS_JSON
         }
 
 
 # Automatiklabel
-AM_SCHNELLLADEN = SCHNELLLADEN
+AM_SOFORTLADEN = SOFORTLADEN
 AM_UEBERSCHUSS = UEBERSCHUSS
 AM_HYBRIDAUTOMATIK = "Hybridautomatik"
 AM_UEBERSCHUSS_NACHT = "Überschuss, über Nacht voll"

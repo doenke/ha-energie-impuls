@@ -96,7 +96,7 @@ class AutomatikBase:
     
 class AutomatikControllerPVGrenze(AutomatikBase):
     def __init__(self, hass, entry, mode, offaction, onaction):
-         super().__init__(hass, mode, entry)
+         super().__init__(hass, entry, mode)
          self.offaction = offaction
          self.onaction = onaction 
      

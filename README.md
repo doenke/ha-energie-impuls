@@ -101,11 +101,11 @@ Die Automatik analysiert regelmäßig die aktuelle PV-Erzeugung und entscheidet 
 | Automatikmodus                      | Beschreibung  | Modus über PV Schwelle |  Modus unter PV Schwelle |
 | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- |
 | **Hybrid-Automatik**       | Wallbox lädt nur dann im Hybrid‑Modus (mit mind. 6 A), wenn die PV‑Erzeugung für eine gewisse Zeitspanne (z. B. 10 Minuten) über einem konfigurierbaren Schwellenwert liegt (z. B. 1,5 kW). Andernfalls wird der Ladevorgang beendet. Somit kann auch bei geringerer Sonneneinstrahlung der ins Auto geladene Strom maximiert werden.  | Hybrid | Überschuss |
-| **Überschussladen**   | Es wird nur geladen, wenn tatsächlich ein PV‑Überschuss vorhanden ist.   | Überschuss |
-| **Sofortladen** | Die Wallbox wird dauerhaft auf Schnellladen gesetzt, unabhängig von der PV‑Erzeugung.  | Normal  |
+| **Überschussladen**   | Es wird nur geladen, wenn tatsächlich ein PV‑Überschuss vorhanden ist.   | Überschuss | NA |
+| **Sofortladen** | Die Wallbox wird dauerhaft auf Schnellladen gesetzt, unabhängig von der PV‑Erzeugung.  | Normal  | NA |
 | **Überschuss, über Nacht voll**    | Überschussladen, bei unzureichender PV‑Leistung wird auf Schnellladen umgeschaltet. Damit ist sichergestellt, dass das Auto am nächsten Morgen auf jeden Fall voll geladen ist.  | Überschuss | Normal  |
 | **Hybrid, über Nacht voll**    | Hybridladen, bei unzureichender PV‑Leistung wird auf Schnellladen umgeschaltet. Damit ist sichergestellt, dass das Auto am nächsten Morgen auf jeden Fall voll geladen ist.  | Hybrid | Normal  |
-| **Manuell**                | Diese Einstellung macht nichts und erlaubt eine dauerhafte manuelle Bedienung.  | -  |
+| **Manuell**                | Diese Einstellung macht nichts und erlaubt eine dauerhafte manuelle Bedienung.  | - | - |
 Normal bedeutet, dass keine Wallbox-Features aktiviert sind. Die Wallbox läd einfach ganz normal.
  
 Diese Modi lassen sich bequem über das select.wallbox_automatikmodus-Entity auswählen.

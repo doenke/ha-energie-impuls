@@ -100,11 +100,7 @@ Sobald irgendein Parameter von Hand umgestellt wird, so schaltet sich die Automa
 - Eine lokale API, um den Umweg über das Internet unnötig zu machen
 - Zugriff auf die API über einen festen Token
 
-# TODO
-- Solarprognose einbauen
-   - Strombedarf Auto
-   - Solarprognose
-   - Automatisch Modus bestimmen, um morgen früh voll zu sein 
+
 
 ## 📊 Verfügbare Entitäten
 
@@ -126,8 +122,15 @@ Sobald irgendein Parameter von Hand umgestellt wird, so schaltet sich die Automa
 | select.energie_impuls_automatic_mode   | Select  | Wahl des Automatikmodus (z. B. Hybrid-Automatik, Überschuss, etc.)         |
 | number.energie_impuls_hybrid_current   | Number  | Einstellbarer Hybrid-Ladestrom in Ampere (0 = deaktiviert)                  |
 
-
 ---
+
+# TODO
+- Solarprognose einbauen
+   - Strombedarf Auto
+   - Solarprognose
+   - Automatisch Modus bestimmen, um morgen früh voll zu sein 
+
+
 
 ## 🧑‍💻 Mitwirken
 

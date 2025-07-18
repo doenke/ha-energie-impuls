@@ -15,6 +15,8 @@ Diese benutzerdefinierte Home Assistant-Integration verbindet dein Smart Home mi
 
 
 ### Beispiel im Dashboard
+![Dahsboard](images/dashboard.png)
+
 ```yaml
 - type: tile
   features_position: bottom

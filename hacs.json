@@ -2,6 +2,5 @@
   "name": "Energie Impuls",
   "filename": "custom_components/energie_impuls/manifest.json",
   "render_readme": true,
-  "render_changelog": true,
   "content_in_root": false
 }

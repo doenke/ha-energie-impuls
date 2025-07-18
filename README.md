@@ -69,29 +69,6 @@ Nach erfolgreichem Login wird ein Zugriffstoken gespeichert und automatisch erne
 
 ---
 
-## 📊 Verfügbare Entitäten
-
-| Entity ID                              | Typ     | Beschreibung                                                                 |
-| :------------------------------------- | :------ | :--------------------------------------------------------------------------- |
-| sensor.pv                              | Sensor  | Aktuelle PV-Erzeugung in kW                                                 |
-| sensor.to_grid                         | Sensor  | Aktuelle Netzeinspeisung in kW                                              |
-| sensor.to_battery                      | Sensor  | Batterieladung in kW                                                        |
-| sensor.household                       | Sensor  | Haushaltsverbrauch in kW                                                    |
-| sensor.battery_soc                     | Sensor  | Batterieladestand in Prozent                                                |
-| sensor.wallbox_mode_str                | Sensor  | Aktueller Wallbox-Modus als lesbarer Text                                   |
-| sensor.wallbox_mode                    | Sensor  | Aktueller Wallbox-Moduscode (numerisch)                                     |
-| sensor.wallbox_consumption            | Sensor  | Stromverbrauch der Wallbox in kW                                            |
-| sensor.wallbox_mode_knx                | Sensor  | Gekürzter Wallbox-Modus für KNX-Anbindung (ohne „Fahrzeug“)                |
-| switch.energie_impuls_switch_locked    | Switch  | Sperrt oder entsperrt die Wallbox                                           |
-| switch.energie_impuls_switch_surplus_charging | Switch | Schaltet das Überschussladen der Wallbox ein/aus                         |
-| switch.energie_impuls_automatic_status | Switch  | Aktiviert oder deaktiviert die Automatiklogik                               |
-| select.energie_impuls_wallbox_mode     | Select  | Manuelle Auswahl des Lademodus (Schnellladen, Hybrid, etc.)                |
-| select.energie_impuls_automatic_mode   | Select  | Wahl des Automatikmodus (z. B. Hybrid-Automatik, Überschuss, etc.)         |
-| number.energie_impuls_hybrid_current   | Number  | Einstellbarer Hybrid-Ladestrom in Ampere (0 = deaktiviert)                  |
-
-
----
-
 # 🔄 Automatikmodus
 Die Integration bietet einen leistungsfähigen Automatikmodus, der die Wallbox je nach PV-Erzeugung und gewähltem Modus automatisch steuert.
 
@@ -128,6 +105,29 @@ Sobald irgendein Parameter von Hand umgestellt wird, so schaltet sich die Automa
    - Strombedarf Auto
    - Solarprognose
    - Automatisch Modus bestimmen, um morgen früh voll zu sein 
+
+## 📊 Verfügbare Entitäten
+
+| Entity ID                              | Typ     | Beschreibung                                                                 |
+| :------------------------------------- | :------ | :--------------------------------------------------------------------------- |
+| sensor.pv                              | Sensor  | Aktuelle PV-Erzeugung in kW                                                 |
+| sensor.to_grid                         | Sensor  | Aktuelle Netzeinspeisung in kW                                              |
+| sensor.to_battery                      | Sensor  | Batterieladung in kW                                                        |
+| sensor.household                       | Sensor  | Haushaltsverbrauch in kW                                                    |
+| sensor.battery_soc                     | Sensor  | Batterieladestand in Prozent                                                |
+| sensor.wallbox_mode_str                | Sensor  | Aktueller Wallbox-Modus als lesbarer Text                                   |
+| sensor.wallbox_mode                    | Sensor  | Aktueller Wallbox-Moduscode (numerisch)                                     |
+| sensor.wallbox_consumption            | Sensor  | Stromverbrauch der Wallbox in kW                                            |
+| sensor.wallbox_mode_knx                | Sensor  | Gekürzter Wallbox-Modus für KNX-Anbindung (ohne „Fahrzeug“)                |
+| switch.energie_impuls_switch_locked    | Switch  | Sperrt oder entsperrt die Wallbox                                           |
+| switch.energie_impuls_switch_surplus_charging | Switch | Schaltet das Überschussladen der Wallbox ein/aus                         |
+| switch.energie_impuls_automatic_status | Switch  | Aktiviert oder deaktiviert die Automatiklogik                               |
+| select.energie_impuls_wallbox_mode     | Select  | Manuelle Auswahl des Lademodus (Schnellladen, Hybrid, etc.)                |
+| select.energie_impuls_automatic_mode   | Select  | Wahl des Automatikmodus (z. B. Hybrid-Automatik, Überschuss, etc.)         |
+| number.energie_impuls_hybrid_current   | Number  | Einstellbarer Hybrid-Ladestrom in Ampere (0 = deaktiviert)                  |
+
+
+---
 
 ## 🧑‍💻 Mitwirken
 

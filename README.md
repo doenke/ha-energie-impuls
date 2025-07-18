@@ -99,7 +99,6 @@ Sobald irgendein Parameter von Hand umgestellt wird, so schaltet sich die Automa
 - Zugriff auf die API über einen festen Token
 
 # TODO
-- Alle Parameter konfigurierbar machen
 - Solarprognose einbauen
    - Strombedarf Auto
    - Solarprognose

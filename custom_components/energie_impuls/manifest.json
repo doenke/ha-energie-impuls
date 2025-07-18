@@ -8,5 +8,5 @@
   "documentation": "https://github.com/doenke/ha-energie-impuls",
   "iot_class": "cloud_polling",
   "requirements": [],
-  "version": "1.0.122"
+  "version": "1.0.123"
 }

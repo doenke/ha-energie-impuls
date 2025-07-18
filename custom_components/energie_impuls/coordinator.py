@@ -38,6 +38,22 @@ class WallboxCoordinator(DataUpdateCoordinator):
         except Exception as err:
             raise UpdateFailed(f"Fehler beim Abrufen der Wallbox-Daten: {err}") from err
 
+    async def set_mode(self, mode_name):
+        payloads = {
+            HYBRID: HYBRID_JSON,
+            NICHTLADEN: NICHTLADEN_JSON,
+            SCHNELLLADEN: SCHNELLLADEN_JSON,
+            UEBERSCHUSS: UEBERSCHUSS_JSON
+        }
+        payload = payloads.get(mode_name)
+        if not payload:
+            return
+
+        try:
+            await self.async_set_wallbox_mode(payload)
+            _LOGGER.info(f"Wallbox-Modus gesetzt auf: {mode_name}")
+        except Exception as e:
+            _LOGGER.error(f"Fehler beim Setzen des Modus {mode_name}: {e}")
 
     async def async_set_wallbox_mode(self, payload: dict):
             """Setze den Wallbox-Modus und aktualisiere die Koordinatordaten."""

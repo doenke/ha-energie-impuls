@@ -51,8 +51,6 @@ class AutomatikController:
                   # dieser Modus ist nach wie vor der gewählte
                   await auto.async_getValues()
                   await auto.async_worker()
-             else:
-                  await auto.async_maintenance()  
              
         self.oldMode = self.activeMode
 
@@ -86,12 +84,6 @@ class AutomatikBase:
      async def async_finish(self):
           self.isActive = False
           await self.async_deactivate()
-
-     async def async_maintenance(self):
-          pass
-          
-     async def async_getValues(self):
-          pass
      
      async def async_justActivated(self):
           pass
@@ -121,7 +113,7 @@ class AutomatikBase:
 
         try:
             await self.wallbox_coordinator.async_set_wallbox_mode(payload)
-            self.mode_entity.async_write_ha_state()
+            #self.mode_entity.async_write_ha_state()
             _LOGGER.info(f"[{self.mode}] Wallbox-Modus gesetzt auf: {mode_name}")
         except Exception as e:
             _LOGGER.error(f"[HybridAutomatikController] Fehler beim Setzen des Modus {mode_name}: {e}")

@@ -129,6 +129,8 @@ class AutomatikControllerPVGrenze(AutomatikBase):
             self.pv = float(self.energy_coordinator.data["flow"].get("pv", 0))
         except Exception:
             self.pv=0
+        _LOGGER.warning(f"PV: {self.pv}")
+        _LOGGER.warning(f"MIN PV: {self.entry.options.get(CONF_AUTO_MIN_PV, DEFAULT_AUTO_MIN_PV)}")
         if self.pv >= self.entry.options.get(CONF_AUTO_MIN_PV, DEFAULT_AUTO_MIN_PV):
             await self.wallbox_coordinator.async_set_mode(self.onaction)
         else:

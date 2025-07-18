@@ -58,7 +58,7 @@ Diese benutzerdefinierte Home Assistant-Integration verbindet dein Smart Home mi
 
 ---
 
-## ⚙️ Konfiguration (über UI)
+### ⚙️ Konfiguration (über UI)
 
 Die Integration wird komplett über das Home Assistant-UI konfiguriert. Es sind folgende Angaben notwendig:
 
@@ -94,11 +94,6 @@ Sobald irgendein Parameter von Hand umgestellt wird, so schaltet sich die Automa
 - `Mindest-PV-Leistung in kW`: Schaltschwelle für Logikfunktionen. Ab diesem Solarertrag schalten die Logiken um
 - `Dauer der Über-/Unterschreitung in Minuten`: Die Schaltschwelle muss für diese Anzahl Minuten über- oder unterschrittenwerden, damit umgeschaltet wird.
 
-# 🧑‍💻 Wünsche an Planville
-- Bereitstellung der Gesamt-Zählerwerte über die API, um das HA Energie Dashboard auch ohne die unzuverlässige China Cloud nutzen zu können
-- Zugriff auf den Wechselrichter, um den Modus einstellen zu könnn, ob Last zuerst aus dem Netz oder aus der Batterie genommen wird, um eine Schonfunktion für die Batterie zu bauen
-- Eine lokale API, um den Umweg über das Internet unnötig zu machen
-- Zugriff auf die API über einen festen Token
 
 
 
@@ -130,6 +125,11 @@ Sobald irgendein Parameter von Hand umgestellt wird, so schaltet sich die Automa
    - Solarprognose
    - Automatisch Modus bestimmen, um morgen früh voll zu sein 
 
+# 🧑‍💻 Wünsche an Planville
+- Bereitstellung der Gesamt-Zählerwerte über die API, um das HA Energie Dashboard auch ohne die unzuverlässige China Cloud nutzen zu können
+- Zugriff auf den Wechselrichter, um den Modus einstellen zu könnn, ob Last zuerst aus dem Netz oder aus der Batterie genommen wird, um eine Schonfunktion für die Batterie zu bauen
+- Eine lokale API, um den Umweg über das Internet unnötig zu machen
+- Zugriff auf die API über einen festen Token
 
 
 ## 🧑‍💻 Mitwirken

@@ -74,7 +74,7 @@ Die Integration bietet einen leistungsfähigen Automatikmodus, der die Wallbox j
 ## 🧠 Funktionsweise
 Die Automatik analysiert regelmäßig die aktuelle PV-Erzeugung und entscheidet abhängig vom gewählten Modus, ob und wie die Wallbox laden soll. Dabei kommen verschiedene Strategien zum Einsatz, zum Beispiel:
 
-- Hybrid-Automatik: Wallbox lädt nur dann im Hybrid-Modus (mit mind. 6A), wenn die PV-Erzeugung über einem konfigurierbaren Schwellenwert liegt (z. B. 1.5 kW) und dies für eine gewisse Zeitspanne (z. B. 10 Minuten) konstant bleibt. Andernfalls wird der Ladevorgang beendet. Somit kann auch bei geringerer Sonneneinstrahlung der ins Auto geladene Strom maximiert werden.
+- Hybrid-Automatik: Wallbox lädt nur dann im Hybrid-Modus (mit mind. 6A), wenn die PV-Erzeugung für eine gewisse Zeitspanne (z. B. 10 Minuten) über einem konfigurierbaren Schwellenwert liegt (z. B. 1.5 kW). Andernfalls wird der Ladevorgang beendet. Somit kann auch bei geringerer Sonneneinstrahlung der ins Auto geladene Strom maximiert werden.
 
 - Überschuss-Automatik: Es wird nur geladen, wenn tatsächlich ein PV-Überschuss vorhanden ist.
 

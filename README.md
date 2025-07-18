@@ -71,8 +71,8 @@ Nach erfolgreichem Login wird ein Zugriffstoken gespeichert und automatisch erne
 
 ## 📊 Verfügbare Entitäten
 
-| Entity ID                               | Typ     | Beschreibung                                                                 |
-|----------------------------------------|---------|------------------------------------------------------------------------------|
+| Entity ID                              | Typ     | Beschreibung                                                                 |
+| :------------------------------------- | :------ | :--------------------------------------------------------------------------- |
 | sensor.pv                              | Sensor  | Aktuelle PV-Erzeugung in kW                                                 |
 | sensor.to_grid                         | Sensor  | Aktuelle Netzeinspeisung in kW                                              |
 | sensor.to_battery                      | Sensor  | Batterieladung in kW                                                        |

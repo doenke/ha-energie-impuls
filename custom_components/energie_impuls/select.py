@@ -69,7 +69,7 @@ class WallboxModeSelect(EnergieImpulsWallboxDeviceInfoMixin,CoordinatorEntity, S
         self._attr_current_option = option
         try:
             await self.hass.data[DOMAIN][CONF_AUTO_SWITCH_ENTITY].async_turn_off()
-            await self.coordinator.async_set_wallbox_mode(PAYLOADS[mode_name])
+            await self.coordinator.async_set_wallbox_mode(PAYLOADS[option])
         except KeyError as e:
             pass
         except Exception as e:

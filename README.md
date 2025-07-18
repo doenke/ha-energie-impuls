@@ -13,6 +13,28 @@ Diese benutzerdefinierte Home Assistant-Integration verbindet dein Smart Home mi
   - Lademodus statt einzelne Wallbox-Schalter
   - Ladeautomatik um bei maximiertem Eigenverbrauch trotzdem morgens das Auto voll geladen zu haben
 
+
+### Beispiel im Dashboard
+```yaml
+- type: tile
+  features_position: bottom
+  vertical: false
+  grid_options:
+    columns: full
+  entity: select.wallbox_automatikmodus
+  hide_state: true
+
+- type: entities
+  entities:
+    - entity: select.wallbox_lademodus
+      name: Lademodus
+    - entity: sensor.knx_wallbox_modus
+      name: Wallbox Status
+  footer:
+    type: graph
+    entity: sensor.energie_impuls_wallbox_verbrauch
+```
+
 ---
 
 ## 🔧 Installation über HACS (empfohlen)

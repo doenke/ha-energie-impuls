@@ -117,6 +117,24 @@ Sobald irgendein Parameter von Hand umgestellt wird, so schaltet sich die Automa
 | select.energie_impuls_automatic_mode   | Select  | Wahl des Automatikmodus (z. B. Hybrid-Automatik, Überschuss, etc.)         |
 | number.energie_impuls_hybrid_current   | Number  | Einstellbarer Hybrid-Ladestrom in Ampere (0 = deaktiviert)                  |
 
+
+### Werte auf den KNX Bus senden:
+
+knx.yaml:
+
+```yaml
+expose:
+    - type: power
+      entity_id: sensor.energie_impuls_pv_erzeugung
+      address: "7/3/6"
+      default: 0.0
+    - type: string
+      entity_id: sensor.knx_wallbox_modus
+      address: "7/3/15"
+      default: ""
+
+```
+
 ---
 
 # TODO

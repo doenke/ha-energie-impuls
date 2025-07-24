@@ -152,8 +152,7 @@ expose:
 
 ## 🧑‍💻 Mitwirken
 
-Pull Requests, Bug Reports und Verbesserungsvorschläge sind willkommen. Bitte beschreibe deine Änderungen klar und verständlich.
-
+Pull Requests, Bug Reports und Verbesserungsvorschläge sind willkommen.
 ---
 
 ## 📜 Lizenz

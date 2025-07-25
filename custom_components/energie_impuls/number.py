@@ -19,6 +19,7 @@ class HybridChargingCurrentNumber(EnergieImpulsWallboxDeviceInfoMixin,Coordinato
         self.hass = hass
         self._attr_name = "Hybridladestrom"
         self._attr_unique_id = "energie_impuls_hybrid_current"
+        self._attr_device_class = "current"
         self._attr_unit_of_measurement = "A"
         self._attr_native_min_value = 0
         self._attr_native_max_value = 16

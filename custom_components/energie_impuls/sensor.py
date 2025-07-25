@@ -19,7 +19,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
         EnergieImpulsSensor(hass, energie_coordinator,"Batterie Ladezustand", "battery_soc", "%","mdi:battery-charging","battery"), 
         WallboxSensor(hass, wallbox_coordinator, "Wallbox Modus", "wallbox_mode_str", lambda d: d["_state"]["mode_str"], None, "mdi:ev-plug-type2"),
         WallboxSensor(hass, wallbox_coordinator, "Wallbox Moduscode", "wallbox_mode", lambda d: d["_state"]["mode"]),
-        WallboxSensor(hass, wallbox_coordinator, "Wallbox Verbrauch", "wallbox_consumption", lambda d: d["_state"]["consumption"], "kW", "mdi:ev-station"),
+        WallboxSensor(hass, wallbox_coordinator, "Wallbox Verbrauch", "wallbox_consumption", lambda d: d["_state"]["consumption"], "kW", "mdi:ev-station","power"),
         #WallboxSensor(hass, wallbox_coordinator, "Wallbox Zeitstempel", "wallbox_timestamp", lambda d: d["_state"]["timestamp"]),
         #WallboxSensor(hass, wallbox_coordinator, "Wallbox Seit Modus aktiv", "wallbox_mode_since", lambda d: d["_state"]["mode_since"]),
         #WallboxSensor(hass, wallbox_coordinator, "Wallbox Standort-ID", "wallbox_location", lambda d: d["location"]),
@@ -29,8 +29,8 @@ async def async_setup_entry(hass, entry, async_add_entities):
     async_add_entities(sensors, update_before_add=True)
 
 
-class EnergieImpulsSensor(EnergieImpulsDeviceInfoMixin,CoordinatorEntity,SensorEntity,name, key, unit,icon,device_class):
-    def __init__(self, hass, coordinator, key):
+class EnergieImpulsSensor(EnergieImpulsDeviceInfoMixin,CoordinatorEntity,SensorEntity):
+    def __init__(self, hass, coordinator, name, key, unit,icon,device_class):
         self.hass = hass
         super().__init__(coordinator)
         self._attr_name = name
@@ -50,14 +50,16 @@ class EnergieImpulsSensor(EnergieImpulsDeviceInfoMixin,CoordinatorEntity,SensorE
 
 
 class WallboxSensor(EnergieImpulsWallboxDeviceInfoMixin,CoordinatorEntity,SensorEntity):
-    def __init__(self, hass, coordinator, name, unique_id, extract_func, unit=None, icon=None):
+    def __init__(self, hass, coordinator, name, unique_id, extract_func, unit=None, icon=None,device_class=None):
         super().__init__(coordinator)
         self.hass = hass
        
         self._extract_func = extract_func
         self._attr_name = name
         self._attr_unique_id = f"energie_impuls_{unique_id}"
+        self._attr_unit_of_measurement = unit
         self._attr_icon = icon
+        self._attr_device_class = device_class
         self._state = None
 
     @property

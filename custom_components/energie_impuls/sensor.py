@@ -82,7 +82,7 @@ class WallboxSensor(EnergieImpulsWallboxDeviceInfoMixin,CoordinatorEntity,Sensor
     def native_value(self):
         self._state = self._extract_func(self.coordinator.data)
         
-        if self.device_clas == SensorDeviceClass.POWER:
+        if self.device_class == SensorDeviceClass.POWER:
             try:
                 return 0 if self._state is None else float(self._state)
             except Exception as e:

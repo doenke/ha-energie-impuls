@@ -8,19 +8,19 @@ import logging
 _LOGGER = logging.getLogger(__name__)
 
 SENSOR_TYPES = {
-    "pv": {"name": "PV-Erzeugung", "unit": "kW", "icon": "mdi:solar-power-variant","device_class": "power"},
-    "to_grid": {"name": "Netzeinspeisung", "unit": "kW", "icon": "mdi:transmission-tower","device_class": "power"},
-    "to_battery": {"name": "Batterie-Ladung", "unit": "kW", "icon": "mdi:battery-charging","device_class": "power"},
-    "household": {"name": "Haushalt", "unit": "kW", "icon": "mdi:home","device_class": "power"},
-    "battery_soc": {"name": "Batterie Ladezustand", "unit": "%", "icon": "mdi:battery-charging","device_class": None}
+    
 }
 
 async def async_setup_entry(hass, entry, async_add_entities):
     energie_coordinator = hass.data[DOMAIN]["coordinator_energie"]
     wallbox_coordinator = hass.data[DOMAIN]["coordinator_wallbox"]
-    sensors = [EnergieImpulsSensor(hass, energie_coordinator, key) for key in SENSOR_TYPES]
-
-    sensors.extend([
+    sensors = 
+    [
+        EnergieImpulsSensor(hass, energie_coordinator,"PV-Erzeugung", "pv", "kW","mdi:solar-power-variant","power"), 
+        EnergieImpulsSensor(hass, energie_coordinator,"Netzeinspeisung", "to_grid", "kW","mdi:transmission-tower","power"), 
+        EnergieImpulsSensor(hass, energie_coordinator,"Batterie-Ladung", "to_battery", "kW","mdi:battery-charging","power"), 
+        EnergieImpulsSensor(hass, energie_coordinator,"Haushalt", "household", "kW","mdi:home","power"), 
+        EnergieImpulsSensor(hass, energie_coordinator,"Batterie Ladezustand", "battery_soc", "%","mdi:battery-charging","battery"), 
         WallboxSensor(hass, wallbox_coordinator, "Wallbox Modus", "wallbox_mode_str", lambda d: d["_state"]["mode_str"], None, "mdi:ev-plug-type2"),
         WallboxSensor(hass, wallbox_coordinator, "Wallbox Moduscode", "wallbox_mode", lambda d: d["_state"]["mode"]),
         WallboxSensor(hass, wallbox_coordinator, "Wallbox Verbrauch", "wallbox_consumption", lambda d: d["_state"]["consumption"], "kW", "mdi:ev-station"),
@@ -28,21 +28,20 @@ async def async_setup_entry(hass, entry, async_add_entities):
         #WallboxSensor(hass, wallbox_coordinator, "Wallbox Seit Modus aktiv", "wallbox_mode_since", lambda d: d["_state"]["mode_since"]),
         #WallboxSensor(hass, wallbox_coordinator, "Wallbox Standort-ID", "wallbox_location", lambda d: d["location"]),
         ShortWallboxModeSensor(hass, wallbox_coordinator, "KNX Wallbox Modus", "wallbox_mode_knx", lambda d: d["_state"]["mode_str"], None, "mdi:cog-outline"),
-    ])
+    ]
 
     async_add_entities(sensors, update_before_add=True)
 
 
-class EnergieImpulsSensor(EnergieImpulsDeviceInfoMixin,CoordinatorEntity,SensorEntity):
+class EnergieImpulsSensor(EnergieImpulsDeviceInfoMixin,CoordinatorEntity,SensorEntity,name, key, unit,icon,device_class):
     def __init__(self, hass, coordinator, key):
         self.hass = hass
         super().__init__(coordinator)
-        self._key = key
-        self._attr_name = SENSOR_TYPES[key]['name']
+        self._attr_name = name
         self._attr_unique_id = f"energie_impuls_{key}"
-        self._attr_unit_of_measurement = SENSOR_TYPES[key].get("unit")
-        self._attr_icon = SENSOR_TYPES[key].get("icon")
-        self._attr_device_class = SENSOR_TYPES[key].get("device_class")
+        self._attr_unit_of_measurement = unit
+        self._attr_icon = icon
+        self._attr_device_class = device_class
         self._state = None
 
     @property

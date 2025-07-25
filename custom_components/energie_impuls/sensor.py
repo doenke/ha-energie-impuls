@@ -41,7 +41,7 @@ class EnergieImpulsSensor(EnergieImpulsDeviceInfoMixin,CoordinatorEntity,SensorE
         self.hass = hass
         self._key = key
         self._attr_name = name
-        self._attr_unique_id = f"energie_impuls_{key}"
+        self._attr_unique_id = f"energie_impulszzzz_{key}"
         self._attr_unit_of_measurement = unit
         self._attr_icon = icon
         self._attr_device_class = device_class

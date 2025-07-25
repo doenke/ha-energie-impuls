@@ -9,5 +9,5 @@
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/doenke/ha-energie-impuls/issues",
   "requirements": [],
-  "version": "1.0.133"
+  "version": "1.0.134"
 }

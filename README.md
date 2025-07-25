@@ -139,7 +139,8 @@ expose:
 - Solarprognose einbauen
    - Strombedarf Auto
    - Solarprognose
-   - Automatisch Modus bestimmen, um morgen früh voll zu sein 
+   - Automatisch Modus bestimmen, um morgen früh voll zu sein
+- Warnung, wenn nicht mehr geladen wird, obwohl geladen werden sollte (Auto is auf Fehler gesprungen...)
 
 # 🧑‍💻 Wünsche an Planville
 - Bereitstellung der Gesamt-Zählerwerte über die API, um das HA Energie Dashboard auch ohne die unzuverlässige China Cloud nutzen zu können

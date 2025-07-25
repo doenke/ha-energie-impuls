@@ -34,6 +34,13 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
     async_add_entities(sensors, update_before_add=True)
 
+async def async_added_to_hass(self):
+    await super().async_added_to_hass()
+    _LOGGER.info(
+        f"Sensor hinzugefügt: {self.name} → unit: {self.unit_of_measurement}, "
+        f"device_class: {self.device_class}, native_value: {self.native_value}, "
+        f"state_class: {getattr(self, 'state_class', 'n/a')}"
+    )
 
 class EnergieImpulsSensor(EnergieImpulsDeviceInfoMixin,CoordinatorEntity,SensorEntity):
     def __init__(self, hass, coordinator, name, key, unit,icon,device_class):
@@ -41,7 +48,7 @@ class EnergieImpulsSensor(EnergieImpulsDeviceInfoMixin,CoordinatorEntity,SensorE
         self.hass = hass
         self._key = key
         self._attr_name = name
-        self._attr_unique_id = f"energie_impulszzzz_{key}"
+        self._attr_unique_id = f"energie_impuls_{key}"
         self._attr_unit_of_measurement = unit
         self._attr_icon = icon
         self._attr_device_class = device_class

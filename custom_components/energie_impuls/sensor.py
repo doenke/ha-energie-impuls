@@ -55,7 +55,7 @@ class EnergieImpulsSensor(EnergieImpulsDeviceInfoMixin,CoordinatorEntity,SensorE
 
         try:
             return 0 if value is None else float(value)
-       except:
+        except Exception as e:
             return 0 if value is None else value
 
 
@@ -73,10 +73,10 @@ class WallboxSensor(EnergieImpulsWallboxDeviceInfoMixin,CoordinatorEntity,Sensor
         self._attr_state_class = SensorStateClass.MEASUREMENT
         self._state = None
 
-    @property
-    def native_value(self):
-        self._state = self._extract_func(self.coordinator.data)
-        return "" if self._state is None else self._state
+        try:
+            return 0 if value is None else float(value)
+        except Exception as e:
+            return 0 if value is None else value
 
 
 class ShortWallboxModeSensor(WallboxSensor):
@@ -86,4 +86,4 @@ class ShortWallboxModeSensor(WallboxSensor):
         if isinstance(value, str):
             value = value.replace("Fahrzeug", "").strip()
         self._state = value
-        return 0 if self._state is None else self._state
+        return "" if self._state is None else self._state

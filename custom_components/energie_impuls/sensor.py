@@ -49,7 +49,7 @@ class EnergieImpulsSensor(EnergieImpulsDeviceInfoMixin,CoordinatorEntity,SensorE
         self._key = key
         self._attr_name = name
         self._attr_unique_id = f"energie_impuls_{key}"
-        self._attr_unit_of_measurement = unit
+        self._attr_native_unit_of_measurement = unit
         self._attr_icon = icon
         self._attr_device_class = device_class
         self._attr_state_class = SensorStateClass.MEASUREMENT
@@ -76,12 +76,13 @@ class WallboxSensor(EnergieImpulsWallboxDeviceInfoMixin,CoordinatorEntity,Sensor
         self._extract_func = extract_func
         self._attr_name = name
         self._attr_unique_id = f"energie_impuls_{unique_id}"
-        self._attr_unit_of_measurement = unit
+        self._attr_native_unit_of_measurement = unit
         self._attr_icon = icon
         self._attr_device_class = device_class
-        self._attr_state_class = SensorStateClass.MEASUREMENT
+        if unique_id == "wallbox_consumption":
+            self._attr_state_class = SensorStateClass.MEASUREMENT
         if unique_id == "wallbox_mode":
-            _attr_entity_registry_visible_default = False
+            self._attr_entity_registry_visible_default = False
         
         self._state = None
 

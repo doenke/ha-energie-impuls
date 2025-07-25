@@ -41,7 +41,7 @@ class EnergieImpulsSensor(EnergieImpulsDeviceInfoMixin,CoordinatorEntity,SensorE
         self._state = None
 
     @property
-    def state(self):
+    def native_value(self):
         data = self.coordinator.data
         if data is None:
             return None
@@ -63,14 +63,14 @@ class WallboxSensor(EnergieImpulsWallboxDeviceInfoMixin,CoordinatorEntity,Sensor
         self._state = None
 
     @property
-    def state(self):
+    def native_value(self):
         self._state = self._extract_func(self.coordinator.data)
         return "" if self._state is None else self._state
 
 
 class ShortWallboxModeSensor(WallboxSensor):
     @property
-    def state(self):
+    def native_value(self):
         value = self._extract_func(self.coordinator.data)
         if isinstance(value, str):
             value = value.replace("Fahrzeug", "").strip()

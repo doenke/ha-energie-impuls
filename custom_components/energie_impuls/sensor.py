@@ -52,7 +52,11 @@ class EnergieImpulsSensor(EnergieImpulsDeviceInfoMixin,CoordinatorEntity,SensorE
         if data is None:
             return None
         value = data.get("flow", {}).get(self._key) or data.get("state", {}).get(self._key) 
-        return 0 if value is None else value
+
+        try:
+            return 0 if value is None else float(value)
+       except:
+            return 0 if value is None else value
 
 
 class WallboxSensor(EnergieImpulsWallboxDeviceInfoMixin,CoordinatorEntity,SensorEntity):

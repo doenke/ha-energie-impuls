@@ -73,16 +73,22 @@ class WallboxSensor(EnergieImpulsWallboxDeviceInfoMixin,CoordinatorEntity,Sensor
         self._attr_icon = icon
         self._attr_device_class = device_class
         self._attr_state_class = SensorStateClass.MEASUREMENT
+        if key == "wallbox_mode":
+            _attr_entity_registry_visible_default = False
+        
         self._state = None
 
     @property
     def native_value(self):
         self._state = self._extract_func(self.coordinator.data)
-        try:
-            return 0 if self._state is None else float(self._state)
-        except Exception as e:
+        
+        if self.device_clas == SensorDeviceClass.POWER:
+            try:
+                return 0 if self._state is None else float(self._state)
+            except Exception as e:
+                return 0 if self._state is None else self._state
+        else
             return 0 if self._state is None else self._state
-
 
 class ShortWallboxModeSensor(WallboxSensor):
     @property

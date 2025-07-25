@@ -17,13 +17,13 @@ async def async_setup_entry(hass, entry, async_add_entities):
         EnergieImpulsSensor(hass, energie_coordinator,"Batterie-Ladung", "to_battery", "kW","mdi:battery-charging","power"), 
         EnergieImpulsSensor(hass, energie_coordinator,"Haushalt", "household", "kW","mdi:home","power"), 
         EnergieImpulsSensor(hass, energie_coordinator,"Batterie Ladezustand", "battery_soc", "%","mdi:battery-charging","battery"), 
-        WallboxSensor(hass, wallbox_coordinator, "Wallbox Modus", "wallbox_mode_str", lambda d: d["_state"]["mode_str"], None, "mdi:ev-plug-type2"),
-        WallboxSensor(hass, wallbox_coordinator, "Wallbox Moduscode", "wallbox_mode", lambda d: d["_state"]["mode"]),
+        WallboxSensor(hass, wallbox_coordinator, "Wallbox Modus", "wallbox_mode_str", lambda d: d["_state"]["mode_str"], None, "mdi:ev-plug-type2","enum"),
+        WallboxSensor(hass, wallbox_coordinator, "Wallbox Moduscode", "wallbox_mode", lambda d: d["_state"]["mode"],"enum"),
         WallboxSensor(hass, wallbox_coordinator, "Wallbox Verbrauch", "wallbox_consumption", lambda d: d["_state"]["consumption"], "kW", "mdi:ev-station","power"),
         #WallboxSensor(hass, wallbox_coordinator, "Wallbox Zeitstempel", "wallbox_timestamp", lambda d: d["_state"]["timestamp"]),
         #WallboxSensor(hass, wallbox_coordinator, "Wallbox Seit Modus aktiv", "wallbox_mode_since", lambda d: d["_state"]["mode_since"]),
         #WallboxSensor(hass, wallbox_coordinator, "Wallbox Standort-ID", "wallbox_location", lambda d: d["location"]),
-        ShortWallboxModeSensor(hass, wallbox_coordinator, "KNX Wallbox Modus", "wallbox_mode_knx", lambda d: d["_state"]["mode_str"], None, "mdi:cog-outline"),
+        ShortWallboxModeSensor(hass, wallbox_coordinator, "KNX Wallbox Modus", "wallbox_mode_knx", lambda d: d["_state"]["mode_str"], None, "mdi:cog-outline","enum"),
     ]
 
     async_add_entities(sensors, update_before_add=True)

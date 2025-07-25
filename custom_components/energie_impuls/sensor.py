@@ -7,10 +7,6 @@ import logging
 
 _LOGGER = logging.getLogger(__name__)
 
-SENSOR_TYPES = {
-    
-}
-
 async def async_setup_entry(hass, entry, async_add_entities):
     energie_coordinator = hass.data[DOMAIN]["coordinator_energie"]
     wallbox_coordinator = hass.data[DOMAIN]["coordinator_wallbox"]

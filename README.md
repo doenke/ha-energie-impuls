@@ -135,8 +135,6 @@ expose:
 
 ```
 
----
-
 # TODO
 - Solarprognose einbauen
    - Strombedarf Auto
@@ -153,6 +151,7 @@ expose:
 ## 🧑‍💻 Mitwirken
 
 Pull Requests, Bug Reports und Verbesserungsvorschläge sind willkommen.
+
 ---
 
 ## 📜 Lizenz

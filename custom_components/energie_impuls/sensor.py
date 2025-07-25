@@ -24,7 +24,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
         EnergieImpulsSensor(hass, energie_coordinator,"Haushalt", "household", UnitOfPower.KILO_WATT,"mdi:home",SensorDeviceClass.POWER), 
         EnergieImpulsSensor(hass, energie_coordinator,"Batterie Ladezustand", "battery_soc", "%","mdi:battery-charging",SensorDeviceClass.BATTERY), 
         WallboxSensor(hass, wallbox_coordinator, "Wallbox Modus", "wallbox_mode_str", lambda d: d["_state"]["mode_str"], None, "mdi:ev-plug-type2",SensorDeviceClass.ENUM),
-        WallboxSensor(hass, wallbox_coordinator, "Wallbox Moduscode", "wallbox_mode", lambda d: d["_state"]["mode"],SensorDeviceClass.ENUM),
+        WallboxSensor(hass, wallbox_coordinator, "Wallbox Moduscode", "wallbox_mode", lambda d: d["_state"]["mode"]),
         WallboxSensor(hass, wallbox_coordinator, "Wallbox Verbrauch", "wallbox_consumption", lambda d: d["_state"]["consumption"], UnitOfPower.KILO_WATT, "mdi:ev-station",SensorDeviceClass.POWER),
         #WallboxSensor(hass, wallbox_coordinator, "Wallbox Zeitstempel", "wallbox_timestamp", lambda d: d["_state"]["timestamp"]),
         #WallboxSensor(hass, wallbox_coordinator, "Wallbox Seit Modus aktiv", "wallbox_mode_since", lambda d: d["_state"]["mode_since"]),

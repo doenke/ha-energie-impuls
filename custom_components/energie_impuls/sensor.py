@@ -73,7 +73,7 @@ class WallboxSensor(EnergieImpulsWallboxDeviceInfoMixin,CoordinatorEntity,Sensor
         self._attr_icon = icon
         self._attr_device_class = device_class
         self._attr_state_class = SensorStateClass.MEASUREMENT
-        if key == "wallbox_mode":
+        if unique_id == "wallbox_mode":
             _attr_entity_registry_visible_default = False
         
         self._state = None

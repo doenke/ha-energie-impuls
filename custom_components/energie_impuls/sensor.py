@@ -8,11 +8,11 @@ import logging
 _LOGGER = logging.getLogger(__name__)
 
 SENSOR_TYPES = {
-    "pv": {"name": "PV-Erzeugung", "unit": "kW", "icon": "mdi:solar-power-variant"},
-    "to_grid": {"name": "Netzeinspeisung", "unit": "kW", "icon": "mdi:transmission-tower"},
-    "to_battery": {"name": "Batterie-Ladung", "unit": "kW", "icon": "mdi:battery-charging"},
-    "household": {"name": "Haushalt", "unit": "kW", "icon": "mdi:home"},
-    "battery_soc": {"name": "Batterie Ladezustand", "unit": "%", "icon": "mdi:battery-charging"}
+    "pv": {"name": "PV-Erzeugung", "unit": "kW", "icon": "mdi:solar-power-variant","device_class": "power"},
+    "to_grid": {"name": "Netzeinspeisung", "unit": "kW", "icon": "mdi:transmission-tower","device_class": "power"},
+    "to_battery": {"name": "Batterie-Ladung", "unit": "kW", "icon": "mdi:battery-charging","device_class": "power"},
+    "household": {"name": "Haushalt", "unit": "kW", "icon": "mdi:home","device_class": "power"},
+    "battery_soc": {"name": "Batterie Ladezustand", "unit": "%", "icon": "mdi:battery-charging","device_class": None}
 }
 
 async def async_setup_entry(hass, entry, async_add_entities):
@@ -42,6 +42,7 @@ class EnergieImpulsSensor(EnergieImpulsDeviceInfoMixin,CoordinatorEntity,SensorE
         self._attr_unique_id = f"energie_impuls_{key}"
         self._attr_unit_of_measurement = SENSOR_TYPES[key].get("unit")
         self._attr_icon = SENSOR_TYPES[key].get("icon")
+        self._attr_device_class = SENSOR_TYPES[key].get("device_class")
         self._state = None
 
     @property

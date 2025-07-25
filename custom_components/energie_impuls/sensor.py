@@ -66,6 +66,7 @@ class WallboxSensor(EnergieImpulsWallboxDeviceInfoMixin,CoordinatorEntity,Sensor
         self._attr_unit_of_measurement = unit
         self._attr_icon = icon
         self._attr_device_class = device_class
+        self._attr_state_class = SensorStateClass.MEASUREMENT
         self._state = None
 
     @property

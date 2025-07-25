@@ -87,7 +87,7 @@ class WallboxSensor(EnergieImpulsWallboxDeviceInfoMixin,CoordinatorEntity,Sensor
                 return 0 if self._state is None else float(self._state)
             except Exception as e:
                 return 0 if self._state is None else self._state
-        else
+        else:
             return 0 if self._state is None else self._state
 
 class ShortWallboxModeSensor(WallboxSensor):

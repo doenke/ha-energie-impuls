@@ -54,7 +54,12 @@ class EnergieImpulsSensor(EnergieImpulsDeviceInfoMixin,CoordinatorEntity,SensorE
         self._attr_device_class = device_class
         self._attr_state_class = SensorStateClass.MEASUREMENT
         self._state = None
+        if unit == UnitOfPower.KILO_WATT:
+             self._attr_suggested_display_precision = 1
+        if unit == "%":
+             self._attr_suggested_display_precision = 0
 
+    
     @property
     def native_value(self):
         data = self.coordinator.data
@@ -83,7 +88,9 @@ class WallboxSensor(EnergieImpulsWallboxDeviceInfoMixin,CoordinatorEntity,Sensor
             self._attr_state_class = SensorStateClass.MEASUREMENT
         if unique_id == "wallbox_mode":
             self._attr_entity_registry_visible_default = False
-        
+
+        if unit == UnitOfPower.KILO_WATT:
+             self._attr_suggested_display_precision = 1
         self._state = None
 
     @property

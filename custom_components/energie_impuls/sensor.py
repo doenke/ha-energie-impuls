@@ -6,6 +6,7 @@ from homeassistant.components.sensor import (
 )
 from homeassistant.const import (
     UnitOfPower,
+    UnitOfEnergy,
 )
 from .const import DOMAIN
 from .api import EnergyImpulsSession
@@ -128,7 +129,8 @@ class DailyProductionSensor(EnergieImpulsDeviceInfoMixin, CoordinatorEntity, Sen
         self._attr_name = name
         self._key = key
         self._attr_unique_id = f"energie_impuls_{key}"
-        self._attr_native_unit_of_measurement = "kWh"
+        self._attr_native_unit_of_measurement = UnitOfEnergy.KILO_WATT_HOUR
+        self._attr_device_class = SensorDeviceClass.ENERGY
         self._attr_icon = icon
         self._attr_state_class = SensorStateClass.TOTAL
         self._attr_suggested_display_precision = 1

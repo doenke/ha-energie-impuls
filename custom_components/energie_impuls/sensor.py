@@ -29,6 +29,8 @@ async def async_setup_entry(hass, entry, async_add_entities):
         WallboxSensor(hass, wallbox_coordinator, "Wallbox Moduscode", "wallbox_mode", lambda d: d["_state"]["mode"]),
         WallboxSensor(hass, wallbox_coordinator, "Wallbox Verbrauch", "wallbox_consumption", lambda d: d["_state"]["consumption"], UnitOfPower.KILO_WATT, "mdi:ev-station",SensorDeviceClass.POWER),
         DailyProductionSensor(hass, production_today_coordinator, "Solarproduktion heute", "production_today"),
+        DailyProductionSensor(hass, production_today_coordinator, "Batterie-Ladung heute", "battery_charge", "mdi:battery-plus"),
+        DailyProductionSensor(hass, production_today_coordinator, "Batterie-Entladung heute", "battery_discharge", "mdi:battery-minus"),
         DailyProductionSensor(hass, production_yesterday_coordinator, "Solarproduktion gestern", "production_yesterday"),
         #WallboxSensor(hass, wallbox_coordinator, "Wallbox Zeitstempel", "wallbox_timestamp", lambda d: d["_state"]["timestamp"]),
         #WallboxSensor(hass, wallbox_coordinator, "Wallbox Seit Modus aktiv", "wallbox_mode_since", lambda d: d["_state"]["mode_since"]),
@@ -120,19 +122,21 @@ class ShortWallboxModeSensor(WallboxSensor):
 
 
 class DailyProductionSensor(EnergieImpulsDeviceInfoMixin, CoordinatorEntity, SensorEntity):
-    def __init__(self, hass, coordinator, name, key):
+    def __init__(self, hass, coordinator, name, key, icon="mdi:solar-power"):
         super().__init__(coordinator)
         self.hass = hass
         self._attr_name = name
+        self._key = key
         self._attr_unique_id = f"energie_impuls_{key}"
         self._attr_native_unit_of_measurement = "kWh"
-        self._attr_icon = "mdi:solar-power"
+        self._attr_icon = icon
         self._attr_state_class = SensorStateClass.TOTAL
         self._attr_suggested_display_precision = 1
 
     @property
     def native_value(self):
-        value = self.coordinator.data
+        data = self.coordinator.data
+        value = data.get("production") if self._key in ("production_today", "production_yesterday") else data.get(self._key)
         try:
             return 0 if value is None else float(value)
         except Exception:

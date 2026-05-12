@@ -17,6 +17,8 @@ _LOGGER = logging.getLogger(__name__)
 async def async_setup_entry(hass, entry, async_add_entities):
     energie_coordinator = hass.data[DOMAIN]["coordinator_energie"]
     wallbox_coordinator = hass.data[DOMAIN]["coordinator_wallbox"]
+    production_today_coordinator = hass.data[DOMAIN]["coordinator_production_today"]
+    production_yesterday_coordinator = hass.data[DOMAIN]["coordinator_production_yesterday"]
     sensors = [
         EnergieImpulsSensor(hass, energie_coordinator,"PV-Erzeugung", "pv", UnitOfPower.KILO_WATT,"mdi:solar-power-variant",SensorDeviceClass.POWER), 
         EnergieImpulsSensor(hass, energie_coordinator,"Netzeinspeisung", "to_grid", UnitOfPower.KILO_WATT,"mdi:transmission-tower",SensorDeviceClass.POWER), 
@@ -26,6 +28,8 @@ async def async_setup_entry(hass, entry, async_add_entities):
         WallboxSensor(hass, wallbox_coordinator, "Wallbox Modus", "wallbox_mode_str", lambda d: d["_state"]["mode_str"], None, "mdi:ev-plug-type2",SensorDeviceClass.ENUM),
         WallboxSensor(hass, wallbox_coordinator, "Wallbox Moduscode", "wallbox_mode", lambda d: d["_state"]["mode"]),
         WallboxSensor(hass, wallbox_coordinator, "Wallbox Verbrauch", "wallbox_consumption", lambda d: d["_state"]["consumption"], UnitOfPower.KILO_WATT, "mdi:ev-station",SensorDeviceClass.POWER),
+        DailyProductionSensor(hass, production_today_coordinator, "Solarproduktion heute", "production_today"),
+        DailyProductionSensor(hass, production_yesterday_coordinator, "Solarproduktion gestern", "production_yesterday"),
         #WallboxSensor(hass, wallbox_coordinator, "Wallbox Zeitstempel", "wallbox_timestamp", lambda d: d["_state"]["timestamp"]),
         #WallboxSensor(hass, wallbox_coordinator, "Wallbox Seit Modus aktiv", "wallbox_mode_since", lambda d: d["_state"]["mode_since"]),
         #WallboxSensor(hass, wallbox_coordinator, "Wallbox Standort-ID", "wallbox_location", lambda d: d["location"]),
@@ -113,3 +117,23 @@ class ShortWallboxModeSensor(WallboxSensor):
             value = value.replace("Fahrzeug", "").strip()
         self._state = value
         return "" if self._state is None else self._state
+
+
+class DailyProductionSensor(EnergieImpulsDeviceInfoMixin, CoordinatorEntity, SensorEntity):
+    def __init__(self, hass, coordinator, name, key):
+        super().__init__(coordinator)
+        self.hass = hass
+        self._attr_name = name
+        self._attr_unique_id = f"energie_impuls_{key}"
+        self._attr_native_unit_of_measurement = "kWh"
+        self._attr_icon = "mdi:solar-power"
+        self._attr_state_class = SensorStateClass.TOTAL
+        self._attr_suggested_display_precision = 1
+
+    @property
+    def native_value(self):
+        value = self.coordinator.data
+        try:
+            return 0 if value is None else float(value)
+        except Exception:
+            return 0 if value is None else value

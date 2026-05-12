@@ -1,8 +1,9 @@
 import aiohttp
 import async_timeout
 import logging
+from datetime import date
 
-from .const import LOGIN_URL, DATA_URL, WALLBOX_URL, WALLBOX_SETPOINT_URL ,DOMAIN, CONF_WB_DEVICE_ID
+from .const import LOGIN_URL, DATA_URL, HOURLY_FLOW_URL, WALLBOX_URL, WALLBOX_SETPOINT_URL ,DOMAIN, CONF_WB_DEVICE_ID
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -55,6 +56,11 @@ class EnergyImpulsSession:
     async def async_get_data(self):
         """Ruft Energiedaten ab (PV, Haushalt, etc.)."""
         return await self._authorized_get(DATA_URL)
+
+    async def async_get_hourlyflow_data(self, target_date: date):
+        """Ruft Tagesdaten inklusive Summen für ein Datum ab."""
+        url = f"{HOURLY_FLOW_URL}?date={target_date.isoformat()}&sync=true"
+        return await self._authorized_get(url)
 
     async def async_get_wallbox_data(self):
         """Ruft Wallboxdaten ab."""

@@ -80,6 +80,6 @@ class DailyProductionCoordinator(DataUpdateCoordinator):
         try:
             target_date = self._date_provider(datetime.now().astimezone())
             data = await self.session.async_get_hourlyflow_data(target_date)
-            return data.get("totals", {}).get("production")
+            return data.get("totals", {})
         except Exception as err:
             raise UpdateFailed(f"Fehler beim Abrufen der Solarproduktion: {err}") from err

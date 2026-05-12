@@ -32,7 +32,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass,
         session,
         name="energie_impuls_solarproduktion_heute",
-        update_interval=timedelta(minutes=15),
+        update_interval=timedelta(minutes=5),
         date_provider=lambda now: now.date(),
     )
     await production_today_coordinator.async_config_entry_first_refresh()

@@ -9,7 +9,7 @@ from .automation import AutomatikController
 from .api import EnergyImpulsSession
 from .const import DOMAIN, CONF_USERNAME, CONF_PASSWORD, CONF_WB_DEVICE_NAME, CONF_WB_DEVICE_ID, CONF_MODE_ENTITY, CONF_AUTO_SWITCH_ENTITY, CONF_AUTO_MIN_PV, DEFAULT_AUTO_MIN_PV, DEFAULT_AUTO_MINUTES, CONF_AUTO_MINUTES 
 
-from .coordinator import EnergieImpulsCoordinator, WallboxCoordinator
+from .coordinator import EnergieImpulsCoordinator, WallboxCoordinator, DailyProductionCoordinator
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -28,6 +28,24 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     wallbox_coordinator = WallboxCoordinator(hass, session)
     await wallbox_coordinator.async_config_entry_first_refresh()
 
+    production_today_coordinator = DailyProductionCoordinator(
+        hass,
+        session,
+        name="energie_impuls_solarproduktion_heute",
+        update_interval=timedelta(minutes=15),
+        date_provider=lambda now: now.date(),
+    )
+    await production_today_coordinator.async_config_entry_first_refresh()
+
+    production_yesterday_coordinator = DailyProductionCoordinator(
+        hass,
+        session,
+        name="energie_impuls_solarproduktion_gestern",
+        update_interval=timedelta(hours=3),
+        date_provider=lambda now: (now - timedelta(days=1)).date(),
+    )
+    await production_yesterday_coordinator.async_config_entry_first_refresh()
+
 
     
     # 🔄 Asynchron Wallbox-Daten abrufen
@@ -44,6 +62,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     hass.data[DOMAIN]["coordinator_energie"] = energie_coordinator
     hass.data[DOMAIN]["coordinator_wallbox"] = wallbox_coordinator
+    hass.data[DOMAIN]["coordinator_production_today"] = production_today_coordinator
+    hass.data[DOMAIN]["coordinator_production_yesterday"] = production_yesterday_coordinator
     
     # Plattformen laden
     await hass.config_entries.async_forward_entry_setups(

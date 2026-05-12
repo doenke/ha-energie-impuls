@@ -1,5 +1,6 @@
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 from datetime import timedelta
+from datetime import datetime
 from .const import PAYLOADS
 import logging
 
@@ -62,3 +63,23 @@ class WallboxCoordinator(DataUpdateCoordinator):
             except Exception as e:
                 _LOGGER.error(f"Fehler beim Setzen des Wallbox-Modus: {e}")
                 raise
+
+
+class DailyProductionCoordinator(DataUpdateCoordinator):
+    def __init__(self, hass, session, name, update_interval, date_provider):
+        super().__init__(
+            hass,
+            _LOGGER,
+            name=name,
+            update_interval=update_interval,
+        )
+        self.session = session
+        self._date_provider = date_provider
+
+    async def _async_update_data(self):
+        try:
+            target_date = self._date_provider(datetime.now().astimezone())
+            data = await self.session.async_get_hourlyflow_data(target_date)
+            return data.get("totals", {}).get("production")
+        except Exception as err:
+            raise UpdateFailed(f"Fehler beim Abrufen der Solarproduktion: {err}") from err

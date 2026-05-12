@@ -2,6 +2,7 @@
 DOMAIN = "energie_impuls"
 LOGIN_URL = "https://energie-impuls.site/api/auth/login"
 DATA_URL = "https://energie-impuls.site/api/c/devices/flow/"
+HOURLY_FLOW_URL = "https://energie-impuls.site/api/c/devices/hourlyflow/"
 WALLBOX_URL = "https://energie-impuls.site/api/c/devices/wallbox/?nested=true"
 WALLBOX_SETPOINT_URL = "https://energie-impuls.site/api/c/devices/wallbox/setpoint/"
 USER_ID = "user_id"
